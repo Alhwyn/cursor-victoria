@@ -8,7 +8,8 @@ import type { AnalyticsProps } from "@vercel/analytics/react";
  * (e.g. a custom domain or CDN) where those routes may not exist, so the dashboard
  * stays empty despite traffic.
  *
- * `process.env.VERCEL_ANALYTICS_ORIGIN` is injected in `build.ts` from `VERCEL_URL`.
+ * `process.env.VERCEL_ANALYTICS_ORIGIN` is injected in `build.ts` from
+ * `VERCEL_PROJECT_PRODUCTION_URL` or `VERCEL_URL`.
  */
 export function getVercelAnalyticsProps(): AnalyticsProps {
   const origin =
