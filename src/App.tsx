@@ -140,7 +140,10 @@ export function App() {
                   <div className="w-full">
                     <StoryBlockView block={events[0]} />
                   </div>
-                  <div className="min-h-0 w-full min-w-0">
+                  <div className="flex min-h-0 w-full min-w-0 flex-col gap-6 md:gap-8">
+                    <p className="font-hand text-[32px] font-medium leading-[1.15] tracking-tight text-neutral-900 md:text-[46px]">
+                      Past events
+                    </p>
                     <MeetupPhotoGrid />
                   </div>
                 </div>

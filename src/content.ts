@@ -20,9 +20,9 @@ export const site = {
 /** Edit blocks below to update the site. */
 export const events: StoryBlock[] = [
   {
-    headline: "Meetup: an evening for builders.",
-    hand: "Meetup",
+    headline: "Upcoming: Cursor Victoria Workshop",
+    hand: "Upcoming",
     sublines: [],
-    cta: { href: "https://luma.com/", label: "Register" },
+    cta: { href: "https://luma.com/event/evt-QzyP9blthoOHmqz", label: "Register" },
   },
 ];
