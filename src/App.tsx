@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { events, site } from "./content";
 import meetup01 from "./assets/meetup/01-hackathon.png";
 import meetup02 from "./assets/meetup/02-stickers.png";
@@ -479,6 +480,7 @@ export function App() {
           </div>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 }
