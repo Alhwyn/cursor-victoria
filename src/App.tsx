@@ -7,11 +7,12 @@ const LINKS = {
   cafeRecap: "https://x.com/cursor",
 } as const;
 
-function ArrowIcon() {
+/** Matches Cursor marketing primary CTA: dark pill, white label, ↗ */
+function ExternalArrowIcon() {
   return (
-    <svg className="inline-block size-4 translate-y-px" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <svg className="inline-block size-[15px] shrink-0 translate-y-px" viewBox="0 0 16 16" fill="none" aria-hidden>
       <path
-        d="M3 8h10M9 4l4 4-4 4"
+        d="M4.5 11.5 11.5 4.5M11.5 4.5H5.5M11.5 4.5v6"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
@@ -20,6 +21,9 @@ function ArrowIcon() {
     </svg>
   );
 }
+
+const btnPrimary =
+  "btn btn--primary inline-flex items-center justify-center gap-2 self-start rounded-full border border-white/[0.08] bg-[#1a1a1a] px-6 h-[43px] text-sm font-medium text-white hover:bg-[#252525] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/25 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--card)]";
 
 function VictoriaMark() {
   return (
@@ -73,10 +77,12 @@ export function App() {
               </p>
               <a
                 href={LINKS.registerBuildNight}
-                className="inline-flex items-center gap-2 self-start rounded-full bg-[var(--accent)] text-[var(--accent-fg)] px-5 py-2.5 text-sm font-semibold hover:brightness-110 transition-[filter] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={btnPrimary}
               >
                 Register now
-                <ArrowIcon />
+                <ExternalArrowIcon />
               </a>
             </div>
             <div className="flex-1 order-1 lg:order-2 min-h-[200px] lg:min-h-[280px] rounded-xl bg-[var(--elevated)] border border-[var(--border)] overflow-hidden relative">
@@ -112,10 +118,12 @@ export function App() {
               </p>
               <a
                 href={LINKS.cafeRecap}
-                className="inline-flex items-center gap-2 self-start rounded-full border border-[var(--border-strong)] px-5 py-2.5 text-sm font-semibold text-[var(--fg)] hover:bg-[var(--elevated)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={btnPrimary}
               >
                 See recap
-                <ArrowIcon />
+                <ExternalArrowIcon />
               </a>
             </div>
           </div>
