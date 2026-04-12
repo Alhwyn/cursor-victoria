@@ -29,4 +29,13 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+
+  /**
+   * Hero logo swaps SVG ↔ video with an opacity crossfade. The blanket rule above
+   * forces transitions to ~0 and makes the handoff flicker (especially noticeable on
+   * mobile, where reduced-motion is common). Keep this transition readable.
+   */
+  .logo-crossfade {
+    transition-duration: 500ms !important;
+  }
 }
