@@ -6,6 +6,7 @@ import meetup03 from "./assets/meetup/03-cafe.png";
 import meetup04 from "./assets/meetup/04-cowork.png";
 import meetup05 from "./assets/meetup/05-banner.png";
 import heroBackground from "./assets/parliament-outdoor-impressionist-oil-no-figure.png";
+import alhwynAvatar from "./assets/alhwyn-avatar.png";
 import "./index.css";
 
 const CURSOR_LOGO_VIDEO_MP4 =
@@ -305,9 +306,24 @@ function StoryBlockView({ block }: { block: (typeof events)[number] }) {
             href={block.cta.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-neutral-800 md:px-6"
+            className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-5 py-2.5 text-base font-normal text-white transition-colors hover:bg-neutral-800 md:px-6"
           >
-            {block.cta.label} <span>→</span>
+            {block.cta.label}
+            <svg
+              className="h-[1.125em] w-[1.125em] shrink-0"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden
+            >
+              <path
+                d="M4 12L12 4M12 4H6M12 4V10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </a>
         </div>
       ) : null}
@@ -419,14 +435,14 @@ export function App() {
         </div>
       </main>
 
-      <footer className="mt-16 bg-[#f2f1ee] text-stone-800">
+      <footer className="mt-16 bg-[#F8F8F6] text-stone-800">
         <div className="relative z-10 mx-auto flex max-w-[1800px] flex-col items-center gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           <div className="flex flex-col items-center gap-1 font-hand text-center text-[32px] font-medium leading-[1.15] tracking-tight text-neutral-900 md:gap-1.5 md:text-[46px]">
             <a
               href={site.footer.partnerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-900 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f2f1ee]"
+              className="text-neutral-900 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8F6]"
             >
               {site.footer.ctaLead}
             </a>
@@ -434,22 +450,33 @@ export function App() {
               href={site.footer.ctaTenfoldUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-900 underline decoration-neutral-400 underline-offset-[0.15em] transition-colors hover:text-neutral-800 hover:decoration-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f2f1ee]"
+              className="text-neutral-900 underline decoration-neutral-400 underline-offset-[0.15em] transition-colors hover:text-neutral-800 hover:decoration-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8F6]"
             >
               {site.footer.ctaHighlight}
             </a>
           </div>
-          <p className="text-center text-sm text-stone-500">
-            Cursor Victoria built by{" "}
-            <a
-              href="https://alhwyn.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-stone-600 underline decoration-stone-300 underline-offset-2 transition-colors hover:text-stone-900 hover:decoration-stone-500"
-            >
-              Alhwyn
-            </a>
-          </p>
+          <div className="flex items-center justify-center gap-2.5 text-sm text-stone-500">
+            <span>
+              built by{" "}
+              <a
+                href="https://x.com/alhwynn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-600 underline decoration-stone-300 underline-offset-2 transition-colors hover:text-stone-900 hover:decoration-stone-500"
+              >
+                Alhwyn
+              </a>
+            </span>
+            <img
+              src={alhwynAvatar}
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8 shrink-0 rounded-full object-cover ring-1 ring-stone-200/80"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </footer>
     </div>
