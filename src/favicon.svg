@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Pointy-top hexagon (Cursor logo) -->
-  <path
-    fill="#1a1a1a"
-    d="M16 3.8 27.2 10.4v11.2L16 28.2 4.8 21.6V10.4L16 3.8z"
-  />
-  <!-- White pointer: vertical left edge, tip toward top-right -->
-  <path fill="#fff" d="M11 21V10l10-1z" />
-</svg>
