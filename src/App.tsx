@@ -414,7 +414,7 @@ export function App() {
                       <p className="max-w-2xl font-hand text-xl font-medium leading-[1.2] tracking-tight text-neutral-700 md:text-2xl">
                         We host Cafe Cursor, hackathons, and many more, powered by the{" "}
                         <a
-                          href={site.footer.partnerUrl}
+                          href={site.footer.url}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-neutral-900 underline decoration-neutral-500 underline-offset-[0.15em] transition-colors hover:text-neutral-950 hover:decoration-neutral-700"
@@ -440,7 +440,7 @@ export function App() {
         <div className="relative z-10 mx-auto flex max-w-[1800px] flex-col items-center gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           <div className="flex flex-col items-center gap-1 font-hand text-center text-[32px] font-medium leading-[1.15] tracking-tight text-neutral-900 md:gap-1.5 md:text-[46px]">
             <a
-              href={site.footer.partnerUrl}
+              href={site.footer.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-900 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8F6]"
@@ -448,7 +448,7 @@ export function App() {
               {site.footer.ctaLead}
             </a>
             <a
-              href={site.footer.ctaTenfoldUrl}
+              href={site.footer.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-900 underline decoration-neutral-400 underline-offset-[0.15em] transition-colors hover:text-neutral-800 hover:decoration-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8F6]"
