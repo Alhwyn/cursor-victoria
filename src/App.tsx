@@ -440,7 +440,7 @@ export function App() {
         <div className="relative z-10 mx-auto flex max-w-[1800px] flex-col items-center gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           <div className="flex flex-col items-center gap-1 font-hand text-center text-[32px] font-medium leading-[1.15] tracking-tight text-neutral-900 md:gap-1.5 md:text-[46px]">
             <a
-              href={site.footer.url}
+              href={site.footer.partnerUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-neutral-900 transition-colors hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F8F6]"
