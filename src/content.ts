@@ -23,7 +23,6 @@ export type StoryBlock = {
 
 export const site = {
   heroHand: "VICTORIA, BC",
-  heroSubline: "VICTORIA, BC",
   /** Section heading above the first upcoming event card (matches “Past events” styling in App). */
   upcomingEventsHeading: "Upcoming events",
   footer: {
