@@ -26,8 +26,7 @@ export const site = {
   /** Section heading above the first upcoming event card (matches “Past events” styling in App). */
   upcomingEventsHeading: "Upcoming events",
   footer: {
-    partnerUrl: "https://victoria-tech-week.vercel.app/",
-    ctaTenfoldUrl: "https://www.tenfoldvictoria.com/",
+    url: "https://luma.com/tenfold",
     ctaLead: "Looking for a similar event in Victoria, BC?",
     ctaHighlight: "Join Tenfold",
   },
