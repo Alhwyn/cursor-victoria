@@ -214,7 +214,7 @@ function MeetupPhotoGrid() {
     {
       src: meetup05,
       alt: "Cursor banner at an event",
-      caption: "Cursor Cafe — Dec 2025",
+      caption: "Cafe Cursor — Dec 2025",
     },
   ] as const;
 
@@ -412,7 +412,7 @@ export function App() {
                         Past events
                       </p>
                       <p className="max-w-2xl font-hand text-xl font-medium leading-[1.2] tracking-tight text-neutral-700 md:text-2xl">
-                        We host Cursor Cafe, hackathons, and many more, powered by the{" "}
+                        We host Cafe Cursor, hackathons, and many more, powered by the{" "}
                         <a
                           href={site.footer.url}
                           target="_blank"
