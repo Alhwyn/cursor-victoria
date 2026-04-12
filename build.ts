@@ -122,13 +122,6 @@ const entrypoints = [...new Bun.Glob("**.html").scanSync("src")]
   .filter(dir => !dir.includes("node_modules"));
 console.log(`📄 Found ${entrypoints.length} HTML ${entrypoints.length === 1 ? "file" : "files"} to process\n`);
 
-const vercelHost = (
-  process.env.VERCEL_PROJECT_PRODUCTION_URL?.replace(/^https?:\/\//, "") ||
-  process.env.VERCEL_URL ||
-  ""
-).replace(/\/$/, "");
-const vercelAnalyticsOrigin = vercelHost ? `https://${vercelHost}` : "";
-
 const result = await Bun.build({
   entrypoints,
   outdir,
@@ -138,7 +131,6 @@ const result = await Bun.build({
   sourcemap: "linked",
   define: {
     "process.env.NODE_ENV": JSON.stringify("production"),
-    "process.env.VERCEL_ANALYTICS_ORIGIN": JSON.stringify(vercelAnalyticsOrigin),
   },
   ...cliConfig,
 });
