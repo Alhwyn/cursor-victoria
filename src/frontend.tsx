@@ -14,7 +14,10 @@ function start() {
   root.render(
     <>
       <App />
-      <Analytics />
+      <Analytics
+        mode="production"
+        scriptSrc="https://cdn.vercel-insights.com/v1/script.js"
+      />
     </>,
   );
 }
