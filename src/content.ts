@@ -13,34 +13,16 @@ export type StoryBlock = {
 };
 
 export const site = {
-  heroPrefix: "Cursor @",
-  heroHand: "Victoria",
-  heroSubline: "Community meetups and build nights on the island.",
+  heroHand: "Victoria, BC",
+  heroSubline: "Victoria, BC",
 } as const;
 
 /** Edit blocks below to update the site. */
 export const events: StoryBlock[] = [
   {
-    label: "Spring 2026 · Victoria, BC",
     headline: "Meetup: an evening for builders.",
     hand: "Meetup",
-    sublines: ["No themes. No tracks.", "Just build something you care about."],
+    sublines: [],
     cta: { href: "https://luma.com/", label: "Register" },
-  },
-];
-
-export const builds: StoryBlock[] = [
-  {
-    label: "What people are building",
-    headline: "Research ops dashboard.",
-    hand: "dashboard",
-    sublines: [
-      "From messy spreadsheets to one live view the team actually opens.",
-    ],
-  },
-  {
-    headline: "Deploy preview CLI.",
-    hand: "CLI",
-    sublines: ["Bun script + hosting API — every branch gets a link in Slack."],
   },
 ];
