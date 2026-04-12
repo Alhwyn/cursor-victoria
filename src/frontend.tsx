@@ -8,13 +8,14 @@
 import { Analytics } from "@vercel/analytics/react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { getVercelAnalyticsProps } from "./vercel-analytics-props";
 
 function start() {
   const root = createRoot(document.getElementById("root")!);
   root.render(
     <>
       <App />
-      <Analytics />
+      <Analytics {...getVercelAnalyticsProps()} />
     </>,
   );
 }
