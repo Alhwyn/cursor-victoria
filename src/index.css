@@ -21,6 +21,16 @@
   border-top: 1px solid rgb(229 229 229 / 0.85);
 }
 
+/**
+ * Hero logo: keep opacity transitions explicit so they are not lost to Tailwind
+ * ordering or compositor quirks (esp. WebKit + video under SVG).
+ */
+.logo-crossfade {
+  transition-property: opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
