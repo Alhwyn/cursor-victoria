@@ -36,16 +36,6 @@ export const site = {
 /** Edit blocks below to update the site. */
 export const events: StoryBlock[] = [
   {
-    headline: "Tenfold Victoria — #097 × Cursor Meetup",
-    sublines: ["Tuesday, April 21, 2026 · 6:00 – 9:00 p.m. PT"],
-    sublinesVariant: "body",
-    cta: { href: "https://luma.com/iohld8eb", label: "Register" },
-    imageSrc: harborMeetup,
-    imageAlt:
-      "Impressionistic oil painting of Victoria’s inner harbour, soft pastel light, docks and water",
-    imageOverlay: "Tenfold Victoria — #097 × Cursor Meetup",
-  },
-  {
     headline: "Cursor Victoria Workshop",
     sublines: ["Wednesday, April 15 9:00 a.m. - 12:00 p.m."],
     sublinesVariant: "body",
@@ -54,5 +44,15 @@ export const events: StoryBlock[] = [
     imageAlt:
       "Impressionistic oil-painting style illustration of the workshop venue street facade, soft light and pastel tones",
     imageOverlay: "Cursor Victoria Workshop",
+  },
+  {
+    headline: "Tenfold Victoria — #097 × Cursor Meetup",
+    sublines: ["Tuesday, April 21, 2026 · 6:00 – 9:00 p.m. PT"],
+    sublinesVariant: "body",
+    cta: { href: "https://luma.com/iohld8eb", label: "Register" },
+    imageSrc: harborMeetup,
+    imageAlt:
+      "Impressionistic oil painting of Victoria’s inner harbour, soft pastel light, docks and water",
+    imageOverlay: "Tenfold Victoria — #097 × Cursor Meetup",
   },
 ];

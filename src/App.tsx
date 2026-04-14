@@ -403,7 +403,11 @@ export function App() {
                       <p className="font-hand text-[32px] font-medium leading-[1.15] tracking-tight text-neutral-900 md:text-[46px]">
                         {site.upcomingEventsHeading}
                       </p>
-                      <StoryBlockView block={events[0]} />
+                      <div className="flex flex-col gap-16 md:gap-24">
+                        {events.slice(0, 2).map(block => (
+                          <StoryBlockView key={block.headline} block={block} />
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <div className="flex min-h-0 w-full min-w-0 flex-col gap-6 md:gap-8">
@@ -428,7 +432,7 @@ export function App() {
                   </div>
                 </div>
               ) : null}
-              {events.slice(1).map(block => (
+              {events.slice(2).map(block => (
                 <StoryBlockView key={block.headline} block={block} />
               ))}
             </div>
