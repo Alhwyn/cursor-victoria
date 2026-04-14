@@ -20,8 +20,11 @@ const LOGO_ANIMATION_IDLE_MS = 3000;
 
 /** Horizontal lockup: static SVG; icon animates via video after each idle period. */
 function CursorHeroLogo() {
+  const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const inViewRef = useRef(true);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const endFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const motionOkRef = useRef(true);
   const [motionOk, setMotionOk] = useState(true);
   const [videoVisible, setVideoVisible] = useState(false);
@@ -33,6 +36,13 @@ function CursorHeroLogo() {
     }
   };
 
+  const clearEndFallback = () => {
+    if (endFallbackTimerRef.current !== null) {
+      clearTimeout(endFallbackTimerRef.current);
+      endFallbackTimerRef.current = null;
+    }
+  };
+
   const schedulePlayAfterIdle = (delayMs: number = LOGO_ANIMATION_IDLE_MS) => {
     clearIdleTimer();
     idleTimerRef.current = setTimeout(() => {
@@ -40,11 +50,13 @@ function CursorHeroLogo() {
       if (!motionOkRef.current) return;
       const v = videoRef.current;
       if (!v) return;
+      v.currentTime = 0;
       void v.play().catch(() => schedulePlayAfterIdle(delayMs));
     }, delayMs);
   };
 
   const endPlayWindow = () => {
+    clearEndFallback();
     const v = videoRef.current;
     if (v) {
       v.pause();
@@ -69,6 +81,7 @@ function CursorHeroLogo() {
   useEffect(() => {
     if (!motionOk) {
       clearIdleTimer();
+      clearEndFallback();
       videoRef.current?.pause();
       setVideoVisible(false);
       return;
@@ -76,22 +89,153 @@ function CursorHeroLogo() {
     schedulePlayAfterIdle(0);
     return () => {
       clearIdleTimer();
+      clearEndFallback();
     };
   }, [motionOk]);
 
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        const vis = Boolean(e?.isIntersecting);
+        inViewRef.current = vis;
+        if (!motionOkRef.current) return;
+        if (vis) {
+          const v = videoRef.current;
+          if (v && v.paused && v.currentTime === 0) {
+            schedulePlayAfterIdle(0);
+          }
+        } else {
+          clearIdleTimer();
+          clearEndFallback();
+          const v = videoRef.current;
+          if (v) {
+            v.pause();
+            v.currentTime = 0;
+          }
+          setVideoVisible(false);
+        }
+      },
+      { root: null, rootMargin: "0px 0px 10% 0px", threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState !== "visible" || !motionOkRef.current || !inViewRef.current)
+        return;
+      const v = videoRef.current;
+      if (v && v.paused) {
+        schedulePlayAfterIdle(0);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
+
+  const armEndFallback = () => {
+    const v = videoRef.current;
+    clearEndFallback();
+    if (v && Number.isFinite(v.duration) && v.duration > 0) {
+      const ms = Math.min(90_000, Math.ceil(v.duration * 1000) + 750);
+      endFallbackTimerRef.current = setTimeout(() => {
+        endFallbackTimerRef.current = null;
+        endPlayWindow();
+      }, ms);
+    }
+  };
+
+  /**
+   * iOS WebKit often fires `playing` before the first decoded frame is on screen.
+   * Fading the SVG mark out immediately can leave a wrong compositing frame (path
+   * still paints as if opaque over the video). Wait until playback time advances or
+   * a decoded video frame is reported, then start the crossfade.
+   */
   const onPlaying = () => {
-    setVideoVisible(true);
+    const v = videoRef.current;
+    if (!v) return;
+
+    let revealed = false;
+    const revealOnce = () => {
+      if (revealed || !motionOkRef.current) return;
+      revealed = true;
+      setVideoVisible(true);
+      armEndFallback();
+    };
+
+    if (v.currentTime > 0.001) {
+      revealOnce();
+      return;
+    }
+
+    let vfcId: number | null = null;
+    let safetyId: ReturnType<typeof setTimeout> | null = null;
+
+    const cleanup = () => {
+      v.removeEventListener("timeupdate", onTime);
+      v.removeEventListener("seeked", onSeeked);
+      if (safetyId !== null) {
+        clearTimeout(safetyId);
+        safetyId = null;
+      }
+      if (vfcId !== null && typeof v.cancelVideoFrameCallback === "function") {
+        try {
+          v.cancelVideoFrameCallback(vfcId);
+        } catch {
+          /* ignore */
+        }
+        vfcId = null;
+      }
+    };
+
+    const tryRevealFromVideo = () => {
+      if (revealed) return;
+      if (v.currentTime <= 0.001) return;
+      revealOnce();
+      cleanup();
+    };
+
+    const onTime = () => tryRevealFromVideo();
+
+    const onSeeked = () => tryRevealFromVideo();
+
+    v.addEventListener("timeupdate", onTime, { passive: true });
+    v.addEventListener("seeked", onSeeked, { passive: true });
+
+    if (typeof v.requestVideoFrameCallback === "function") {
+      vfcId = v.requestVideoFrameCallback((_now, meta) => {
+        vfcId = null;
+        if (meta.mediaTime > 0.001) {
+          revealOnce();
+          cleanup();
+        }
+      });
+    }
+
+    safetyId = window.setTimeout(() => {
+      safetyId = null;
+      if (!revealed && motionOkRef.current && videoRef.current === v && !v.paused) {
+        revealOnce();
+      }
+      cleanup();
+    }, 500);
   };
 
   const onEnded = () => endPlayWindow();
 
   const onError = () => {
     clearIdleTimer();
+    clearEndFallback();
     setVideoVisible(false);
   };
 
   return (
     <div
+      ref={wrapRef}
       className="relative inline-block overflow-hidden text-neutral-900"
       role="img"
       aria-label="Cursor"
@@ -102,9 +246,9 @@ function CursorHeroLogo() {
           ref={videoRef}
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden
-          className={`block h-full w-auto max-w-none object-contain object-left transition-opacity duration-500 ${
+          className={`logo-crossfade block h-full w-auto max-w-none object-contain object-left transition-opacity duration-500 ${
             videoVisible ? "opacity-100" : "opacity-0"
           }`}
           onPlaying={onPlaying}
@@ -117,18 +261,20 @@ function CursorHeroLogo() {
       </div>
       <svg
         fill="none"
-        className="relative z-10 block h-auto w-[110px] isolate md:w-[168px] lg:w-[200px]"
+        className="relative z-10 block h-auto w-[110px] md:w-[168px] lg:w-[200px]"
         viewBox="0 0 2193 545"
         xmlns="http://www.w3.org/2000/svg"
         overflow="visible"
       >
         <g fill="currentColor">
-          <path
-            className={`transition-opacity duration-500 ${
+          {/* Opacity on <g>: WebKit can fail to composite path opacity over sibling video. */}
+          <g
+            className={`logo-crossfade transition-opacity duration-500 ${
               videoVisible ? "opacity-0" : "opacity-100"
             }`}
-            d="m466.383 137.073-206.469-119.2034c-6.63-3.8287-14.811-3.8287-21.441 0l-206.4586 119.2034c-5.5734 3.218-9.0144 9.169-9.0144 15.615v240.375c0 6.436 3.441 12.397 9.0144 15.615l206.4686 119.203c6.63 3.829 14.811 3.829 21.441 0l206.468-119.203c5.574-3.218 9.015-9.17 9.015-15.615v-240.375c0-6.436-3.441-12.397-9.015-15.615zm-12.969 25.25-199.316 345.223c-1.347 2.326-4.904 1.376-4.904-1.319v-226.048c0-4.517-2.414-8.695-6.33-10.963l-195.7577-113.019c-2.3263-1.347-1.3764-4.905 1.3182-4.905h398.6305c5.661 0 9.199 6.136 6.368 11.041h-.009z"
-          />
+          >
+            <path d="m466.383 137.073-206.469-119.2034c-6.63-3.8287-14.811-3.8287-21.441 0l-206.4586 119.2034c-5.5734 3.218-9.0144 9.169-9.0144 15.615v240.375c0 6.436 3.441 12.397 9.0144 15.615l206.4686 119.203c6.63 3.829 14.811 3.829 21.441 0l206.468-119.203c5.574-3.218 9.015-9.17 9.015-15.615v-240.375c0-6.436-3.441-12.397-9.015-15.615zm-12.969 25.25-199.316 345.223c-1.347 2.326-4.904 1.376-4.904-1.319v-226.048c0-4.517-2.414-8.695-6.33-10.963l-195.7577-113.019c-2.3263-1.347-1.3764-4.905 1.3182-4.905h398.6305c5.661 0 9.199 6.136 6.368 11.041h-.009z" />
+          </g>
           <g>
             <path d="m723.253 148.84h87.856v48.397h-84.881c-45.789 0-81.527 26.432-81.527 82.273s35.738 82.273 81.527 82.273h84.881v48.397h-91.578c-76.691 0-131.039-45.043-131.039-130.66 0-85.618 58.07-130.661 134.761-130.661z" />
             <path d="m855.781 148.84h54.348v159.7c0 39.828 18.242 58.448 61.056 58.448 42.815 0 61.055-18.61 61.055-58.448v-159.7h54.35v170.866c0 58.071-36.85 94.933-115.405 94.933-78.551 0-115.404-37.231-115.404-95.301z" />

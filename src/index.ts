@@ -1,7 +1,14 @@
 import { serve } from "bun";
 import index from "./index.html";
 
+const portEnv = process.env.PORT;
+const port =
+  portEnv === undefined || portEnv === ""
+    ? undefined
+    : Number(portEnv);
+
 const server = serve({
+  ...(Number.isFinite(port) ? { port } : {}),
   routes: {
     "/*": index,
   },
