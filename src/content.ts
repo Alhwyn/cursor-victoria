@@ -36,6 +36,7 @@ export const site = {
 /** Edit blocks below to update the site. */
 export const events: StoryBlock[] = [
   {
+    label: "Workshop",
     headline: "Cursor Victoria Workshop",
     sublines: ["Wednesday, April 15 9:00 a.m. - 12:00 p.m."],
     sublinesVariant: "body",
@@ -46,6 +47,7 @@ export const events: StoryBlock[] = [
     imageOverlay: "Cursor Victoria Workshop",
   },
   {
+    label: "Meetup",
     headline: "Tenfold Victoria — #097 × Cursor Meetup",
     sublines: ["Tuesday, April 21, 2026 · 6:00 – 9:00 p.m. PT"],
     sublinesVariant: "body",
