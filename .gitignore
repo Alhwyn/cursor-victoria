@@ -34,5 +34,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # local screen recordings / scratch captures (not part of the app)
+artifacts/
 victoria-bc-demo.mp4
 *-demo-frame.png
