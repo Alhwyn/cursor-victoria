@@ -25,14 +25,18 @@ function jsonResponse(body: unknown, status = 200) {
 async function readJsonBody(req: Request): Promise<InviteRequestBody | null> {
   try {
     const body = await req.json();
-    return typeof body === "object" && body !== null ? (body as InviteRequestBody) : null;
+    return typeof body === "object" && body !== null
+      ? (body as InviteRequestBody)
+      : null;
   } catch {
     return null;
   }
 }
 
 function optionalString(value: unknown) {
-  return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
+  return typeof value === "string" && value.trim().length > 0
+    ? value.trim()
+    : undefined;
 }
 
 function getBearerToken(req: Request) {
@@ -87,14 +91,21 @@ async function inviteLumaGuest(req: Request) {
   const eventId =
     optionalString(body.eventId) ?? optionalString(process.env.LUMA_EVENT_ID);
   if (!eventId) {
-    return jsonResponse({ error: "Provide eventId or configure LUMA_EVENT_ID." }, 400);
+    return jsonResponse(
+      { error: "Provide eventId or configure LUMA_EVENT_ID." },
+      400,
+    );
   }
 
   const guest: { email: string; name?: string } = { email };
   const name = optionalString(body.name);
   if (name) guest.name = name;
 
-  const lumaBody: { event_id: string; guests: Array<typeof guest>; message?: string } = {
+  const lumaBody: {
+    event_id: string;
+    guests: Array<typeof guest>;
+    message?: string;
+  } = {
     event_id: eventId,
     guests: [guest],
   };
