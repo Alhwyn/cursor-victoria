@@ -1,7 +1,9 @@
 import { serve } from "bun";
+import { timingSafeEqual } from "node:crypto";
 import index from "./index.html";
 
-const LUMA_SEND_INVITES_URL = "https://api.luma.com/v1/events/guests/send-invites";
+const LUMA_SEND_INVITES_URL =
+  "https://api.luma.com/v1/events/guests/send-invites";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type InviteRequestBody = {
@@ -33,6 +35,20 @@ function optionalString(value: unknown) {
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : undefined;
 }
 
+function getBearerToken(req: Request) {
+  const [scheme, token] = req.headers.get("Authorization")?.split(" ") ?? [];
+  return scheme?.toLowerCase() === "bearer" ? optionalString(token) : undefined;
+}
+
+function tokensMatch(actual: string, expected: string) {
+  const actualBuffer = Buffer.from(actual);
+  const expectedBuffer = Buffer.from(expected);
+  return (
+    actualBuffer.length === expectedBuffer.length &&
+    timingSafeEqual(actualBuffer, expectedBuffer)
+  );
+}
+
 function parseJsonText(text: string) {
   if (!text) return {};
   try {
@@ -43,6 +59,16 @@ function parseJsonText(text: string) {
 }
 
 async function inviteLumaGuest(req: Request) {
+  const inviteToken = optionalString(process.env.LUMA_INVITE_TOKEN);
+  if (!inviteToken) {
+    return jsonResponse({ error: "LUMA_INVITE_TOKEN is not configured." }, 503);
+  }
+
+  const bearerToken = getBearerToken(req);
+  if (!bearerToken || !tokensMatch(bearerToken, inviteToken)) {
+    return jsonResponse({ error: "Unauthorized." }, 401);
+  }
+
   const body = await readJsonBody(req);
   if (!body) {
     return jsonResponse({ error: "Expected a JSON body." }, 400);
@@ -58,7 +84,8 @@ async function inviteLumaGuest(req: Request) {
     return jsonResponse({ error: "LUMA_API_KEY is not configured." }, 503);
   }
 
-  const eventId = optionalString(body.eventId) ?? optionalString(process.env.LUMA_EVENT_ID);
+  const eventId =
+    optionalString(body.eventId) ?? optionalString(process.env.LUMA_EVENT_ID);
   if (!eventId) {
     return jsonResponse({ error: "Provide eventId or configure LUMA_EVENT_ID." }, 400);
   }
