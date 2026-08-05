@@ -1,21 +1,19 @@
-# bun-react-tailwind-template
+# Cursor Codechella
 
-To install dependencies:
+Landing page for **Cursor Codechella @ Victoria, BC** — a one-day hackathon styled after [Cursor Compile](https://cursor.com/compile) and Cursor brand guidelines.
+
+## Develop
 
 ```bash
 bun install
-```
-
-To start a development server:
-
-```bash
 bun dev
 ```
 
-To run for production:
+## Production
 
 ```bash
+bun run build
 bun start
 ```
 
-This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+RSVP: [luma.com/cursorvictoria](https://luma.com/cursorvictoria)

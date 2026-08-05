@@ -2,26 +2,231 @@
 
 @layer base {
   :root {
-    @apply font-sans text-neutral-900 antialiased;
-    background-color: #f8f8f6;
+    --bg: #edece8;
+    --fg: #14120b;
+    --fg-secondary: #5c5a52;
+    --fg-tertiary: #8a877c;
+    --border: #d9d7cf;
+    --card: #f4f3ee;
+    --button-bg: #14120b;
+    --button-fg: #f7f7f4;
+    --accent: #f54e00; /* cursor.com --color-theme-accent */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --header-h: 4.25rem;
+    --g: calc(10rem / 16);
+    --spacing-g1: calc(var(--g) * 1);
+    --spacing-g2: calc(var(--g) * 2);
+    /*
+     * Content column: max 1300px (cursor.com .container).
+     * Side gutters scale with viewport so left AND right always match —
+     * never collapse to a tiny 20px edge gap on laptop widths.
+     */
+    --page-max: 81.25rem; /* 1300px */
+    --page-gutter: clamp(2.5rem, 13vw, 12rem);
+    --grid-columns: 6;
+
+    color: var(--fg);
+    background-color: var(--bg);
+    font-family: "Geist", "Inter", "Segoe UI", sans-serif;
+    font-feature-settings: "ss01" on, "cv11" on;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: #f8f8f6;
+    background-color: var(--bg);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--fg) 14%, transparent);
   }
 }
 
-.font-hand {
-  font-family: "Gochi Hand", cursive;
+/*
+ * Single content shell — equal left/right inset.
+ * width is shrunk by gutters (not padding-inside-max), so both sides match.
+ */
+.page-shell {
+  box-sizing: border-box;
+  width: min(var(--page-max), calc(100% - 2 * var(--page-gutter)));
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: 0;
 }
 
-.section-divider {
-  border-top: 1px solid rgb(229 229 229 / 0.85);
+@layer utilities {
+  .font-display {
+    font-family: "Geist", "Inter", "Segoe UI", sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .type-sm {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .type-md-sm {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    column-gap: var(--spacing-g1);
+    row-gap: var(--spacing-g1);
+  }
+
+  .site-grain {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgb(255 255 255 / 0.55), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgb(20 18 11 / 0.03), transparent 50%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade {
+  animation: fade-in 0.9s var(--ease-out) 0.2s both;
+}
+
+.hero-stage {
+  position: relative;
+}
+
+.hero-stage::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 18%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 55%, var(--bg) 100%);
+}
+
+.header-shell {
+  background: var(--bg);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/*
+ * Sponsors — match cursor.com #logo-garden (logo-garden-responsive-8):
+ *   mobile/tablet: 4 cols, folds to multiple rows
+ *   desktop: 6 cols for 11 logos (folds to 2 rows)
+ * Cards use fixed heights (not aspect-ratio), same as cursor.com
+ *   h-16 → sm:h-[4.5rem] → md:h-[6.25rem]
+ */
+.logo-garden {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4375rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .logo-garden {
+    gap: 0.625rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-garden {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.625rem; /* 10px */
+  }
+}
+
+.logo-garden > li {
+  min-width: 0;
+}
+
+.logo-garden-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 4rem; /* cursor.com h-[4rem] */
+  padding: 0 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px; /* rounded-xs */
+  transition: opacity 0.15s var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .logo-garden-card {
+    height: 4.5rem; /* sm:h-[4.5rem] */
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-garden-card {
+    height: 6.25rem; /* md:h-[6.25rem] */
+  }
+}
+
+.logo-garden-card:hover {
+  opacity: 0.8;
+}
+
+.logo-garden-card img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 58%;
+  max-height: 1.65rem;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (min-width: 640px) {
+  .logo-garden-card img {
+    max-height: 1.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-garden-card img {
+    max-height: 2rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   ::before,
   ::after {
