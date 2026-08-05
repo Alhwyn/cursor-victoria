@@ -94,7 +94,7 @@ function AboutCta() {
       href={site.rsvpUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex w-full items-center justify-center gap-2 bg-[var(--button-bg)] px-4 py-1.5 text-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
+      className="inline-flex w-full items-center justify-center gap-2 bg-[var(--button-bg)] px-4 py-1.5 type-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
     >
       Register on Luma
       <ArrowIcon />
@@ -115,7 +115,7 @@ function SiteHeader() {
         </a>
 
         <nav
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 text-sm text-[var(--fg-secondary)] md:flex"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 type-sm text-[var(--fg-secondary)] md:flex"
           aria-label="Primary"
         >
           <a href="#logo-garden" className="transition-colors hover:text-[var(--fg)]">
@@ -143,7 +143,7 @@ export function App() {
 
       <main id="main" className="bg-[#EDECE8] pb-32 md:pb-48">
         {/* Hero — same structure as cursor.com/compile */}
-        <section className="grid h-[80svh] content-start justify-items-center">
+        <section className="grid h-[80svh] place-items-center">
           <div className="compile-shell flex flex-col items-center">
             <h1 className="sr-only">Codechella</h1>
             <HeroStage />
@@ -163,7 +163,7 @@ export function App() {
           aria-label="Sponsors"
         >
           <div className="stack container text-center flex w-full flex-col items-center">
-            <h2 className="type-sm mb-v1 mb-[1.4rem] text-sm font-normal leading-[1.5] text-[var(--fg)]">
+            <h2 className="type-sm mb-[1.4rem] font-normal text-[var(--fg)]">
               {sponsorsHeading}
             </h2>
             <ul className="logo-garden">
@@ -194,18 +194,15 @@ export function App() {
           </div>
         </section>
 
-        {/* About — same grid/type as cursor.com/compile */}
+        {/* About — 3 columns: lead | body | CTA (md+) */}
         <PageSection id="about" className="scroll-mt-8 mt-16 md:mt-24">
-          <div className="grid items-start gap-x-6 gap-y-6 lg:grid-cols-2 lg:gap-x-12 xl:grid-cols-3">
-            <div className="max-md:col-start-auto max-md:row-start-auto md:col-start-1 md:row-span-2 md:row-start-1 md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10">
+          <div className="grid items-start gap-x-6 gap-y-6 md:grid-cols-3 md:gap-x-12">
+            <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
               <p className="type-sm text-pretty text-[var(--fg)]">
                 {about.lead}
               </p>
-              <div className="pt-6 lg:hidden">
-                <AboutCta />
-              </div>
             </div>
-            <div className="grid gap-y-4 md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10">
+            <div className="grid gap-y-4 border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
               {about.body.map(paragraph => (
                 <p
                   key={paragraph}
@@ -215,7 +212,7 @@ export function App() {
                 </p>
               ))}
             </div>
-            <div className="pt-6 max-lg:hidden md:pt-10">
+            <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
               <AboutCta />
             </div>
           </div>

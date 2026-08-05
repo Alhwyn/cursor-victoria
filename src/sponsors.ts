@@ -72,7 +72,7 @@ export const sponsors = [
     name: "Exa",
     src: exa,
     href: "https://exa.ai",
-    logoScale: 0.95,
+    logoScale: 0.85,
   },
   {
     name: "Wispr Flow",

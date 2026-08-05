@@ -45,16 +45,14 @@
 }
 
 /*
- * Compile content column.
- * Width is inset from the viewport (not width:100%), so the section box
- * itself has side margins like cursor.com/compile — not edge-to-edge.
+ * Compile content column — matches cursor.com/compile (mx-auto max-w-7xl px-6).
  */
 .compile-shell {
   box-sizing: border-box;
-  width: min(var(--compile-max), calc(100% - 2 * var(--compile-gutter)));
-  max-width: var(--compile-max);
+  width: 100%;
+  max-width: 80rem;
   margin-inline: auto;
-  padding-inline: var(--compile-px);
+  padding-inline: 1.5rem;
 }
 
 @layer utilities {
@@ -69,6 +67,12 @@
   }
 
   .type-sm {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .type-md-sm {
     font-size: 0.8125rem;
     line-height: 1.5;
     font-weight: 400;
@@ -121,16 +125,41 @@
   background: var(--bg);
 }
 
-/* sponsors — always one row, equal tiles for any count */
+/* Compile marketing layout — logo garden */
+.container {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* sponsors — responsive rows (like cursor.com logo-garden) */
 .logo-garden {
   display: grid;
   width: 100%;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 0.625rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+@media (min-width: 660px) {
+  .logo-garden {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.625rem;
+  }
+}
+
+@media (min-width: 1140px) {
+  .logo-garden {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
 }
 
 .logo-garden > li {
@@ -142,8 +171,9 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.5rem;
-  padding: 0 0.5rem;
+  aspect-ratio: 5 / 2;
+  height: auto;
+  padding: 0 0.625rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 2px;
@@ -156,8 +186,10 @@
 
 .logo-garden-card img {
   display: block;
-  width: 4.5rem;
-  height: 1.35rem;
+  width: auto;
+  height: auto;
+  max-width: 88%;
+  max-height: 72%;
   object-fit: contain;
   object-position: center;
 }
