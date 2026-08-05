@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import { sponsors, sponsorsHeading } from "./sponsors";
 import alhwynAvatar from "./assets/alhwyn-avatar.png";
 import "./index.css";
 
@@ -117,6 +118,9 @@ function SiteHeader() {
           className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 text-sm text-[var(--fg-secondary)] md:flex"
           aria-label="Primary"
         >
+          <a href="#logo-garden" className="transition-colors hover:text-[var(--fg)]">
+            Sponsors
+          </a>
           <a href="#schedule" className="transition-colors hover:text-[var(--fg)]">
             Schedule
           </a>
@@ -196,6 +200,40 @@ export function App() {
                 Exact venue shared after approval.
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* Logo garden — Cursor-style sponsor strip */}
+        <section
+          id="logo-garden"
+          className="mt-24 bg-[#14120b] text-[#f7f7f4] md:mt-32"
+          aria-label="Sponsors"
+        >
+          <div className="mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-14">
+            <p className="text-center text-sm text-[#a8a59a] md:text-[15px]">
+              {sponsorsHeading}
+            </p>
+            <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:mt-10 md:gap-x-12 md:gap-y-10">
+              {sponsors.map(sponsor => (
+                <li key={sponsor.name}>
+                  <a
+                    href={sponsor.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex opacity-80 transition-opacity hover:opacity-100"
+                    aria-label={sponsor.name}
+                  >
+                    <img
+                      src={sponsor.src}
+                      alt={sponsor.name}
+                      className={`w-auto max-w-[9.5rem] object-contain ${sponsor.className}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
