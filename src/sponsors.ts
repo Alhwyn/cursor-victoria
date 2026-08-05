@@ -1,9 +1,9 @@
-import convex from "./assets/sponsors/convex.png";
+import convex from "./assets/sponsors/convex-lockup.svg";
 import elevenlabs from "./assets/sponsors/elevenlabs.png";
-import exa from "./assets/sponsors/exa.png";
+import exa from "./assets/sponsors/exa-lockup.svg";
 import firecrawl from "./assets/sponsors/firecrawl.png";
 import gmi from "./assets/sponsors/gmi.png";
-import mintlify from "./assets/sponsors/mintlify-lockup.png";
+import mintlify from "./assets/sponsors/mintlify-lockup.svg";
 import render from "./assets/sponsors/render.png";
 import shipaton from "./assets/sponsors/shipaton.png";
 import solana from "./assets/sponsors/solana-lockup.svg";
@@ -14,6 +14,12 @@ export const sponsorsHeading =
   "Sponsored by teams that help builders ship";
 
 export const sponsors = [
+  {
+    name: "Convex",
+    src: convex,
+    href: "https://www.convex.dev",
+    logoScale: 1.45,
+  },
   {
     name: "Solana",
     src: solana,
@@ -39,16 +45,10 @@ export const sponsors = [
     logoScale: 0.94,
   },
   {
-    name: "Convex",
-    src: convex,
-    href: "https://www.convex.dev",
-    logoScale: 1.3,
-  },
-  {
     name: "Shipaton",
     src: shipaton,
     href: "https://www.revenuecat.com/shipaton",
-    logoScale: 0.94,
+    logoScale: 1.4,
   },
   {
     name: "ElevenLabs",
@@ -78,6 +78,6 @@ export const sponsors = [
     name: "Wispr Flow",
     src: wisprFlow,
     href: "https://wisprflow.ai",
-    logoScale: 1.02,
+    logoScale: 1.2,
   },
 ] as const;
