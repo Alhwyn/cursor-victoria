@@ -74,3 +74,22 @@ export const who = [
   "Want a full day making something real",
   "Curious — expertise optional",
 ] as const;
+
+export const faq = [
+  {
+    q: "Is it free?",
+    a: "Yes. Participation is free. Space is limited and registration requires approval.",
+  },
+  {
+    q: "Do I need a team?",
+    a: "No. Come solo or with up to four people. You’ll meet builders on the day.",
+  },
+  {
+    q: "What should I bring?",
+    a: "A laptop, chargers, and an idea you’ve been meaning to ship. Mentors and snacks are on site.",
+  },
+  {
+    q: "Where is it?",
+    a: "Victoria, BC. The exact venue is shared after your registration is approved.",
+  },
+] as const;

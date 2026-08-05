@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { about, perks, schedule, site, tracks, who } from "./content";
+import { useEffect, useState, type ReactNode } from "react";
+import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import alhwynAvatar from "./assets/alhwyn-avatar.png";
 import "./index.css";
 
@@ -26,14 +26,14 @@ function CursorLogo({ className = "" }: { className?: string }) {
   );
 }
 
-/** Outlined display wordmark — Compile-inspired, modest stroke, breathing room. */
+/** Outlined display wordmark — Compile-inspired letter colors. */
 function CodechellaWordmark() {
   const letters = [
     { char: "C", color: "#F76D18", delay: "0s" },
     { char: "O", color: "#2C9F28", delay: "0.05s" },
     { char: "D", color: "#A88D02", delay: "0.1s" },
     { char: "E", color: "#8C89E7", delay: "0.15s" },
-    { char: "C", color: "currentColor", delay: "0.2s" },
+    { char: "C", color: "#14120b", delay: "0.2s" },
     { char: "H", color: "#916031", delay: "0.25s" },
     { char: "E", color: "#2268FF", delay: "0.3s" },
     { char: "L", color: "#F76D18", delay: "0.35s" },
@@ -43,19 +43,16 @@ function CodechellaWordmark() {
 
   return (
     <h1
-      className="font-display flex flex-wrap items-center justify-center gap-x-[0.04em] text-[clamp(2.75rem,11vw,7.5rem)] leading-none tracking-[-0.04em] text-[var(--fg)]"
+      className="font-display flex flex-wrap items-center justify-center gap-x-[0.035em] text-[clamp(2.6rem,10.5vw,7.25rem)] leading-none tracking-[-0.045em]"
       aria-label="Codechella"
     >
       {letters.map((letter, i) => (
         <span
           key={`${letter.char}-${i}`}
-          className="inline-block"
+          className="wordmark-letter inline-block"
           style={{
             color: letter.color,
-            WebkitTextStroke: "1.5px currentColor",
-            WebkitTextFillColor: "transparent",
-            paintOrder: "stroke fill",
-            animation: `rise-in 0.8s var(--ease-out) ${letter.delay} both`,
+            animation: `rise-in 0.85s var(--ease-out) ${letter.delay} both`,
           }}
         >
           {letter.char}
@@ -91,17 +88,46 @@ function SectionLabel({ children }: { children: ReactNode }) {
   );
 }
 
-export function App() {
+function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)]">
-      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 pt-8 md:px-10 md:pt-10">
+    <header
+      className={`header-shell fixed top-0 right-0 left-0 z-50 ${
+        scrolled ? "is-scrolled" : ""
+      }`}
+    >
+      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-7xl items-center justify-between px-6 md:px-10">
         <a
-          href="/"
+          href="#top"
           className="inline-flex items-center text-[var(--fg)] transition-opacity hover:opacity-70"
           aria-label="Cursor Codechella home"
         >
-          <CursorLogo className="h-auto w-[72px] md:w-[88px]" />
+          <CursorLogo className="h-auto w-[68px] md:w-[82px]" />
         </a>
+
+        <nav
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 text-sm text-[var(--fg-secondary)] md:flex"
+          aria-label="Primary"
+        >
+          <a href="#schedule" className="transition-colors hover:text-[var(--fg)]">
+            Schedule
+          </a>
+          <a href="#tracks" className="transition-colors hover:text-[var(--fg)]">
+            Tracks
+          </a>
+          <a href="#faq" className="transition-colors hover:text-[var(--fg)]">
+            FAQ
+          </a>
+        </nav>
+
         <a
           href={site.rsvpUrl}
           target="_blank"
@@ -111,14 +137,22 @@ export function App() {
           RSVP
           <ArrowIcon />
         </a>
-      </header>
+      </div>
+    </header>
+  );
+}
 
-      <main>
-        {/* Hero — one composition: brand, wordmark, meta, one CTA */}
-        <section className="mx-auto grid min-h-[72svh] w-full max-w-7xl place-items-center px-6 pb-16 pt-20 md:min-h-[78svh] md:px-10 md:pt-28">
+export function App() {
+  return (
+    <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
+      <SiteHeader />
+
+      <main className="pt-[var(--header-h)]">
+        {/* Hero — brand + wordmark + meta only */}
+        <section className="mx-auto grid min-h-[calc(100svh-var(--header-h))] w-full max-w-7xl place-items-center px-6 pb-20 md:px-10">
           <div className="flex w-full flex-col items-center">
             <CodechellaWordmark />
-            <div className="animate-rise-delay-2 mt-10 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-12 md:text-[15px]">
+            <div className="animate-rise-delay-2 mt-10 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-14 md:text-[15px]">
               <p className="text-[var(--fg)]">An event by Cursor</p>
               <p className="text-[var(--fg-secondary)]">
                 {site.dateShort} · {site.location}
@@ -128,9 +162,12 @@ export function App() {
         </section>
 
         {/* Intro */}
-        <section className="mx-auto max-w-7xl px-6 md:px-10">
+        <section
+          id="about"
+          className="mx-auto max-w-7xl scroll-mt-24 px-6 md:px-10"
+        >
           <div className="grid items-start gap-x-12 gap-y-10 border-t border-[var(--border)] pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
-            <div className="md:col-span-1 lg:col-span-1">
+            <div>
               <p className="text-pretty text-lg leading-snug text-[var(--fg)] md:text-xl">
                 {about.lead}
               </p>
@@ -142,7 +179,7 @@ export function App() {
                 </p>
               ))}
             </div>
-            <div className="border-t border-[var(--border)] pt-8 md:border-t-0 md:pt-0 lg:border-t-0">
+            <div className="border-t border-[var(--border)] pt-8 md:col-span-2 md:border-t-0 md:pt-0 lg:col-span-1">
               <p className="mb-4 text-sm text-[var(--fg-secondary)]">
                 Free to join. Space limited to {site.capacity}.
               </p>
@@ -163,7 +200,10 @@ export function App() {
         </section>
 
         {/* Schedule */}
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
+        <section
+          id="schedule"
+          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
+        >
           <SectionLabel>Schedule</SectionLabel>
           <ul className="border-t border-[var(--border)]">
             {schedule.map(item => (
@@ -181,16 +221,21 @@ export function App() {
         </section>
 
         {/* Tracks */}
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
+        <section
+          id="tracks"
+          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
+        >
           <SectionLabel>Prize tracks</SectionLabel>
           <div className="grid gap-0 border-t border-[var(--border)] md:grid-cols-3">
             {tracks.map((track, index) => (
               <article
                 key={track.name}
                 className={`border-b border-[var(--border)] py-8 md:border-b-0 md:py-10 ${
-                  index < tracks.length - 1
-                    ? "md:border-r md:pr-8 md:[&:not(:first-child)]:pl-8"
-                    : "md:pl-8"
+                  index === 0
+                    ? "md:pr-8"
+                    : index === tracks.length - 1
+                      ? "md:border-l md:pl-8"
+                      : "md:border-l md:px-8"
                 }`}
               >
                 <h2 className="text-base font-medium tracking-tight text-[var(--fg)] md:text-lg">
@@ -237,10 +282,33 @@ export function App() {
           </div>
         </section>
 
+        {/* FAQ */}
+        <section
+          id="faq"
+          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
+        >
+          <SectionLabel>FAQ</SectionLabel>
+          <div className="border-t border-[var(--border)]">
+            {faq.map(item => (
+              <div
+                key={item.q}
+                className="grid gap-2 border-b border-[var(--border)] py-6 md:grid-cols-[minmax(10rem,16rem)_1fr] md:gap-10 md:py-7"
+              >
+                <h3 className="text-sm font-medium text-[var(--fg)] md:text-[15px]">
+                  {item.q}
+                </h3>
+                <p className="text-sm leading-relaxed text-[var(--fg-secondary)] md:text-[15px]">
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Closing CTA */}
         <section className="mx-auto mt-28 max-w-7xl px-6 pb-8 md:mt-40 md:px-10">
           <div className="border-t border-[var(--border)] pt-16 text-center md:pt-24">
-            <p className="font-display text-3xl tracking-tight text-[var(--fg)] md:text-5xl">
+            <p className="font-display animate-rise text-3xl tracking-tight text-[var(--fg)] md:text-5xl">
               Ship something real.
             </p>
             <p className="mx-auto mt-4 max-w-md text-sm text-[var(--fg-secondary)] md:text-[15px]">
@@ -269,7 +337,7 @@ export function App() {
       </main>
 
       <footer className="mx-auto mt-20 flex max-w-7xl flex-col items-center gap-6 px-6 pb-12 md:px-10">
-        <CursorLogo className="h-auto w-[64px] text-[var(--fg)] opacity-80" />
+        <CursorLogo className="h-auto w-[56px] text-[var(--fg)] opacity-70" />
         <div className="flex items-center justify-center gap-2.5 text-sm text-[var(--fg-tertiary)]">
           <span>
             built by{" "}
