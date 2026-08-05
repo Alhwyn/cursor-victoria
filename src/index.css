@@ -204,21 +204,21 @@
   display: block;
   width: auto;
   height: auto;
-  max-width: 72%;
-  max-height: 2rem; /* cursor.com h-[2rem] logos */
+  max-width: 58%;
+  max-height: 1.65rem;
   object-fit: contain;
   object-position: center;
 }
 
 @media (min-width: 640px) {
   .logo-garden-card img {
-    max-height: 2.25rem;
+    max-height: 1.85rem;
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card img {
-    max-height: 2.5rem;
+    max-height: 2rem;
   }
 }
 
