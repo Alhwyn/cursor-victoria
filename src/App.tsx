@@ -162,7 +162,7 @@ export function App() {
           className="compile-shell scroll-mt-8 pb-[2.1rem] pt-0"
           aria-label="Sponsors"
         >
-          <div className="stack container text-center flex w-full flex-col items-center">
+          <div className="stack w-full text-center">
             <h2 className="type-sm mb-[1.4rem] font-normal text-[var(--fg)]">
               {sponsorsHeading}
             </h2>
