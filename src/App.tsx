@@ -1,7 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
-import alhwynAvatar from "./assets/alhwyn-avatar.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
 import "./index.css";
 
@@ -28,21 +27,20 @@ function CursorLogo({ className = "" }: { className?: string }) {
   );
 }
 
-/** Parliament dome sketch as the hero brand mark. */
-function CodechellaMark() {
+/** Parliament dome — spans the same width as the rest of the page shell. */
+function HeroStage() {
   return (
-    <h1 className="animate-rise m-0 w-full max-w-3xl">
-      <span className="sr-only">Codechella</span>
+    <div className="hero-stage w-full">
       <img
         src={parliamentDome}
-        alt=""
-        className="mx-auto h-auto w-full max-w-[min(100%,36rem)] object-contain md:max-w-[42rem]"
+        alt="Pencil sketch of the Victoria parliament buildings"
+        className="mx-auto h-auto w-full max-h-[min(52vw,22rem)] object-contain sm:max-h-[28rem] md:max-h-[34rem]"
         width={998}
         height={582}
         decoding="async"
         fetchPriority="high"
       />
-    </h1>
+    </div>
   );
 }
 
@@ -68,27 +66,46 @@ function ArrowIcon() {
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-4 text-sm text-[var(--fg-tertiary)] md:mb-6">{children}</p>
+    <p className="type-sm mb-4 text-[var(--fg-tertiary)] md:mb-6">{children}</p>
+  );
+}
+
+/** Compile content column — same max width as keynote/about on cursor.com/compile */
+function PageSection({
+  id,
+  className = "",
+  children,
+  ...props
+}: {
+  id?: string;
+  className?: string;
+  children: ReactNode;
+} & Omit<ComponentPropsWithoutRef<"section">, "id" | "className" | "children">) {
+  return (
+    <section id={id} className={`compile-shell ${className}`.trim()} {...props}>
+      {children}
+    </section>
+  );
+}
+
+function AboutCta() {
+  return (
+    <a
+      href={site.rsvpUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex w-full items-center justify-center gap-2 bg-[var(--button-bg)] px-4 py-1.5 text-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
+    >
+      Register on Luma
+      <ArrowIcon />
+    </a>
   );
 }
 
 function SiteHeader() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <header
-      className={`header-shell fixed top-0 right-0 left-0 z-50 ${
-        scrolled ? "is-scrolled" : ""
-      }`}
-    >
-      <div className="mx-auto flex h-[var(--header-h)] w-full max-w-7xl items-center justify-between px-6 md:px-10">
+    <header className="header-shell">
+      <div className="compile-shell relative flex h-[var(--header-h)] items-center justify-between">
         <a
           href="#top"
           className="inline-flex items-center text-[var(--fg)] transition-opacity hover:opacity-70"
@@ -114,16 +131,6 @@ function SiteHeader() {
             FAQ
           </a>
         </nav>
-
-        <a
-          href={site.rsvpUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-sm bg-[var(--button-bg)] px-3.5 py-1.5 text-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
-        >
-          RSVP
-          <ArrowIcon />
-        </a>
       </div>
     </header>
   );
@@ -134,13 +141,14 @@ export function App() {
     <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       <SiteHeader />
 
-      <main className="pt-[var(--header-h)]">
-        {/* Hero — brand + wordmark + meta only */}
-        <section className="mx-auto grid min-h-[calc(100svh-var(--header-h))] w-full max-w-7xl place-items-center px-6 pb-20 md:px-10">
-          <div className="flex w-full flex-col items-center">
-            <CodechellaMark />
-            <div className="animate-rise-delay-2 mt-8 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-10 md:text-[15px]">
-              <p className="text-[var(--fg)]">An event by Cursor</p>
+      <main id="main" className="bg-[#EDECE8] pb-32 md:pb-48">
+        {/* Hero — same structure as cursor.com/compile */}
+        <section className="grid h-[80svh] content-start justify-items-center">
+          <div className="compile-shell flex flex-col items-center">
+            <h1 className="sr-only">Codechella</h1>
+            <HeroStage />
+            <div className="type-sm animate-fade mt-12 flex w-full items-baseline justify-between gap-x-4 gap-y-2 text-[var(--fg)] max-md:flex-wrap">
+              <p>An event by Cursor Community</p>
               <p className="text-[var(--fg-secondary)]">
                 {site.dateShort} · {site.location}
               </p>
@@ -148,28 +156,36 @@ export function App() {
           </div>
         </section>
 
-        {/* Logo garden — above about, like cursor.com */}
-        <section id="logo-garden" className="scroll-mt-24" aria-label="Sponsors">
-          <div className="mx-auto max-w-7xl px-6 py-4 md:px-10 md:py-5">
-            <p className="text-center text-sm text-[var(--fg-secondary)] md:text-[15px]">
+        {/* Logo garden — compile-shell width (same as hero/about) + stack/text-center */}
+        <section
+          id="logo-garden"
+          className="compile-shell scroll-mt-8 pb-[2.1rem] pt-0"
+          aria-label="Sponsors"
+        >
+          <div className="stack container text-center flex w-full flex-col items-center">
+            <h2 className="type-sm mb-v1 mb-[1.4rem] text-sm font-normal leading-[1.5] text-[var(--fg)]">
               {sponsorsHeading}
-            </p>
-            <ul className="logo-garden mt-7 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8 lg:gap-2.5">
+            </h2>
+            <ul className="logo-garden">
               {sponsors.map(sponsor => (
                 <li key={sponsor.name}>
                   <a
                     href={sponsor.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-[4.25rem] items-center justify-center rounded-lg px-3 transition-opacity hover:opacity-80 md:h-[4.75rem]"
+                    className="logo-garden-card"
                     aria-label={sponsor.name}
                   >
                     <img
                       src={sponsor.src}
                       alt={sponsor.name}
-                      className={`w-auto max-w-[7rem] object-contain ${sponsor.className}`}
                       loading="lazy"
                       decoding="async"
+                      style={
+                        "logoScale" in sponsor
+                          ? { transform: `scale(${sponsor.logoScale})` }
+                          : undefined
+                      }
                     />
                   </a>
                 </li>
@@ -178,55 +194,40 @@ export function App() {
           </div>
         </section>
 
-        {/* Intro */}
-        <section
-          id="about"
-          className="mx-auto mt-10 max-w-7xl scroll-mt-24 px-6 md:mt-14 md:px-10"
-        >
-          <div className="grid items-start gap-x-12 gap-y-10 border-t border-[var(--border)] pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
-            <div>
-              <p className="text-pretty text-lg leading-snug text-[var(--fg)] md:text-xl">
+        {/* About — same grid/type as cursor.com/compile */}
+        <PageSection id="about" className="scroll-mt-8 mt-16 md:mt-24">
+          <div className="grid items-start gap-x-6 gap-y-6 lg:grid-cols-2 lg:gap-x-12 xl:grid-cols-3">
+            <div className="max-md:col-start-auto max-md:row-start-auto md:col-start-1 md:row-span-2 md:row-start-1 md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10">
+              <p className="type-sm text-pretty text-[var(--fg)]">
                 {about.lead}
               </p>
+              <div className="pt-6 lg:hidden">
+                <AboutCta />
+              </div>
             </div>
-            <div className="space-y-4 text-sm leading-relaxed text-[var(--fg-secondary)] md:text-[15px]">
+            <div className="grid gap-y-4 md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10">
               {about.body.map(paragraph => (
-                <p key={paragraph} className="text-pretty">
+                <p
+                  key={paragraph}
+                  className="type-sm text-pretty text-[var(--fg-secondary)]"
+                >
                   {paragraph}
                 </p>
               ))}
             </div>
-            <div className="border-t border-[var(--border)] pt-8 md:col-span-2 md:border-t-0 md:pt-0 lg:col-span-1">
-              <p className="mb-4 text-sm text-[var(--fg-secondary)]">
-                Free to join. Space limited to {site.capacity}.
-              </p>
-              <a
-                href={site.rsvpUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-[var(--button-bg)] px-4 py-2.5 text-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
-              >
-                Register on Luma
-                <ArrowIcon />
-              </a>
-              <p className="mt-3 text-xs text-[var(--fg-tertiary)]">
-                Exact venue shared after approval.
-              </p>
+            <div className="pt-6 max-lg:hidden md:pt-10">
+              <AboutCta />
             </div>
           </div>
-        </section>
+        </PageSection>
 
-        {/* Schedule */}
-        <section
-          id="schedule"
-          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
-        >
+        <PageSection id="schedule" className="scroll-mt-8 mt-32 md:mt-64">
           <SectionLabel>Schedule</SectionLabel>
           <ul className="border-t border-[var(--border)]">
             {schedule.map(item => (
               <li
-                key={item.time}
-                className="grid grid-cols-[7rem_1fr] items-baseline gap-4 border-b border-[var(--border)] py-4 text-sm md:grid-cols-[9rem_1fr] md:text-[15px]"
+                key={`${item.time}-${item.label}`}
+                className="type-sm grid grid-cols-[9.5rem_1fr] items-baseline gap-4 border-b border-[var(--border)] py-4 md:grid-cols-[11.5rem_1fr]"
               >
                 <span className="tabular-nums text-[var(--fg-tertiary)]">
                   {item.time}
@@ -235,48 +236,37 @@ export function App() {
               </li>
             ))}
           </ul>
-        </section>
+        </PageSection>
 
-        {/* Tracks */}
-        <section
-          id="tracks"
-          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
-        >
+        <PageSection id="tracks" className="scroll-mt-8 mt-32 md:mt-64">
           <SectionLabel>Prize tracks</SectionLabel>
-          <div className="grid gap-0 border-t border-[var(--border)] md:grid-cols-3">
-            {tracks.map((track, index) => (
+          <div className="grid items-start gap-x-6 gap-y-6 md:grid-cols-3 lg:gap-x-12">
+            {tracks.map(track => (
               <article
                 key={track.name}
-                className={`border-b border-[var(--border)] py-8 md:border-b-0 md:py-10 ${
-                  index === 0
-                    ? "md:pr-8"
-                    : index === tracks.length - 1
-                      ? "md:border-l md:pl-8"
-                      : "md:border-l md:px-8"
-                }`}
+                className="md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10"
               >
-                <h2 className="text-base font-medium tracking-tight text-[var(--fg)] md:text-lg">
+                <h2 className="type-sm font-medium text-[var(--fg)]">
                   {track.name}
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--fg-secondary)]">
+                <p className="type-sm mt-3 text-[var(--fg-secondary)]">
                   {track.detail}
                 </p>
-                <p className="mt-5 text-sm text-[var(--fg)]">{track.prizes}</p>
+                <p className="type-sm mt-5 text-[var(--fg)]">{track.prizes}</p>
               </article>
             ))}
           </div>
-        </section>
+        </PageSection>
 
-        {/* Who + Perks */}
-        <section className="mx-auto mt-28 max-w-7xl px-6 md:mt-40 md:px-10">
-          <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-20">
+        <PageSection className="mt-32 md:mt-64">
+          <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-x-12 md:gap-y-0">
             <div>
               <SectionLabel>Who should come</SectionLabel>
               <ul className="space-y-3">
                 {who.map(line => (
                   <li
                     key={line}
-                    className="text-sm leading-relaxed text-[var(--fg)] md:text-[15px]"
+                    className="type-sm text-[var(--fg)]"
                   >
                     {line}
                   </li>
@@ -289,7 +279,7 @@ export function App() {
                 {perks.map(perk => (
                   <li
                     key={perk}
-                    className="mb-3 break-inside-avoid text-sm leading-relaxed text-[var(--fg)] md:text-[15px]"
+                    className="type-sm mb-3 break-inside-avoid text-[var(--fg)]"
                   >
                     {perk}
                   </li>
@@ -297,13 +287,9 @@ export function App() {
               </ul>
             </div>
           </div>
-        </section>
+        </PageSection>
 
-        {/* FAQ */}
-        <section
-          id="faq"
-          className="mx-auto mt-28 max-w-7xl scroll-mt-24 px-6 md:mt-40 md:px-10"
-        >
+        <PageSection id="faq" className="scroll-mt-8 mt-32 md:mt-64">
           <SectionLabel>FAQ</SectionLabel>
           <div className="border-t border-[var(--border)]">
             {faq.map(item => (
@@ -311,73 +297,17 @@ export function App() {
                 key={item.q}
                 className="grid gap-2 border-b border-[var(--border)] py-6 md:grid-cols-[minmax(10rem,16rem)_1fr] md:gap-10 md:py-7"
               >
-                <h3 className="text-sm font-medium text-[var(--fg)] md:text-[15px]">
+                <h3 className="type-sm font-medium text-[var(--fg)]">
                   {item.q}
                 </h3>
-                <p className="text-sm leading-relaxed text-[var(--fg-secondary)] md:text-[15px]">
+                <p className="type-sm text-[var(--fg-secondary)]">
                   {item.a}
                 </p>
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Closing CTA */}
-        <section className="mx-auto mt-28 max-w-7xl px-6 pb-8 md:mt-40 md:px-10">
-          <div className="border-t border-[var(--border)] pt-16 text-center md:pt-24">
-            <p className="font-display animate-rise text-3xl tracking-tight text-[var(--fg)] md:text-5xl">
-              Ship something real.
-            </p>
-            <p className="mx-auto mt-4 max-w-md text-sm text-[var(--fg-secondary)] md:text-[15px]">
-              {site.date} · {site.location}. Powered by{" "}
-              <a
-                href={site.communityUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--fg)] underline decoration-[var(--border)] underline-offset-4 transition-colors hover:decoration-[var(--fg-secondary)]"
-              >
-                Tenfold
-              </a>
-              .
-            </p>
-            <a
-              href={site.rsvpUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-sm bg-[var(--button-bg)] px-5 py-2.5 text-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
-            >
-              RSVP for Codechella
-              <ArrowIcon />
-            </a>
-          </div>
-        </section>
+        </PageSection>
       </main>
-
-      <footer className="mx-auto mt-20 flex max-w-7xl flex-col items-center gap-6 px-6 pb-12 md:px-10">
-        <CursorLogo className="h-auto w-[56px] text-[var(--fg)] opacity-70" />
-        <div className="flex items-center justify-center gap-2.5 text-sm text-[var(--fg-tertiary)]">
-          <span>
-            built by{" "}
-            <a
-              href={site.footer.builtByUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--fg-secondary)] underline decoration-[var(--border)] underline-offset-2 transition-colors hover:text-[var(--fg)]"
-            >
-              {site.footer.builtBy}
-            </a>
-          </span>
-          <img
-            src={alhwynAvatar}
-            alt=""
-            width={28}
-            height={28}
-            className="h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-[var(--border)]"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-      </footer>
     </div>
   );
 }
