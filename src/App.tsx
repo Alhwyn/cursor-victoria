@@ -121,7 +121,7 @@ export function App() {
             <div className="animate-rise-delay-2 mt-10 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-12 md:text-[15px]">
               <p className="text-[var(--fg)]">An event by Cursor</p>
               <p className="text-[var(--fg-secondary)]">
-                {site.dateShort}, {site.location}
+                {site.dateShort} · {site.location}
               </p>
             </div>
           </div>
