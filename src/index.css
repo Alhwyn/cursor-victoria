@@ -2,23 +2,87 @@
 
 @layer base {
   :root {
-    @apply font-sans text-neutral-900 antialiased;
-    background-color: #f8f8f6;
+    --bg: #edece8;
+    --fg: #14120b;
+    --fg-secondary: #5c5a52;
+    --fg-tertiary: #8a877c;
+    --border: #d9d7cf;
+    --card: #f4f3ee;
+    --button-bg: #14120b;
+    --button-fg: #f7f7f4;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+    color: var(--fg);
+    background-color: var(--bg);
+    font-family: "Geist", "Inter", "Segoe UI", sans-serif;
+    font-feature-settings: "ss01" on, "cv11" on;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: #f8f8f6;
+    background-color: var(--bg);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--fg) 14%, transparent);
   }
 }
 
-.font-hand {
-  font-family: "Gochi Hand", cursive;
+@layer utilities {
+  .font-display {
+    font-family: "Geist", "Inter", "Segoe UI", sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
 }
 
-.section-divider {
-  border-top: 1px solid rgb(229 229 229 / 0.85);
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stroke-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-rise {
+  animation: rise-in 0.9s var(--ease-out) both;
+}
+
+.animate-rise-delay-1 {
+  animation: rise-in 0.9s var(--ease-out) 0.08s both;
+}
+
+.animate-rise-delay-2 {
+  animation: rise-in 0.9s var(--ease-out) 0.16s both;
+}
+
+.animate-rise-delay-3 {
+  animation: rise-in 0.9s var(--ease-out) 0.24s both;
+}
+
+.wordmark-letter {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: stroke-draw 1.4s var(--ease-out) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -28,5 +92,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .wordmark-letter {
+    stroke-dashoffset: 0;
   }
 }
