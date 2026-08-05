@@ -51,6 +51,12 @@ export const tracks = [
     prizes: "1st $1,000 · 2nd $500",
   },
   {
+    name: "Solana",
+    detail:
+      "Best project built with Solana: onchain apps, wallets, payments, or agent tooling on Solana.",
+    prizes: "$500",
+  },
+  {
     name: "Best AI Agent Application",
     detail:
       "Best project using GMI Cloud: deploy a model and build an agent with voice, integrations, or workflows.",

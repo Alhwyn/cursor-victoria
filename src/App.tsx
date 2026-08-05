@@ -233,12 +233,9 @@ export function App() {
 
         <PageSection id="tracks" className="scroll-mt-8 mt-32 md:mt-64">
           <SectionLabel>Prize tracks</SectionLabel>
-          <div className="grid items-stretch gap-x-6 gap-y-6 md:grid-cols-3 lg:gap-x-12">
+          <div className="grid items-stretch gap-x-6 gap-y-6 border-t border-[rgb(20_18_11/0.1)] pt-6 md:grid-cols-2 md:pt-10 lg:grid-cols-4 lg:gap-x-12">
             {tracks.map(track => (
-              <article
-                key={track.name}
-                className="flex h-full flex-col md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10"
-              >
+              <article key={track.name} className="flex h-full flex-col">
                 <h2 className="type-sm font-medium text-[var(--accent)]">
                   {track.name}
                 </h2>
