@@ -10,15 +10,19 @@
     --card: #f4f3ee;
     --button-bg: #14120b;
     --button-fg: #f7f7f4;
+    --accent: #f54e00; /* cursor.com --color-theme-accent */
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --header-h: 4.25rem;
     --g: calc(10rem / 16);
     --spacing-g1: calc(var(--g) * 1);
     --spacing-g2: calc(var(--g) * 2);
-    /* Compile content column (max-w-7xl) + always-visible side gutters */
-    --compile-max: 80rem;
-    --compile-px: 1.5rem;
-    --compile-gutter: clamp(1.5rem, 5vw, 4rem);
+    /*
+     * Content column: max 1300px (cursor.com .container).
+     * Side gutters scale with viewport so left AND right always match —
+     * never collapse to a tiny 20px edge gap on laptop widths.
+     */
+    --page-max: 81.25rem; /* 1300px */
+    --page-gutter: clamp(2.5rem, 13vw, 12rem);
     --grid-columns: 6;
 
     color: var(--fg);
@@ -45,16 +49,15 @@
 }
 
 /*
- * Compile content column.
- * Width is inset from the viewport (not width:100%), so the section box
- * itself has side margins like cursor.com/compile — not edge-to-edge.
+ * Single content shell — equal left/right inset.
+ * width is shrunk by gutters (not padding-inside-max), so both sides match.
  */
-.compile-shell {
+.page-shell {
   box-sizing: border-box;
-  width: min(var(--compile-max), calc(100% - 2 * var(--compile-gutter)));
-  max-width: var(--compile-max);
+  width: min(var(--page-max), calc(100% - 2 * var(--page-gutter)));
+  max-width: var(--page-max);
   margin-inline: auto;
-  padding-inline: var(--compile-px);
+  padding-inline: 0;
 }
 
 @layer utilities {
@@ -69,6 +72,12 @@
   }
 
   .type-sm {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .type-md-sm {
     font-size: 0.8125rem;
     line-height: 1.5;
     font-weight: 400;
@@ -114,23 +123,48 @@
   bottom: 0;
   height: 18%;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent 55%, #edece8 100%);
+  background: linear-gradient(to bottom, transparent 55%, var(--bg) 100%);
 }
 
 .header-shell {
   background: var(--bg);
 }
 
-/* sponsors — always one row, equal tiles for any count */
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+/*
+ * Sponsors — match cursor.com #logo-garden (logo-garden-responsive-8):
+ *   mobile/tablet: 4 cols, folds to multiple rows
+ *   desktop: 6 cols for 11 logos (folds to 2 rows)
+ * Cards use fixed heights (not aspect-ratio), same as cursor.com
+ *   h-16 → sm:h-[4.5rem] → md:h-[6.25rem]
+ */
 .logo-garden {
   display: grid;
   width: 100%;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 0.625rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4375rem;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+@media (min-width: 640px) {
+  .logo-garden {
+    gap: 0.625rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-garden {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.625rem; /* 10px */
+  }
 }
 
 .logo-garden > li {
@@ -142,12 +176,24 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 3.5rem;
-  padding: 0 0.5rem;
+  height: 4rem; /* cursor.com h-[4rem] */
+  padding: 0 0.75rem;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 2px; /* rounded-xs */
   transition: opacity 0.15s var(--ease-out);
+}
+
+@media (min-width: 640px) {
+  .logo-garden-card {
+    height: 4.5rem; /* sm:h-[4.5rem] */
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-garden-card {
+    height: 6.25rem; /* md:h-[6.25rem] */
+  }
 }
 
 .logo-garden-card:hover {
@@ -156,10 +202,24 @@
 
 .logo-garden-card img {
   display: block;
-  width: 4.5rem;
-  height: 1.35rem;
+  width: auto;
+  height: auto;
+  max-width: 58%;
+  max-height: 1.65rem;
   object-fit: contain;
   object-position: center;
+}
+
+@media (min-width: 640px) {
+  .logo-garden-card img {
+    max-height: 1.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-garden-card img {
+    max-height: 2rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -174,5 +234,4 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
 }
