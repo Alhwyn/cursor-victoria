@@ -92,19 +92,6 @@
   animation: fade-in 0.7s var(--ease-out) both;
 }
 
-.wordmark-letter {
-  color: inherit;
-  -webkit-text-stroke: 1.35px currentColor;
-  -webkit-text-fill-color: transparent;
-  paint-order: stroke fill;
-  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out);
-}
-
-.wordmark-letter:hover {
-  transform: translateY(-2px);
-  opacity: 0.85;
-}
-
 .header-shell {
   backdrop-filter: blur(10px);
   background: color-mix(in srgb, var(--bg) 86%, transparent);
@@ -116,6 +103,11 @@
 
 .header-shell.is-scrolled {
   border-bottom-color: var(--border);
+}
+
+.logo-garden > li > a {
+  /* Same cool gray card fill as cursor.com logo garden */
+  background: #e8e9ed;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -131,7 +123,4 @@
     transition-duration: 0.01ms !important;
   }
 
-  .wordmark-letter:hover {
-    transform: none;
-  }
 }

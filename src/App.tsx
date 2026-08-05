@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import alhwynAvatar from "./assets/alhwyn-avatar.png";
+import parliamentDome from "./assets/parliament-dome-sketch.png";
 import "./index.css";
 
 function CursorLogo({ className = "" }: { className?: string }) {
@@ -27,38 +28,20 @@ function CursorLogo({ className = "" }: { className?: string }) {
   );
 }
 
-/** Outlined display wordmark — Compile-inspired letter colors. */
-function CodechellaWordmark() {
-  const letters = [
-    { char: "C", color: "#F76D18", delay: "0s" },
-    { char: "O", color: "#2C9F28", delay: "0.05s" },
-    { char: "D", color: "#A88D02", delay: "0.1s" },
-    { char: "E", color: "#8C89E7", delay: "0.15s" },
-    { char: "C", color: "#14120b", delay: "0.2s" },
-    { char: "H", color: "#916031", delay: "0.25s" },
-    { char: "E", color: "#2268FF", delay: "0.3s" },
-    { char: "L", color: "#F76D18", delay: "0.35s" },
-    { char: "L", color: "#2C9F28", delay: "0.4s" },
-    { char: "A", color: "#8C89E7", delay: "0.45s" },
-  ] as const;
-
+/** Parliament dome sketch as the hero brand mark. */
+function CodechellaMark() {
   return (
-    <h1
-      className="font-display flex flex-wrap items-center justify-center gap-x-[0.035em] text-[clamp(2.6rem,10.5vw,7.25rem)] leading-none tracking-[-0.045em]"
-      aria-label="Codechella"
-    >
-      {letters.map((letter, i) => (
-        <span
-          key={`${letter.char}-${i}`}
-          className="wordmark-letter inline-block"
-          style={{
-            color: letter.color,
-            animation: `rise-in 0.85s var(--ease-out) ${letter.delay} both`,
-          }}
-        >
-          {letter.char}
-        </span>
-      ))}
+    <h1 className="animate-rise m-0 w-full max-w-3xl">
+      <span className="sr-only">Codechella</span>
+      <img
+        src={parliamentDome}
+        alt=""
+        className="mx-auto h-auto w-full max-w-[min(100%,36rem)] object-contain md:max-w-[42rem]"
+        width={998}
+        height={582}
+        decoding="async"
+        fetchPriority="high"
+      />
     </h1>
   );
 }
@@ -155,8 +138,8 @@ export function App() {
         {/* Hero — brand + wordmark + meta only */}
         <section className="mx-auto grid min-h-[calc(100svh-var(--header-h))] w-full max-w-7xl place-items-center px-6 pb-20 md:px-10">
           <div className="flex w-full flex-col items-center">
-            <CodechellaWordmark />
-            <div className="animate-rise-delay-2 mt-10 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-14 md:text-[15px]">
+            <CodechellaMark />
+            <div className="animate-rise-delay-2 mt-8 flex w-full max-w-3xl items-baseline justify-between gap-x-4 gap-y-2 text-sm max-sm:flex-col max-sm:items-center max-sm:text-center md:mt-10 md:text-[15px]">
               <p className="text-[var(--fg)]">An event by Cursor</p>
               <p className="text-[var(--fg-secondary)]">
                 {site.dateShort} · {site.location}
@@ -165,10 +148,40 @@ export function App() {
           </div>
         </section>
 
+        {/* Logo garden — above about, like cursor.com */}
+        <section id="logo-garden" className="scroll-mt-24" aria-label="Sponsors">
+          <div className="mx-auto max-w-7xl px-6 py-4 md:px-10 md:py-5">
+            <p className="text-center text-sm text-[var(--fg-secondary)] md:text-[15px]">
+              {sponsorsHeading}
+            </p>
+            <ul className="logo-garden mt-7 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8 lg:gap-2.5">
+              {sponsors.map(sponsor => (
+                <li key={sponsor.name}>
+                  <a
+                    href={sponsor.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-[4.25rem] items-center justify-center rounded-lg px-3 transition-opacity hover:opacity-80 md:h-[4.75rem]"
+                    aria-label={sponsor.name}
+                  >
+                    <img
+                      src={sponsor.src}
+                      alt={sponsor.name}
+                      className={`w-auto max-w-[7rem] object-contain ${sponsor.className}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
         {/* Intro */}
         <section
           id="about"
-          className="mx-auto max-w-7xl scroll-mt-24 px-6 md:px-10"
+          className="mx-auto mt-10 max-w-7xl scroll-mt-24 px-6 md:mt-14 md:px-10"
         >
           <div className="grid items-start gap-x-12 gap-y-10 border-t border-[var(--border)] pt-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
             <div>
@@ -200,40 +213,6 @@ export function App() {
                 Exact venue shared after approval.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* Logo garden — Cursor-style sponsor strip */}
-        <section
-          id="logo-garden"
-          className="mt-24 bg-[#14120b] text-[#f7f7f4] md:mt-32"
-          aria-label="Sponsors"
-        >
-          <div className="mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-14">
-            <p className="text-center text-sm text-[#a8a59a] md:text-[15px]">
-              {sponsorsHeading}
-            </p>
-            <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:mt-10 md:gap-x-12 md:gap-y-10">
-              {sponsors.map(sponsor => (
-                <li key={sponsor.name}>
-                  <a
-                    href={sponsor.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex opacity-80 transition-opacity hover:opacity-100"
-                    aria-label={sponsor.name}
-                  >
-                    <img
-                      src={sponsor.src}
-                      alt={sponsor.name}
-                      className={`w-auto max-w-[9.5rem] object-contain ${sponsor.className}`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
 
