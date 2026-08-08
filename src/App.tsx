@@ -178,11 +178,6 @@ export function App() {
                       alt={sponsor.name}
                       loading="lazy"
                       decoding="async"
-                      style={
-                        "logoScale" in sponsor
-                          ? { transform: `scale(${sponsor.logoScale})` }
-                          : undefined
-                      }
                     />
                   </a>
                 </li>
