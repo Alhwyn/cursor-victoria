@@ -43,6 +43,8 @@ export const sponsors = [
     name: "Shipaton",
     src: shipaton,
     href: "https://www.revenuecat.com/shipaton",
+    /** Sparse pixel-art mark — slight optical bump to match neighbors. */
+    opticalScale: 1.18,
   },
   {
     name: "ElevenLabs",
