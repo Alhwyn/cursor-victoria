@@ -32,16 +32,6 @@
           format("woff2");
       }
     </style>
-    <script>
-      // For now: always land on / instead of /#schedule (or other hash URLs).
-      if (window.location.hash) {
-        window.history.replaceState(
-          null,
-          "",
-          window.location.pathname + window.location.search,
-        );
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>

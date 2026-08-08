@@ -244,6 +244,28 @@
   }
 }
 
+/* Inspiration — horizontal project carousel (community-gallery style) */
+.inspiration-carousel {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--fg) 25%, transparent) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inspiration-carousel::-webkit-scrollbar {
+  height: 0.35rem;
+}
+
+.inspiration-carousel::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--fg) 25%, transparent);
+  border-radius: 999px;
+}
+
+.inspiration-carousel:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
