@@ -179,8 +179,8 @@ export function App() {
                       loading="lazy"
                       decoding="async"
                       style={
-                        "logoScale" in sponsor
-                          ? { transform: `scale(${sponsor.logoScale})` }
+                        "opticalScale" in sponsor
+                          ? { transform: `scale(${sponsor.opticalScale})` }
                           : undefined
                       }
                     />

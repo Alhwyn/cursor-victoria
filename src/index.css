@@ -143,6 +143,8 @@
  *   desktop: 6 cols for 11 logos (folds to 2 rows)
  * Cards use fixed heights (not aspect-ratio), same as cursor.com
  *   h-16 → sm:h-[4.5rem] → md:h-[6.25rem]
+ * Logo marks (logo-flip-card):
+ *   h-[1.5rem] → sm:1.75 → md:2 → lg:2.25 → xl:2.5rem
  */
 .logo-garden {
   display: grid;
@@ -177,7 +179,8 @@
   justify-content: center;
   width: 100%;
   height: 4rem; /* cursor.com h-[4rem] */
-  padding: 0 0.75rem;
+  /* cursor.com: px-g0.5 sm:px-g0.75 */
+  padding: 0 calc(var(--g) * 0.5);
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 2px; /* rounded-xs */
@@ -187,6 +190,7 @@
 @media (min-width: 640px) {
   .logo-garden-card {
     height: 4.5rem; /* sm:h-[4.5rem] */
+    padding: 0 calc(var(--g) * 0.75);
   }
 }
 
@@ -200,25 +204,43 @@
   opacity: 0.8;
 }
 
+/*
+ * Logo mark size — match cursor.com logo-flip-card SVG heights:
+ *   1.5 → sm:1.75 → md:2 → lg:2.25 → xl:2.5rem
+ * Cap width so wide wordmarks don’t dominate; aspect ratio stays intact.
+ * No per-logo transform scales.
+ */
 .logo-garden-card img {
   display: block;
   width: auto;
   height: auto;
-  max-width: 58%;
-  max-height: 1.65rem;
+  max-height: 1.5rem;
+  max-width: 72%;
   object-fit: contain;
   object-position: center;
 }
 
 @media (min-width: 640px) {
   .logo-garden-card img {
-    max-height: 1.85rem;
+    max-height: 1.75rem;
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card img {
     max-height: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-garden-card img {
+    max-height: 2.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .logo-garden-card img {
+    max-height: 2.5rem;
   }
 }
 
