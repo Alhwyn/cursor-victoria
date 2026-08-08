@@ -289,36 +289,6 @@ function HomePage() {
         </div>
       </PageSection>
 
-      <PageSection
-        id="inspiration-teaser"
-        className="scroll-mt-8 mt-32 md:mt-64"
-        aria-label="Inspiration"
-      >
-        <div className="grid items-end gap-6 border-t border-[var(--border)] pt-10 md:grid-cols-[1fr_auto]">
-          <div>
-            <SectionLabel>Inspiration</SectionLabel>
-            <h2 className="font-display text-[1.35rem] leading-tight text-[var(--fg)] md:text-[1.65rem]">
-              See what builders ship
-            </h2>
-            <p className="mt-3 max-w-xl type-sm text-pretty text-[var(--fg-secondary)]">
-              A carousel and gallery of projects from the Cursor community — fuel
-              for your Codechella idea.
-            </p>
-          </div>
-          <a
-            href="/inspiration"
-            className="inline-flex w-full items-center justify-center gap-2 bg-[var(--button-bg)] px-4 py-1.5 type-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820] md:w-auto"
-            onClick={event => {
-              event.preventDefault();
-              navigate("/inspiration");
-            }}
-          >
-            Browse Inspiration
-            <ArrowIcon />
-          </a>
-        </div>
-      </PageSection>
-
       <PageSection id="schedule" className="scroll-mt-8 mt-32 md:mt-64">
         <SectionLabel>Schedule</SectionLabel>
         <ul className="border-t border-[var(--border)]">
