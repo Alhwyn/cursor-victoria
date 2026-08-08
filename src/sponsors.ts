@@ -38,13 +38,14 @@ export const sponsors = [
     name: "UVEC",
     src: uvec,
     href: "https://www.linkedin.com/company/uvic-entrepreneurship-club",
+    opticalScale: 0.88,
   },
   {
     name: "Shipaton",
     src: shipaton,
     href: "https://www.revenuecat.com/shipaton",
-    /** Sparse pixel-art mark — slight optical bump to match neighbors. */
-    opticalScale: 1.18,
+    /** Sparse pixel-art mark — needs more optical weight than dense wordmarks. */
+    opticalScale: 1.38,
   },
   {
     name: "ElevenLabs",
@@ -65,6 +66,7 @@ export const sponsors = [
     name: "Exa",
     src: exa,
     href: "https://exa.ai",
+    opticalScale: 0.82,
   },
   {
     name: "Wispr Flow",
