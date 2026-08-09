@@ -393,7 +393,7 @@ export function App() {
   useEffect(() => {
     const title =
       route === "inspiration"
-        ? "Inspiration · Cursor Codechella"
+        ? "Inspiration Board · Cursor Codechella"
         : "Cursor · Codechella";
     document.title = title;
 
@@ -410,8 +410,14 @@ export function App() {
 
   return (
     <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
-      <SiteHeader route={route} />
-      {route === "inspiration" ? <InspirationPage /> : <HomePage />}
+      {route === "inspiration" ? (
+        <InspirationPage />
+      ) : (
+        <>
+          <SiteHeader route={route} />
+          <HomePage />
+        </>
+      )}
     </div>
   );
 }

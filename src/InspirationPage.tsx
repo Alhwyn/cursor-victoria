@@ -1,255 +1,188 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import {
   inspirationIntro,
-  inspirationProjects,
-  type InspirationProject,
+  inspirationItems,
+  type InspirationItem,
 } from "./inspiration";
-import { site } from "./content";
 
-function ArrowIcon() {
+function navigateHome() {
+  window.history.pushState({}, "", "/");
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+
+function XIcon() {
   return (
-    <svg
-      className="h-[1em] w-[1em] shrink-0"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <path
-        d="M4 12L12 4M12 4H6M12 4V10"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
 
-function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <p className="type-sm mb-4 text-[var(--fg-tertiary)] md:mb-6">{children}</p>
-  );
-}
-
-function spanClass(span: InspirationProject["span"]): string {
-  switch (span) {
-    case "short":
-      return "aspect-[4/3]";
-    case "medium":
-      return "aspect-[3/4]";
-    case "tall":
-      return "aspect-[2/3]";
-    default: {
-      const _exhaustive: never = span;
-      return _exhaustive;
-    }
+function builderInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) {
+    return (parts[0]?.slice(0, 2) ?? "?").toUpperCase();
   }
+  const first = parts[0]?.[0] ?? "";
+  const last = parts[parts.length - 1]?.[0] ?? "";
+  return `${first}${last}`.toUpperCase();
 }
 
-function ProjectCaption({
-  title,
+function BuilderAvatar({
   builder,
+  avatarSrc,
 }: {
-  title: string;
   builder: string;
+  avatarSrc?: string;
 }) {
-  return (
-    <figcaption className="mt-2 type-sm text-[var(--fg-secondary)]">
-      <span className="text-[var(--fg)]">{title}</span>
-      <span className="text-[var(--fg-tertiary)]"> · {builder}</span>
-    </figcaption>
-  );
-}
-
-function ProjectMedia({
-  project,
-  className = "",
-  priority = false,
-}: {
-  project: InspirationProject;
-  className?: string;
-  priority?: boolean;
-}) {
-  const image = (
-    <img
-      src={project.imageSrc}
-      alt={project.imageAlt}
-      className={`block h-full w-full object-cover ${className}`.trim()}
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      fetchPriority={priority ? "high" : "auto"}
-    />
-  );
-
-  if (project.href) {
+  if (avatarSrc) {
     return (
-      <a
-        href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--fg)]"
-        aria-label={`${project.title} by ${project.builder}`}
-      >
-        {image}
-      </a>
+      <img
+        src={avatarSrc}
+        alt=""
+        className="h-7 w-7 shrink-0 rounded-full object-cover bg-[var(--border)]"
+        loading="lazy"
+        decoding="async"
+      />
     );
   }
 
-  return image;
-}
-
-/** Horizontal scroll carousel — community-gallery style strip of featured builds. */
-function ProjectCarousel({ projects }: { projects: InspirationProject[] }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
-
-  const updateEdges = () => {
-    const el = trackRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setCanPrev(el.scrollLeft > 8);
-    setCanNext(el.scrollLeft < max - 8);
-  };
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    updateEdges();
-    el.addEventListener("scroll", updateEdges, { passive: true });
-    window.addEventListener("resize", updateEdges);
-    return () => {
-      el.removeEventListener("scroll", updateEdges);
-      window.removeEventListener("resize", updateEdges);
-    };
-  }, [projects]);
-
-  const scrollByCard = (direction: -1 | 1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector<HTMLElement>("[data-carousel-card]");
-    const amount = card ? card.offsetWidth + 16 : el.clientWidth * 0.7;
-    el.scrollBy({ left: direction * amount, behavior: "smooth" });
-  };
-
   return (
-    <section
-      className="group flex flex-col"
-      aria-label="Featured project carousel"
-      data-intro="true"
+    <span
+      className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--border)] type-sm font-medium text-[var(--fg-secondary)]"
+      aria-hidden
     >
-      <div className="mb-4 flex items-end justify-between gap-4 md:mb-6">
-        <SectionLabel>Featured builds</SectionLabel>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="inline-flex h-8 w-8 items-center justify-center border border-[var(--border)] bg-[var(--card)] text-[var(--fg)] transition-opacity disabled:opacity-30"
-            aria-label="Previous projects"
-            disabled={!canPrev}
-            onClick={() => scrollByCard(-1)}
-          >
-            <span className="rotate-180" aria-hidden>
-              <ArrowIcon />
-            </span>
-          </button>
-          <button
-            type="button"
-            className="inline-flex h-8 w-8 items-center justify-center border border-[var(--border)] bg-[var(--card)] text-[var(--fg)] transition-opacity disabled:opacity-30"
-            aria-label="Next projects"
-            disabled={!canNext}
-            onClick={() => scrollByCard(1)}
-          >
-            <ArrowIcon />
-          </button>
-        </div>
-      </div>
-
-      <div
-        ref={trackRef}
-        className="inspiration-carousel flex gap-3 overflow-x-auto pb-2 md:gap-4"
-        tabIndex={0}
-      >
-        {projects.map((project, index) => (
-          <figure
-            key={project.id}
-            data-carousel-card
-            className="w-[min(78vw,22rem)] shrink-0 snap-start md:w-[26rem]"
-          >
-            <div className="relative overflow-hidden bg-[var(--card)]">
-              <div className="aspect-[4/3]">
-                <ProjectMedia project={project} priority={index < 2} />
-              </div>
-              <p className="pointer-events-none absolute bottom-3 left-3 type-sm uppercase tracking-[0.04em] text-white drop-shadow-[0_1px_2px_rgb(0_0_0/0.55)]">
-                {project.builder}
-              </p>
-            </div>
-            <ProjectCaption title={project.title} builder={project.track} />
-            <p className="mt-1 type-sm text-pretty text-[var(--fg-tertiary)]">
-              {project.summary}
-            </p>
-          </figure>
-        ))}
-      </div>
-    </section>
+      {builderInitials(builder)}
+    </span>
   );
 }
 
-/** Masonry columns gallery — matches cursor.com community photo grid. */
-function ProjectMasonry({ projects }: { projects: InspirationProject[] }) {
+function InspirationCard({
+  item,
+  priority = false,
+}: {
+  item: InspirationItem;
+  priority?: boolean;
+}) {
   return (
-    <section
-      className="mt-16 md:mt-24"
-      aria-label="Project gallery"
+    <a
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inspiration-card group flex flex-col overflow-hidden rounded-lg"
     >
-      <SectionLabel>Gallery</SectionLabel>
-      <div className="mt-2 columns-2 gap-2 md:columns-3 lg:mt-4 lg:gap-4">
-        {projects.map(project => (
-          <figure
-            key={project.id}
-            className="mb-2 break-inside-avoid md:mb-4"
-          >
-            <div className={`overflow-hidden bg-[var(--card)] ${spanClass(project.span)}`}>
-              <ProjectMedia project={project} />
-            </div>
-            <ProjectCaption title={project.title} builder={project.builder} />
-          </figure>
-        ))}
+      <div className="w-full overflow-hidden rounded-lg bg-[var(--card)]">
+        <img
+          src={item.imageSrc}
+          alt={item.imageAlt}
+          className="h-auto w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02]"
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
+        />
       </div>
-    </section>
+      <div className="flex flex-1 flex-col pb-2 pt-4">
+        <p className="mb-3 flex-1 text-[14px] leading-relaxed text-[var(--fg-secondary)]">
+          {item.description}
+        </p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <BuilderAvatar builder={item.builder} avatarSrc={item.avatarSrc} />
+            <span className="truncate text-[13px] font-medium text-[var(--fg)]">
+              {item.builder}
+            </span>
+          </div>
+          <span className="shrink-0 text-[var(--fg-tertiary)] transition-colors group-hover:text-[var(--fg-secondary)]">
+            <XIcon />
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function Reveal({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      el.classList.add("is-visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            el.classList.add("is-visible");
+            observer.unobserve(el);
+          }
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="inspiration-reveal">
+      {children}
+    </div>
   );
 }
 
 export function InspirationPage() {
-  const featured = inspirationProjects.filter(p => p.featured);
-  const gallery = inspirationProjects;
-
   return (
-    <main id="main" className="bg-[var(--bg)] pb-32 md:pb-48">
-      <section className="page-shell scroll-mt-8 pt-10 md:pt-16">
-        <p className="type-sm text-[var(--fg-tertiary)]">{inspirationIntro.label}</p>
-        <h1 className="mt-3 max-w-2xl font-display text-[1.75rem] leading-tight text-[var(--fg)] md:text-[2.25rem]">
-          {inspirationIntro.title}
-        </h1>
-        <p className="mt-4 max-w-xl type-sm text-pretty text-[var(--fg-secondary)]">
-          {inspirationIntro.body}
-        </p>
-        <div className="mt-6">
-          <a
-            href={site.rsvpUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[var(--button-bg)] px-4 py-1.5 type-sm text-[var(--button-fg)] transition-colors hover:bg-[#2a2820]"
-          >
-            Register on Luma
-            <ArrowIcon />
-          </a>
-        </div>
-      </section>
+    <main id="main" className="bg-[var(--bg)] pb-24 md:pb-32">
+      <nav className="page-shell pt-8" aria-label="Inspiration">
+        <a
+          href="/"
+          className="inline-flex items-center gap-1.5 type-sm text-[var(--fg-tertiary)] transition-colors hover:text-[var(--fg)]"
+          onClick={event => {
+            event.preventDefault();
+            navigateHome();
+          }}
+        >
+          <span aria-hidden>←</span> Back to home
+        </a>
+      </nav>
 
-      <section className="page-shell mt-12 md:mt-16">
-        <ProjectCarousel projects={featured} />
-        <ProjectMasonry projects={gallery} />
+      <section
+        id="inspiration"
+        className="page-shell py-12 md:py-20"
+        aria-labelledby="inspiration-title"
+      >
+        <div className="mb-12 max-w-2xl md:mb-16">
+          <h1
+            id="inspiration-title"
+            className="font-display text-3xl font-medium leading-tight text-[var(--fg)] md:text-5xl"
+          >
+            {inspirationIntro.title}
+          </h1>
+          <p className="mt-6 text-lg leading-relaxed text-[var(--fg-secondary)]">
+            {inspirationIntro.body}
+          </p>
+        </div>
+
+        <div
+          className="columns-1 gap-8 md:columns-2 lg:columns-3"
+          aria-label="Inspiration board gallery"
+        >
+          {inspirationItems.map((item, index) => (
+            <div key={item.id} className="mb-8 break-inside-avoid">
+              <Reveal>
+                <InspirationCard item={item} priority={index < 3} />
+              </Reveal>
+            </div>
+          ))}
+        </div>
       </section>
     </main>
   );

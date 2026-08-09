@@ -5,124 +5,118 @@ import meetup04 from "./assets/meetup/04-cowork.png";
 import meetup05 from "./assets/meetup/05-banner.png";
 import harborMeetup from "./assets/harbor-meetup.png";
 import workshopVenue from "./assets/workshop-venue.png";
+import parliamentOutdoor from "./assets/parliament-outdoor-impressionist-oil-no-figure.png";
+import alhwynAvatar from "./assets/alhwyn-avatar.png";
 
-/** Projects people have built — edit here to update the Inspiration page. */
-export type InspirationProject = {
+/** Inspiration Board items — edit here to update /inspiration. */
+export type InspirationItem = {
   id: string;
-  title: string;
+  /** Short caption under the media (tweet-style description). */
+  description: string;
   builder: string;
-  summary: string;
-  track: string;
-  href?: string;
+  /** Optional avatar image; falls back to initials. */
+  avatarSrc?: string;
+  /** Link to the demo, tweet, or project. */
+  href: string;
   imageSrc: string;
   imageAlt: string;
-  /** Taller / shorter cells for masonry rhythm */
-  span: "short" | "medium" | "tall";
-  featured?: boolean;
 };
 
 export const inspirationIntro = {
-  label: "Inspiration",
-  title: "Projects people have built",
-  body: "A gallery of builds from the Cursor community — use them as sparks for what you ship at Codechella.",
+  title: "Inspiration Board",
+  body: "Here are some cool demos/ships we came across, we wanted to share with you as a source of inspo for what you might ship.",
 } as const;
 
-export const inspirationProjects: InspirationProject[] = [
+export const inspirationItems: InspirationItem[] = [
   {
     id: "harbor-notes",
-    title: "Harbor Notes",
+    description:
+      "Realtime shared notes for meetup tables — open a board, drop a thought, watch the room sync live.",
     builder: "Maya Chen",
-    summary: "Realtime shared notes for meetup tables, synced live with Convex.",
-    track: "Convex",
     href: "https://www.convex.dev",
     imageSrc: harborMeetup,
-    imageAlt: "Victoria harbour at dusk — Harbor Notes project visual",
-    span: "tall",
-    featured: true,
+    imageAlt: "Victoria harbour at dusk",
   },
   {
     id: "demo-coach",
-    title: "Demo Coach",
+    description:
+      "An agent that times your 3-minute demo and suggests tighter cuts before you get on stage.",
     builder: "Jordan Lee",
-    summary: "An agent that times your 3-minute demo and suggests tighter cuts.",
-    track: "AI Agent",
+    href: "https://cursor.com",
     imageSrc: meetup01,
-    imageAlt: "Builders watching a tech presentation on a large screen",
-    span: "medium",
-    featured: true,
+    imageAlt: "Builders watching a tech presentation",
   },
   {
     id: "sticker-radar",
-    title: "Sticker Radar",
+    description:
+      "Scan event stickers, collect digital badges, and trade them with other builders on the floor.",
     builder: "Priya Nair",
-    summary: "Scan event stickers, collect digital badges, and trade with other builders.",
-    track: "Shipaton",
+    href: "https://cursor.com",
     imageSrc: meetup02,
     imageAlt: "Cursor stickers and enamel pin on a table",
-    span: "short",
-    featured: true,
   },
   {
     id: "cafe-cursor",
-    title: "Cafe Cursor",
+    description:
+      "Find open cowork tables nearby and drop a status for who is shipping what.",
     builder: "Alex Rivera",
-    summary: "Find open cowork tables nearby and drop a status for who is shipping what.",
-    track: "Realtime",
+    href: "https://luma.com/tenfold",
     imageSrc: meetup03,
     imageAlt: "People gathering at a cafe meetup",
-    span: "medium",
-    featured: true,
   },
   {
     id: "pair-queue",
-    title: "Pair Queue",
+    description:
+      "Match solo builders into temporary pairs for the afternoon sprint. You can just make software with someone new.",
     builder: "Sam Okonkwo",
-    summary: "Match solo builders into temporary pairs for the afternoon sprint.",
-    track: "Convex",
+    href: "https://www.convex.dev",
     imageSrc: meetup04,
     imageAlt: "Coworking space during a build session",
-    span: "tall",
-    featured: true,
   },
   {
     id: "banner-bot",
-    title: "Banner Bot",
+    description:
+      "Voice-controlled slide captions for demos — talk through your build and the deck keeps up.",
     builder: "Riley Park",
-    summary: "Voice-controlled slide captions for demos, powered by speech models.",
-    track: "AI Agent",
+    href: "https://cursor.com",
     imageSrc: meetup05,
     imageAlt: "Cursor banner at a community event",
-    span: "short",
-    featured: true,
   },
   {
     id: "venue-scout",
-    title: "Venue Scout",
+    description:
+      "Map quiet corners, power outlets, and mentor desks for the venue floor so you stop wandering mid-debug.",
     builder: "Casey Ng",
-    summary: "Map quiet corners, power outlets, and mentor desks for the venue floor.",
-    track: "Shipaton",
+    href: "https://luma.com/cursorvictoria",
     imageSrc: workshopVenue,
     imageAlt: "Street facade of a workshop venue",
-    span: "medium",
   },
   {
     id: "ship-log",
-    title: "Ship Log",
+    description:
+      "A public feed of what broke, what shipped, and what you would try next. Built for demo day energy.",
     builder: "Taylor Brooks",
-    summary: "A public feed of what broke, what shipped, and what you would try next.",
-    track: "Community",
+    href: "https://cursor.com",
     imageSrc: meetup01,
     imageAlt: "Community presentation during a hackathon",
-    span: "short",
   },
   {
     id: "mentor-ping",
-    title: "Mentor Ping",
+    description:
+      "Request a five-minute unblock from mentors without leaving your editor.",
     builder: "Nina Volkov",
-    summary: "Request a five-minute unblock from mentors without leaving your editor.",
-    track: "Realtime",
+    href: "https://www.convex.dev",
     imageSrc: meetup04,
     imageAlt: "Builders working side by side in a cowork space",
-    span: "medium",
+  },
+  {
+    id: "parliament-sketch",
+    description:
+      "Weekend experiments turning Victoria landmarks into generative postcards for hackathon swag.",
+    builder: "Alhwyn",
+    avatarSrc: alhwynAvatar,
+    href: "https://x.com/alhwynn",
+    imageSrc: parliamentOutdoor,
+    imageAlt: "Impressionist sketch of Victoria parliament outdoors",
   },
 ] as const;

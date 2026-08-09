@@ -244,26 +244,23 @@
   }
 }
 
-/* Inspiration — horizontal project carousel (community-gallery style) */
-.inspiration-carousel {
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--fg) 25%, transparent) transparent;
-  -webkit-overflow-scrolling: touch;
-}
-
-.inspiration-carousel::-webkit-scrollbar {
-  height: 0.35rem;
-}
-
-.inspiration-carousel::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--fg) 25%, transparent);
-  border-radius: 999px;
-}
-
-.inspiration-carousel:focus-visible {
+/* Inspiration Board — Waterloo-style masonry cards */
+.inspiration-card:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 4px;
+}
+
+.inspiration-reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.55s var(--ease-out),
+    transform 0.55s var(--ease-out);
+}
+
+.inspiration-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
