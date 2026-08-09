@@ -244,23 +244,19 @@
   }
 }
 
-/* Inspiration Board — Waterloo-style masonry cards */
-.inspiration-card:focus-visible {
+/* Inspiration — community-gallery style horizontal strip */
+.inspiration-gallery-track {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inspiration-gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.inspiration-gallery-track:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 4px;
-}
-
-.inspiration-reveal {
-  opacity: 0;
-  transform: translateY(1.5rem);
-  transition:
-    opacity 0.55s var(--ease-out),
-    transform 0.55s var(--ease-out);
-}
-
-.inspiration-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
