@@ -244,6 +244,27 @@
   }
 }
 
+/* Inspiration — community-gallery style horizontal strip */
+.inspiration-gallery-track {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inspiration-gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.inspiration-gallery-track:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+}
+
+/* Inspiration Board masonry cards */
+.inspiration-card:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

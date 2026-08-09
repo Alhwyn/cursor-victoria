@@ -1,9 +1,39 @@
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import { InspirationPage } from "./InspirationPage";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
 import "./index.css";
+
+type Route = "home" | "inspiration";
+
+function pathToRoute(pathname: string): Route {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  if (normalized === "/inspiration") return "inspiration";
+  return "home";
+}
+
+function navigate(path: string) {
+  const url = new URL(path, window.location.href);
+  const next = `${url.pathname}${url.search}${url.hash}`;
+  const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+  if (current === next) {
+    if (url.hash) {
+      document.getElementById(url.hash.slice(1))?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+    return;
+  }
+  window.history.pushState({}, "", next);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
 
 /** Cursor wordmark lockup — masked so it inherits currentColor. */
 function CursorLogo({ className = "" }: { className?: string }) {
@@ -101,205 +131,287 @@ function AboutCta() {
   );
 }
 
-function SiteHeader() {
+function NavLink({
+  href,
+  children,
+  active = false,
+}: {
+  href: string;
+  children: ReactNode;
+  active?: boolean;
+}) {
+  const isExternal = href.startsWith("http");
+
+  if (isExternal) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="transition-colors hover:text-[var(--fg)]"
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      className={`transition-colors hover:text-[var(--fg)] ${
+        active ? "text-[var(--fg)]" : ""
+      }`}
+      aria-current={active ? "page" : undefined}
+      onClick={event => {
+        event.preventDefault();
+        navigate(href);
+      }}
+    >
+      {children}
+    </a>
+  );
+}
+
+function SiteHeader({ route }: { route: Route }) {
   return (
     <header className="header-shell">
       <div className="page-shell flex h-[var(--header-h)] items-center justify-between">
         <a
-          href="#top"
+          href="/"
           className="inline-flex items-center text-[var(--fg)] transition-opacity hover:opacity-70"
           aria-label="Cursor Codechella home"
+          onClick={event => {
+            event.preventDefault();
+            navigate("/");
+          }}
         >
           <CursorLogo className="h-auto w-[68px] md:w-[82px]" />
         </a>
 
         <nav
-          className="hidden items-center gap-7 type-sm text-[var(--fg-secondary)] md:flex"
+          className="flex items-center gap-4 type-sm text-[var(--fg-secondary)] md:gap-7"
           aria-label="Primary"
         >
-          <a href="#logo-garden" className="transition-colors hover:text-[var(--fg)]">
-            Sponsors
-          </a>
-          <a href="#schedule" className="transition-colors hover:text-[var(--fg)]">
-            Schedule
-          </a>
-          <a href="#tracks" className="transition-colors hover:text-[var(--fg)]">
-            Tracks
-          </a>
-          <a href="#faq" className="transition-colors hover:text-[var(--fg)]">
-            FAQ
-          </a>
+          <NavLink href="/inspiration" active={route === "inspiration"}>
+            Inspiration
+          </NavLink>
+          {route === "home" ? (
+            <>
+              <span className="hidden items-center gap-7 md:contents">
+                <NavLink href="#logo-garden">Sponsors</NavLink>
+                <NavLink href="#schedule">Schedule</NavLink>
+                <NavLink href="#tracks">Tracks</NavLink>
+                <NavLink href="#faq">FAQ</NavLink>
+              </span>
+              <NavLink href={site.rsvpUrl}>Register</NavLink>
+            </>
+          ) : (
+            <>
+              <span className="hidden items-center gap-7 md:contents">
+                <NavLink href="/#schedule">Schedule</NavLink>
+                <NavLink href="/#tracks">Tracks</NavLink>
+              </span>
+              <NavLink href={site.rsvpUrl}>Register</NavLink>
+            </>
+          )}
         </nav>
       </div>
     </header>
   );
 }
 
-export function App() {
+function HomePage() {
   return (
-    <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
-      <SiteHeader />
-
-      <main id="main" className="bg-[var(--bg)] pb-32 md:pb-48">
-        <section className="grid h-[80svh] place-items-center">
-          <div className="page-shell flex flex-col items-center">
-            <h1 className="sr-only">Codechella</h1>
-            <HeroStage />
-            <div className="type-sm animate-fade mt-12 flex w-full items-baseline justify-between gap-x-4 gap-y-2 text-[var(--fg)] max-md:flex-wrap">
-              <p>An event by Cursor Community</p>
-              <p className="text-[var(--fg-secondary)]">
-                {site.dateShort} · {site.location}
-              </p>
-            </div>
+    <main id="main" className="bg-[var(--bg)] pb-32 md:pb-48">
+      <section className="grid h-[80svh] place-items-center">
+        <div className="page-shell flex flex-col items-center">
+          <h1 className="sr-only">Codechella</h1>
+          <HeroStage />
+          <div className="type-sm animate-fade mt-12 flex w-full items-baseline justify-between gap-x-4 gap-y-2 text-[var(--fg)] max-md:flex-wrap">
+            <p>An event by Cursor Community</p>
+            <p className="text-[var(--fg-secondary)]">
+              {site.dateShort} · {site.location}
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section
-          id="logo-garden"
-          className="page-shell scroll-mt-8 pb-[2.1rem] pt-0"
-          aria-label="Sponsors"
-        >
-          <div className="stack text-center">
-            <h2 className="type-sm mb-[1.4rem] font-normal text-[var(--fg)]">
-              {sponsorsHeading}
-            </h2>
-            <ul className="logo-garden">
-              {sponsors.map(sponsor => (
-                <li key={sponsor.name}>
-                  <a
-                    href={sponsor.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="logo-garden-card"
-                    aria-label={sponsor.name}
-                  >
-                    <img
-                      src={sponsor.src}
-                      alt={sponsor.name}
-                      loading="lazy"
-                      decoding="async"
-                      style={
-                        "opticalScale" in sponsor
-                          ? { transform: `scale(${sponsor.opticalScale})` }
-                          : undefined
-                      }
-                    />
-                  </a>
+      <section
+        id="logo-garden"
+        className="page-shell scroll-mt-8 pb-[2.1rem] pt-0"
+        aria-label="Sponsors"
+      >
+        <div className="stack text-center">
+          <h2 className="type-sm mb-[1.4rem] font-normal text-[var(--fg)]">
+            {sponsorsHeading}
+          </h2>
+          <ul className="logo-garden">
+            {sponsors.map(sponsor => (
+              <li key={sponsor.name}>
+                <a
+                  href={sponsor.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="logo-garden-card"
+                  aria-label={sponsor.name}
+                >
+                  <img
+                    src={sponsor.src}
+                    alt={sponsor.name}
+                    loading="lazy"
+                    decoding="async"
+                    style={
+                      "opticalScale" in sponsor
+                        ? { transform: `scale(${sponsor.opticalScale})` }
+                        : undefined
+                    }
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <PageSection id="about" className="scroll-mt-8 mt-16 md:mt-24">
+        <div className="grid items-start gap-x-6 gap-y-6 md:grid-cols-3 md:gap-x-12">
+          <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
+            <p className="type-sm text-pretty text-[var(--fg)]">{about.lead}</p>
+          </div>
+          <div className="grid gap-y-4 border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
+            {about.body.map(paragraph => (
+              <p
+                key={paragraph}
+                className="type-sm text-pretty text-[var(--fg-secondary)]"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
+            <AboutCta />
+          </div>
+        </div>
+      </PageSection>
+
+      <PageSection id="schedule" className="scroll-mt-8 mt-32 md:mt-64">
+        <SectionLabel>Schedule</SectionLabel>
+        <ul className="border-t border-[var(--border)]">
+          {schedule.map(item => (
+            <li
+              key={`${item.time}-${item.label}`}
+              className="type-sm grid grid-cols-[9.5rem_1fr] items-baseline gap-4 border-b border-[var(--border)] py-4 md:grid-cols-[11.5rem_1fr]"
+            >
+              <span className="tabular-nums text-[var(--fg-tertiary)]">
+                {item.time}
+              </span>
+              <span className="text-[var(--fg)]">{item.label}</span>
+            </li>
+          ))}
+        </ul>
+      </PageSection>
+
+      <PageSection id="tracks" className="scroll-mt-8 mt-32 md:mt-64">
+        <SectionLabel>Prize tracks</SectionLabel>
+        <div className="grid items-stretch gap-x-6 gap-y-6 md:grid-cols-3 lg:gap-x-12">
+          {tracks.map(track => (
+            <article
+              key={track.name}
+              className="flex h-full flex-col md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10"
+            >
+              <h2 className="type-sm font-medium text-[var(--accent)]">
+                {track.name}
+              </h2>
+              <p className="type-sm mt-3 text-[var(--fg-secondary)]">
+                {track.detail}
+              </p>
+              <p className="type-sm mt-auto pt-5 text-[var(--fg)]">
+                {track.prizes}
+              </p>
+            </article>
+          ))}
+        </div>
+      </PageSection>
+
+      <PageSection className="mt-32 md:mt-64">
+        <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-x-12 md:gap-y-0">
+          <div>
+            <SectionLabel>Who should come</SectionLabel>
+            <ul className="space-y-3">
+              {who.map(line => (
+                <li key={line} className="type-sm text-[var(--fg)]">
+                  {line}
                 </li>
               ))}
             </ul>
           </div>
-        </section>
-
-        <PageSection id="about" className="scroll-mt-8 mt-16 md:mt-24">
-          <div className="grid items-start gap-x-6 gap-y-6 md:grid-cols-3 md:gap-x-12">
-            <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
-              <p className="type-sm text-pretty text-[var(--fg)]">
-                {about.lead}
-              </p>
-            </div>
-            <div className="grid gap-y-4 border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
-              {about.body.map(paragraph => (
-                <p
-                  key={paragraph}
-                  className="type-sm text-pretty text-[var(--fg-secondary)]"
+          <div>
+            <SectionLabel>What you get</SectionLabel>
+            <ul className="columns-1 gap-x-10 sm:columns-2">
+              {perks.map(perk => (
+                <li
+                  key={perk}
+                  className="type-sm mb-3 break-inside-avoid text-[var(--fg)]"
                 >
-                  {paragraph}
-                </p>
+                  {perk}
+                </li>
               ))}
-            </div>
-            <div className="border-t border-[rgb(20_18_11/0.1)] pt-6 md:pt-10">
-              <AboutCta />
-            </div>
+            </ul>
           </div>
-        </PageSection>
+        </div>
+      </PageSection>
 
-        <PageSection id="schedule" className="scroll-mt-8 mt-32 md:mt-64">
-          <SectionLabel>Schedule</SectionLabel>
-          <ul className="border-t border-[var(--border)]">
-            {schedule.map(item => (
-              <li
-                key={`${item.time}-${item.label}`}
-                className="type-sm grid grid-cols-[9.5rem_1fr] items-baseline gap-4 border-b border-[var(--border)] py-4 md:grid-cols-[11.5rem_1fr]"
-              >
-                <span className="tabular-nums text-[var(--fg-tertiary)]">
-                  {item.time}
-                </span>
-                <span className="text-[var(--fg)]">{item.label}</span>
-              </li>
-            ))}
-          </ul>
-        </PageSection>
-
-        <PageSection id="tracks" className="scroll-mt-8 mt-32 md:mt-64">
-          <SectionLabel>Prize tracks</SectionLabel>
-          <div className="grid items-stretch gap-x-6 gap-y-6 md:grid-cols-3 lg:gap-x-12">
-            {tracks.map(track => (
-              <article
-                key={track.name}
-                className="flex h-full flex-col md:border-t md:border-[rgb(20_18_11/0.1)] md:pt-10"
-              >
-                <h2 className="type-sm font-medium text-[var(--accent)]">
-                  {track.name}
-                </h2>
-                <p className="type-sm mt-3 text-[var(--fg-secondary)]">
-                  {track.detail}
-                </p>
-                <p className="type-sm mt-auto pt-5 text-[var(--fg)]">
-                  {track.prizes}
-                </p>
-              </article>
-            ))}
-          </div>
-        </PageSection>
-
-        <PageSection className="mt-32 md:mt-64">
-          <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-x-12 md:gap-y-0">
-            <div>
-              <SectionLabel>Who should come</SectionLabel>
-              <ul className="space-y-3">
-                {who.map(line => (
-                  <li key={line} className="type-sm text-[var(--fg)]">
-                    {line}
-                  </li>
-                ))}
-              </ul>
+      <PageSection id="faq" className="scroll-mt-8 mt-32 md:mt-64">
+        <SectionLabel>FAQ</SectionLabel>
+        <div className="border-t border-[var(--border)]">
+          {faq.map(item => (
+            <div
+              key={item.q}
+              className="grid gap-2 border-b border-[var(--border)] py-6 md:grid-cols-[minmax(10rem,16rem)_1fr] md:gap-10 md:py-7"
+            >
+              <h3 className="type-sm font-medium text-[var(--fg)]">{item.q}</h3>
+              <p className="type-sm text-[var(--fg-secondary)]">{item.a}</p>
             </div>
-            <div>
-              <SectionLabel>What you get</SectionLabel>
-              <ul className="columns-1 gap-x-10 sm:columns-2">
-                {perks.map(perk => (
-                  <li
-                    key={perk}
-                    className="type-sm mb-3 break-inside-avoid text-[var(--fg)]"
-                  >
-                    {perk}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </PageSection>
+          ))}
+        </div>
+      </PageSection>
+    </main>
+  );
+}
 
-        <PageSection id="faq" className="scroll-mt-8 mt-32 md:mt-64">
-          <SectionLabel>FAQ</SectionLabel>
-          <div className="border-t border-[var(--border)]">
-            {faq.map(item => (
-              <div
-                key={item.q}
-                className="grid gap-2 border-b border-[var(--border)] py-6 md:grid-cols-[minmax(10rem,16rem)_1fr] md:gap-10 md:py-7"
-              >
-                <h3 className="type-sm font-medium text-[var(--fg)]">
-                  {item.q}
-                </h3>
-                <p className="type-sm text-[var(--fg-secondary)]">
-                  {item.a}
-                </p>
-              </div>
-            ))}
-          </div>
-        </PageSection>
-      </main>
+export function App() {
+  const [route, setRoute] = useState<Route>(() =>
+    typeof window === "undefined" ? "home" : pathToRoute(window.location.pathname),
+  );
+
+  useEffect(() => {
+    const onPopState = () => setRoute(pathToRoute(window.location.pathname));
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    const title =
+      route === "inspiration"
+        ? "Inspiration · Cursor Codechella"
+        : "Cursor · Codechella";
+    document.title = title;
+
+    if (route === "home" && window.location.hash) {
+      const id = window.location.hash.slice(1);
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [route]);
+
+  return (
+    <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
+      <SiteHeader route={route} />
+      {route === "inspiration" ? <InspirationPage /> : <HomePage />}
     </div>
   );
 }
