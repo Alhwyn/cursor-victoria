@@ -189,7 +189,7 @@ function SiteHeader({ route }: { route: Route }) {
         </a>
 
         <nav
-          className="hidden items-center gap-7 type-sm text-[var(--fg-secondary)] md:flex"
+          className="flex items-center gap-4 type-sm text-[var(--fg-secondary)] md:gap-7"
           aria-label="Primary"
         >
           <NavLink href="/inspiration" active={route === "inspiration"}>
@@ -197,15 +197,20 @@ function SiteHeader({ route }: { route: Route }) {
           </NavLink>
           {route === "home" ? (
             <>
-              <NavLink href="#logo-garden">Sponsors</NavLink>
-              <NavLink href="#schedule">Schedule</NavLink>
-              <NavLink href="#tracks">Tracks</NavLink>
-              <NavLink href="#faq">FAQ</NavLink>
+              <span className="hidden items-center gap-7 md:contents">
+                <NavLink href="#logo-garden">Sponsors</NavLink>
+                <NavLink href="#schedule">Schedule</NavLink>
+                <NavLink href="#tracks">Tracks</NavLink>
+                <NavLink href="#faq">FAQ</NavLink>
+              </span>
+              <NavLink href={site.rsvpUrl}>Register</NavLink>
             </>
           ) : (
             <>
-              <NavLink href="/#schedule">Schedule</NavLink>
-              <NavLink href="/#tracks">Tracks</NavLink>
+              <span className="hidden items-center gap-7 md:contents">
+                <NavLink href="/#schedule">Schedule</NavLink>
+                <NavLink href="/#tracks">Tracks</NavLink>
+              </span>
               <NavLink href={site.rsvpUrl}>Register</NavLink>
             </>
           )}
