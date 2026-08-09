@@ -265,19 +265,6 @@
   outline-offset: 4px;
 }
 
-.inspiration-reveal {
-  opacity: 0;
-  transform: translateY(1.5rem);
-  transition:
-    opacity 0.55s var(--ease-out),
-    transform 0.55s var(--ease-out);
-}
-
-.inspiration-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

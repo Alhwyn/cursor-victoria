@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   boardIntro,
   communityGalleryItems,
@@ -205,42 +205,6 @@ function InspirationCard({
   );
 }
 
-function Reveal({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      el.classList.add("is-visible");
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      entries => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            el.classList.add("is-visible");
-            observer.unobserve(el);
-          }
-        }
-      },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div ref={ref} className="inspiration-reveal">
-      {children}
-    </div>
-  );
-}
-
 /** Waterloo-style masonry Inspiration Board. */
 function InspirationBoard({ items }: { items: InspirationBoardItem[] }) {
   return (
@@ -267,9 +231,7 @@ function InspirationBoard({ items }: { items: InspirationBoardItem[] }) {
       >
         {items.map((item, index) => (
           <div key={item.id} className="mb-8 break-inside-avoid">
-            <Reveal>
-              <InspirationCard item={item} priority={index < 3} />
-            </Reveal>
+            <InspirationCard item={item} priority={index < 3} />
           </div>
         ))}
       </div>
