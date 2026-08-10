@@ -46,6 +46,8 @@ export const sponsors = [
     href: "https://www.revenuecat.com/shipaton",
     /** Sparse pixel-art mark — needs more optical weight than dense wordmarks. */
     opticalScale: 1.38,
+    /** Wide lockup (mascot + wordmark + badge) — keep smaller in 2-col mobile. */
+    mobileOpticalScale: 0.84,
   },
   {
     name: "ElevenLabs",
