@@ -22,7 +22,8 @@
      * never collapse to a tiny 20px edge gap on laptop widths.
      */
     --page-max: 81.25rem; /* 1300px */
-    --page-gutter: clamp(2.5rem, 13vw, 12rem);
+    /* Mobile needs usable content width; widen gutters from sm up. */
+    --page-gutter: clamp(1.25rem, 5vw, 12rem);
     --grid-columns: 6;
 
     color: var(--fg);
@@ -58,6 +59,12 @@
   max-width: var(--page-max);
   margin-inline: auto;
   padding-inline: 0;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: clamp(2.5rem, 13vw, 12rem);
+  }
 }
 
 @layer utilities {
@@ -139,11 +146,10 @@
 
 /*
  * Sponsors logo garden:
- *   mobile: 2 cols (logos stay legible on narrow screens)
+ *   mobile: 2 cols + large marks (must stay readable on phones)
  *   sm: 3 cols
  *   md: 4 cols
  *   lg+: 6 cols for 11 logos (folds to 2 rows)
- * Cards use fixed heights; logo marks scale with breakpoints.
  */
 .logo-garden {
   display: grid;
@@ -184,8 +190,9 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 4.5rem;
-  padding: 0 calc(var(--g) * 0.75);
+  /* Shorter cards on mobile so marks fill the tile instead of floating. */
+  height: 4.25rem;
+  padding: 0.5rem 0.65rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 2px; /* rounded-xs */
@@ -194,7 +201,7 @@
 
 @media (min-width: 640px) {
   .logo-garden-card {
-    height: 4.5rem;
+    height: 4.75rem;
     padding: 0 calc(var(--g) * 0.75);
   }
 }
@@ -210,23 +217,18 @@
 }
 
 /*
- * Logo mark size — larger on mobile now that cells are 2-col wide.
- * Cap width so wide wordmarks don’t dominate; aspect ratio stays intact.
- * Optical scale (via --logo-optical-scale) is capped on small screens so
- * sparse marks like Shipaton don’t dominate the 2-col grid.
+ * Mobile marks need real presence — prior 1.5–1.875rem caps read as
+ * hairlines inside tall cards. Fill most of the cell instead.
+ * Optical scale: --logo-optical-scale-mobile when set (Shipaton), else
+ * never upscale on small screens.
  */
 .logo-garden-card img {
   display: block;
-  width: auto;
-  height: auto;
-  max-height: 1.875rem;
-  max-width: 78%;
+  /* Fill most of the tile on mobile so marks aren’t hairlines. */
+  width: 92%;
+  height: 2.35rem;
   object-fit: contain;
   object-position: center;
-  /*
-   * Prefer --logo-optical-scale-mobile when set (e.g. Shipaton).
-   * Otherwise never upscale on mobile — 2-col cells already give room.
-   */
   transform: scale(
     var(--logo-optical-scale-mobile, min(var(--logo-optical-scale, 1), 1))
   );
@@ -234,9 +236,10 @@
 
 @media (min-width: 640px) {
   .logo-garden-card img {
-    max-height: 1.875rem;
+    width: auto;
+    height: auto;
+    max-height: 2rem;
     max-width: 72%;
-    /* Drop mobile-only shrink once the grid widens past 2 cols. */
     transform: scale(min(var(--logo-optical-scale, 1), 1.1));
   }
 }
