@@ -212,6 +212,8 @@
 /*
  * Logo mark size — larger on mobile now that cells are 2-col wide.
  * Cap width so wide wordmarks don’t dominate; aspect ratio stays intact.
+ * Optical scale (via --logo-optical-scale) is capped on small screens so
+ * sparse marks like Shipaton don’t dominate the 2-col grid.
  */
 .logo-garden-card img {
   display: block;
@@ -221,18 +223,21 @@
   max-width: 78%;
   object-fit: contain;
   object-position: center;
+  transform: scale(min(var(--logo-optical-scale, 1), 1.08));
 }
 
 @media (min-width: 640px) {
   .logo-garden-card img {
     max-height: 1.875rem;
     max-width: 72%;
+    transform: scale(min(var(--logo-optical-scale, 1), 1.18));
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card img {
     max-height: 2rem;
+    transform: scale(var(--logo-optical-scale, 1));
   }
 }
 

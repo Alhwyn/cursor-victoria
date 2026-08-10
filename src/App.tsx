@@ -1,4 +1,8 @@
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
@@ -180,7 +184,11 @@ export function App() {
                       decoding="async"
                       style={
                         "opticalScale" in sponsor
-                          ? { transform: `scale(${sponsor.opticalScale})` }
+                          ? ({
+                              "--logo-optical-scale": String(
+                                sponsor.opticalScale,
+                              ),
+                            } as CSSProperties)
                           : undefined
                       }
                     />
