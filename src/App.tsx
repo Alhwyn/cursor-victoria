@@ -160,7 +160,7 @@ export function App() {
 
         <section
           id="logo-garden"
-          className="page-shell scroll-mt-8 pb-[2.1rem] pt-0"
+          className="logo-garden-shell page-shell scroll-mt-8 pb-[2.1rem] pt-0"
           aria-label="Sponsors"
         >
           <div className="stack text-center">
