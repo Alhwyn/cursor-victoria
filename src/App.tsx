@@ -188,6 +188,13 @@ export function App() {
                               "--logo-optical-scale": String(
                                 sponsor.opticalScale,
                               ),
+                              ...("mobileOpticalScale" in sponsor
+                                ? {
+                                    "--logo-optical-scale-mobile": String(
+                                      sponsor.mobileOpticalScale,
+                                    ),
+                                  }
+                                : {}),
                             } as CSSProperties)
                           : undefined
                       }
