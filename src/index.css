@@ -22,7 +22,8 @@
      * never collapse to a tiny 20px edge gap on laptop widths.
      */
     --page-max: 81.25rem; /* 1300px */
-    --page-gutter: clamp(2.5rem, 13vw, 12rem);
+    /* Mobile: pull content edge-to-edge enough for readable logos. */
+    --page-gutter: clamp(0.875rem, 4vw, 12rem);
     --grid-columns: 6;
 
     color: var(--fg);
@@ -58,6 +59,12 @@
   max-width: var(--page-max);
   margin-inline: auto;
   padding-inline: 0;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: clamp(2.5rem, 13vw, 12rem);
+  }
 }
 
 @layer utilities {
@@ -137,18 +144,29 @@
   width: 100%;
 }
 
+/* Sponsors section: use nearly full phone width. */
+.logo-garden-shell {
+  width: min(var(--page-max), calc(100% - 1.5rem));
+}
+
+@media (min-width: 640px) {
+  .logo-garden-shell {
+    width: min(var(--page-max), calc(100% - 2 * var(--page-gutter)));
+  }
+}
+
 /*
- * Sponsors — match cursor.com #logo-garden (logo-garden-responsive-8):
- *   mobile/tablet: 4 cols, folds to multiple rows
- *   desktop: 6 cols for 11 logos (folds to 2 rows)
- * Cards use fixed heights (not aspect-ratio), same as cursor.com
- *   h-16 → sm:h-[4.5rem] → md:h-[6.25rem]
+ * Sponsors logo garden — mobile-first, phone-readable:
+ *   <640: 2 cols, large filled tiles (not hairline marks)
+ *   sm: 3 cols
+ *   md: 4 cols
+ *   lg+: 6 cols
  */
 .logo-garden {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.4375rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -156,7 +174,14 @@
 
 @media (min-width: 640px) {
   .logo-garden {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.625rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-garden {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -176,8 +201,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 4rem; /* cursor.com h-[4rem] */
-  padding: 0 0.75rem;
+  height: 5.5rem;
+  padding: 0.85rem 0.75rem;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 2px; /* rounded-xs */
@@ -186,13 +211,14 @@
 
 @media (min-width: 640px) {
   .logo-garden-card {
-    height: 4.5rem; /* sm:h-[4.5rem] */
+    height: 4.75rem;
+    padding: 0 calc(var(--g) * 0.75);
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card {
-    height: 6.25rem; /* md:h-[6.25rem] */
+    height: 6.25rem;
   }
 }
 
@@ -200,25 +226,47 @@
   opacity: 0.8;
 }
 
+/*
+ * Phone: logos own the tile. Fixed box + object-fit so every mark
+ * (wide or square) lands at a readable size — not 1.65rem hairlines.
+ */
 .logo-garden-card img {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 58%;
-  max-height: 1.65rem;
+  width: 94%;
+  height: 3.35rem;
   object-fit: contain;
   object-position: center;
+  transform: scale(
+    var(--logo-optical-scale-mobile, min(var(--logo-optical-scale, 1), 1))
+  );
 }
 
 @media (min-width: 640px) {
   .logo-garden-card img {
-    max-height: 1.85rem;
+    width: auto;
+    height: auto;
+    max-height: 2rem;
+    max-width: 72%;
+    transform: scale(min(var(--logo-optical-scale, 1), 1.1));
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card img {
     max-height: 2rem;
+    transform: scale(var(--logo-optical-scale, 1));
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-garden-card img {
+    max-height: 2.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .logo-garden-card img {
+    max-height: 2.5rem;
   }
 }
 

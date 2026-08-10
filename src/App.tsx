@@ -1,4 +1,8 @@
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
@@ -156,7 +160,7 @@ export function App() {
 
         <section
           id="logo-garden"
-          className="page-shell scroll-mt-8 pb-[2.1rem] pt-0"
+          className="logo-garden-shell page-shell scroll-mt-8 pb-[2.1rem] pt-0"
           aria-label="Sponsors"
         >
           <div className="stack text-center">
@@ -179,8 +183,19 @@ export function App() {
                       loading="lazy"
                       decoding="async"
                       style={
-                        "logoScale" in sponsor
-                          ? { transform: `scale(${sponsor.logoScale})` }
+                        "opticalScale" in sponsor
+                          ? ({
+                              "--logo-optical-scale": String(
+                                sponsor.opticalScale,
+                              ),
+                              ...("mobileOpticalScale" in sponsor
+                                ? {
+                                    "--logo-optical-scale-mobile": String(
+                                      sponsor.mobileOpticalScale,
+                                    ),
+                                  }
+                                : {}),
+                            } as CSSProperties)
                           : undefined
                       }
                     />
