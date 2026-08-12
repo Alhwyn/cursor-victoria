@@ -80,6 +80,7 @@ export const sponsors = [
     name: "Dub",
     src: dub,
     href: "https://dub.co",
-    opticalScale: 1.15,
+    opticalScale: 1.55,
+    mobileOpticalScale: 1.2,
   },
 ] as const;
