@@ -1,4 +1,5 @@
 import convex from "./assets/sponsors/convex-lockup.svg";
+import dub from "./assets/sponsors/dub-wordmark.svg";
 import elevenlabs from "./assets/sponsors/elevenlabs.png";
 import exa from "./assets/sponsors/exa-lockup.svg";
 import firecrawl from "./assets/sponsors/firecrawl.png";
@@ -74,5 +75,11 @@ export const sponsors = [
     name: "Wispr Flow",
     src: wisprFlow,
     href: "https://wisprflow.ai",
+  },
+  {
+    name: "Dub",
+    src: dub,
+    href: "https://dub.co",
+    opticalScale: 1.15,
   },
 ] as const;
