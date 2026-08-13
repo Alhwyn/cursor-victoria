@@ -1,5 +1,15 @@
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
-import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import {
+  about,
+  faq,
+  judges,
+  judgesHeading,
+  perks,
+  schedule,
+  site,
+  tracks,
+  who,
+} from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
@@ -126,6 +136,9 @@ function SiteHeader() {
           <a href="#tracks" className="transition-colors hover:text-[var(--fg)]">
             Tracks
           </a>
+          <a href="#judges" className="transition-colors hover:text-[var(--fg)]">
+            Judges
+          </a>
           <a href="#faq" className="transition-colors hover:text-[var(--fg)]">
             FAQ
           </a>
@@ -244,6 +257,22 @@ export function App() {
               </article>
             ))}
           </div>
+        </PageSection>
+
+        <PageSection id="judges" className="scroll-mt-8 mt-32 md:mt-64">
+          <h2 className="type-sm mb-10 text-center font-normal text-[var(--fg)] md:mb-14">
+            {judgesHeading}
+          </h2>
+          <ul className="judges-grid">
+            {judges.map((judge, index) => (
+              <li key={index} className="judges-card">
+                <p className="type-sm text-[var(--fg)]">{judge.name}</p>
+                <p className="type-sm mt-1 text-[var(--fg-secondary)]">
+                  {judge.org}
+                </p>
+              </li>
+            ))}
+          </ul>
         </PageSection>
 
         <PageSection className="mt-32 md:mt-64">

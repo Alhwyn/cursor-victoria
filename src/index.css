@@ -334,6 +334,40 @@
   }
 }
 
+/*
+ * Judges grid — mirrors cursor.com/compile "Thanks to our speakers":
+ * name + org in a responsive multi-column layout.
+ */
+.judges-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .judges-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .judges-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3rem 2rem;
+    padding-top: 3rem;
+  }
+}
+
+.judges-card {
+  min-width: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
