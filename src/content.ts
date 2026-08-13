@@ -70,16 +70,6 @@ export const tracks = [
   },
 ] as const;
 
-export const judgesHeading = "Thanks to our judges";
-
-/** Add judges here — name + org, matching cursor.com/compile speakers. */
-export const judges = [
-  { name: "Judge name", org: "Company" },
-  { name: "Judge name", org: "Company" },
-  { name: "Judge name", org: "Company" },
-  { name: "Judge name", org: "Company" },
-] as const;
-
 export const perks = [
   "$20 Cursor credits",
   "$10 GMI Cloud credits",

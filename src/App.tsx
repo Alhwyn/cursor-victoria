@@ -1,15 +1,12 @@
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import {
-  about,
-  faq,
-  judges,
-  judgesHeading,
-  perks,
-  schedule,
-  site,
-  tracks,
-  who,
-} from "./content";
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+  useEffect,
+  useRef,
+} from "react";
+import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import { judges, judgesHeading } from "./judges";
+import { renderSinePortrait } from "./sinePortrait";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
@@ -108,6 +105,169 @@ function AboutCta() {
       Register on Luma
       <ArrowIcon />
     </a>
+  );
+}
+
+function ChevronLeftIcon() {
+  return (
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path
+        d="M10 3L5 8l5 5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronRightIcon() {
+  return (
+    <svg
+      className="h-4 w-4"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <path
+        d="M6 3l5 5-5 5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function JudgePortrait({
+  src,
+  background,
+  foreground,
+  alt,
+}: {
+  src: string;
+  background: string;
+  foreground: string;
+  alt: string;
+}) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    const canvas = canvasRef.current;
+    if (!frame || !canvas) return;
+
+    const img = new Image();
+    let cancelled = false;
+    let frameId = 0;
+
+    const paint = () => {
+      if (cancelled || !img.naturalWidth) return;
+      renderSinePortrait(canvas, img, { background, foreground });
+    };
+
+    img.onload = () => {
+      if (cancelled) return;
+      paint();
+    };
+    img.src = src;
+
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(paint);
+    });
+    observer.observe(frame);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
+  }, [src, background, foreground]);
+
+  return (
+    <div
+      ref={frameRef}
+      className="judge-portrait"
+      style={{ background }}
+    >
+      <canvas ref={canvasRef} aria-hidden />
+      <span className="sr-only">{alt}</span>
+    </div>
+  );
+}
+
+function JudgesSection() {
+  const trackRef = useRef<HTMLUListElement>(null);
+
+  const scrollByCard = (direction: -1 | 1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.querySelector("li");
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap || "16");
+    const amount = (card?.getBoundingClientRect().width ?? 240) + gap;
+    track.scrollBy({ left: amount * direction, behavior: "smooth" });
+  };
+
+  return (
+    <PageSection id="judges" className="scroll-mt-8 mt-32 md:mt-64">
+      <div className="mb-8 flex items-center justify-between gap-4 md:mb-10">
+        <h2 className="text-[1.05rem] font-medium tracking-tight text-[var(--fg)]">
+          {judgesHeading}
+        </h2>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            className="judges-nav-btn"
+            aria-label="Previous judges"
+            onClick={() => scrollByCard(-1)}
+          >
+            <ChevronLeftIcon />
+          </button>
+          <button
+            type="button"
+            className="judges-nav-btn"
+            aria-label="Next judges"
+            onClick={() => scrollByCard(1)}
+          >
+            <ChevronRightIcon />
+          </button>
+        </div>
+      </div>
+      <ul ref={trackRef} className="judges-track">
+        {judges.map(judge => (
+          <li key={judge.slug} className="judge-card">
+            <a
+              href={judge.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block transition-opacity hover:opacity-80"
+            >
+              <JudgePortrait
+                src={judge.photo}
+                background={judge.background}
+                foreground={judge.foreground}
+                alt={`${judge.name}, ${judge.org}`}
+              />
+              <p className="type-sm mt-3 text-[var(--fg)]">
+                <span className="font-medium">{judge.name}</span>{" "}
+                <span className="text-[var(--fg-secondary)]">{judge.org}</span>
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </PageSection>
   );
 }
 
@@ -259,21 +419,7 @@ export function App() {
           </div>
         </PageSection>
 
-        <PageSection id="judges" className="scroll-mt-8 mt-32 md:mt-64">
-          <h2 className="type-sm mb-10 text-center font-normal text-[var(--fg)] md:mb-14">
-            {judgesHeading}
-          </h2>
-          <ul className="judges-grid">
-            {judges.map((judge, index) => (
-              <li key={index} className="judges-card">
-                <p className="type-sm text-[var(--fg)]">{judge.name}</p>
-                <p className="type-sm mt-1 text-[var(--fg-secondary)]">
-                  {judge.org}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </PageSection>
+        <JudgesSection />
 
         <PageSection className="mt-32 md:mt-64">
           <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-x-12 md:gap-y-0">
