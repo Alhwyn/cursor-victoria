@@ -237,7 +237,7 @@
   object-fit: contain;
   object-position: center;
   transform: scale(
-    var(--logo-optical-scale-mobile, min(var(--logo-optical-scale, 1), 1))
+    var(--logo-optical-scale-mobile, var(--logo-optical-scale, 1))
   );
 }
 
@@ -247,15 +247,79 @@
     height: auto;
     max-height: 2rem;
     max-width: 72%;
-    transform: scale(min(var(--logo-optical-scale, 1), 1.1));
+    transform: scale(var(--logo-optical-scale, 1));
   }
 }
 
 @media (min-width: 768px) {
   .logo-garden-card img {
     max-height: 2rem;
-    transform: scale(var(--logo-optical-scale, 1));
   }
+}
+
+/*
+ * Per-logo optical balance — each mark gets its own scale so the grid
+ * reads at a consistent visual weight (logos ship with wildly different
+ * aspect ratios and built-in padding).
+ */
+.logo-garden-card[data-sponsor="convex"] img {
+  --logo-optical-scale: 1.38;
+  --logo-optical-scale-mobile: 1.22;
+}
+
+.logo-garden-card[data-sponsor="solana"] img {
+  --logo-optical-scale: 0.76;
+  --logo-optical-scale-mobile: 0.84;
+}
+
+.logo-garden-card[data-sponsor="mintlify"] img {
+  --logo-optical-scale: 1;
+  --logo-optical-scale-mobile: 1;
+}
+
+.logo-garden-card[data-sponsor="gmi"] img {
+  --logo-optical-scale: 0.76;
+  --logo-optical-scale-mobile: 0.85;
+}
+
+.logo-garden-card[data-sponsor="uvec"] img {
+  --logo-optical-scale: 0.84;
+  --logo-optical-scale-mobile: 0.9;
+}
+
+.logo-garden-card[data-sponsor="shipaton"] img {
+  --logo-optical-scale: 0.88;
+  --logo-optical-scale-mobile: 0.94;
+}
+
+.logo-garden-card[data-sponsor="elevenlabs"] img {
+  --logo-optical-scale: 1.14;
+  --logo-optical-scale-mobile: 1.08;
+}
+
+.logo-garden-card[data-sponsor="render"] img {
+  --logo-optical-scale: 1;
+  --logo-optical-scale-mobile: 1;
+}
+
+.logo-garden-card[data-sponsor="firecrawl"] img {
+  --logo-optical-scale: 1.1;
+  --logo-optical-scale-mobile: 1.05;
+}
+
+.logo-garden-card[data-sponsor="exa"] img {
+  --logo-optical-scale: 0.7;
+  --logo-optical-scale-mobile: 0.78;
+}
+
+.logo-garden-card[data-sponsor="wispr-flow"] img {
+  --logo-optical-scale: 1.1;
+  --logo-optical-scale-mobile: 1.05;
+}
+
+.logo-garden-card[data-sponsor="dub"] img {
+  --logo-optical-scale: 1.12;
+  --logo-optical-scale-mobile: 1.06;
 }
 
 @media (min-width: 1024px) {
