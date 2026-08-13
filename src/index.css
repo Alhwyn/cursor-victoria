@@ -263,13 +263,13 @@
  * aspect ratios and built-in padding).
  */
 .logo-garden-card[data-sponsor="convex"] img {
-  --logo-optical-scale: 1.38;
-  --logo-optical-scale-mobile: 1.22;
+  --logo-optical-scale: 1;
+  --logo-optical-scale-mobile: 1;
 }
 
 .logo-garden-card[data-sponsor="solana"] img {
-  --logo-optical-scale: 0.76;
-  --logo-optical-scale-mobile: 0.84;
+  --logo-optical-scale: 0.95;
+  --logo-optical-scale-mobile: 0.98;
 }
 
 .logo-garden-card[data-sponsor="mintlify"] img {
@@ -278,48 +278,48 @@
 }
 
 .logo-garden-card[data-sponsor="gmi"] img {
-  --logo-optical-scale: 0.76;
-  --logo-optical-scale-mobile: 0.85;
-}
-
-.logo-garden-card[data-sponsor="uvec"] img {
-  --logo-optical-scale: 0.84;
-  --logo-optical-scale-mobile: 0.9;
-}
-
-.logo-garden-card[data-sponsor="shipaton"] img {
-  --logo-optical-scale: 0.88;
+  --logo-optical-scale: 0.9;
   --logo-optical-scale-mobile: 0.94;
 }
 
-.logo-garden-card[data-sponsor="elevenlabs"] img {
-  --logo-optical-scale: 1.14;
-  --logo-optical-scale-mobile: 1.08;
+.logo-garden-card[data-sponsor="uvec"] img {
+  --logo-optical-scale: 0.88;
+  --logo-optical-scale-mobile: 0.92;
 }
 
-.logo-garden-card[data-sponsor="render"] img {
+.logo-garden-card[data-sponsor="shipaton"] img {
+  --logo-optical-scale: 1.08;
+  --logo-optical-scale-mobile: 1.15;
+}
+
+.logo-garden-card[data-sponsor="elevenlabs"] img {
   --logo-optical-scale: 1;
   --logo-optical-scale-mobile: 1;
 }
 
+.logo-garden-card[data-sponsor="render"] img {
+  --logo-optical-scale: 1.12;
+  --logo-optical-scale-mobile: 1.08;
+}
+
 .logo-garden-card[data-sponsor="firecrawl"] img {
-  --logo-optical-scale: 1.1;
-  --logo-optical-scale-mobile: 1.05;
+  --logo-optical-scale: 1;
+  --logo-optical-scale-mobile: 1;
 }
 
 .logo-garden-card[data-sponsor="exa"] img {
-  --logo-optical-scale: 0.7;
-  --logo-optical-scale-mobile: 0.78;
+  --logo-optical-scale: 0.85;
+  --logo-optical-scale-mobile: 0.82;
 }
 
 .logo-garden-card[data-sponsor="wispr-flow"] img {
-  --logo-optical-scale: 1.1;
-  --logo-optical-scale-mobile: 1.05;
+  --logo-optical-scale: 1;
+  --logo-optical-scale-mobile: 1;
 }
 
 .logo-garden-card[data-sponsor="dub"] img {
   --logo-optical-scale: 1.12;
-  --logo-optical-scale-mobile: 1.06;
+  --logo-optical-scale-mobile: 1;
 }
 
 @media (min-width: 1024px) {
