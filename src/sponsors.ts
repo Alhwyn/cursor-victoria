@@ -16,71 +16,75 @@ export const sponsorsHeading =
 
 export const sponsors = [
   {
+    slug: "convex",
     name: "Convex",
     src: convex,
     href: "https://www.convex.dev",
   },
   {
+    slug: "solana",
     name: "Solana",
     src: solana,
     href: "https://solana.com",
   },
   {
+    slug: "mintlify",
     name: "Mintlify",
     src: mintlify,
     href: "https://mintlify.com",
   },
   {
+    slug: "gmi",
     name: "GMI Cloud",
     src: gmi,
     href: "https://www.gmicloud.ai",
   },
   {
+    slug: "uvec",
     name: "UVEC",
     src: uvec,
     href: "https://www.linkedin.com/company/uvic-entrepreneurship-club",
-    opticalScale: 0.88,
   },
   {
+    slug: "shipaton",
     name: "Shipaton",
     src: shipaton,
     href: "https://www.revenuecat.com/shipaton",
-    /** Sparse pixel-art mark — needs more optical weight than dense wordmarks. */
-    opticalScale: 1.38,
-    /** Fill the mobile tile; desktop keeps the stronger opticalScale. */
-    mobileOpticalScale: 1,
   },
   {
+    slug: "elevenlabs",
     name: "ElevenLabs",
     src: elevenlabs,
     href: "https://elevenlabs.io",
   },
   {
+    slug: "render",
     name: "Render",
     src: render,
     href: "https://render.com",
   },
   {
+    slug: "firecrawl",
     name: "Firecrawl",
     src: firecrawl,
     href: "https://www.firecrawl.dev",
   },
   {
+    slug: "exa",
     name: "Exa",
     src: exa,
     href: "https://exa.ai",
-    opticalScale: 0.82,
   },
   {
+    slug: "wispr-flow",
     name: "Wispr Flow",
     src: wisprFlow,
     href: "https://wisprflow.ai",
   },
   {
+    slug: "dub",
     name: "Dub",
     src: dub,
     href: "https://dub.co",
-    opticalScale: 1.55,
-    mobileOpticalScale: 1.2,
   },
 ] as const;

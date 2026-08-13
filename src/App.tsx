@@ -1,8 +1,4 @@
-import {
-  type ComponentPropsWithoutRef,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
@@ -175,6 +171,7 @@ export function App() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="logo-garden-card"
+                    data-sponsor={sponsor.slug}
                     aria-label={sponsor.name}
                   >
                     <img
@@ -182,22 +179,6 @@ export function App() {
                       alt={sponsor.name}
                       loading="lazy"
                       decoding="async"
-                      style={
-                        "opticalScale" in sponsor
-                          ? ({
-                              "--logo-optical-scale": String(
-                                sponsor.opticalScale,
-                              ),
-                              ...("mobileOpticalScale" in sponsor
-                                ? {
-                                    "--logo-optical-scale-mobile": String(
-                                      sponsor.mobileOpticalScale,
-                                    ),
-                                  }
-                                : {}),
-                            } as CSSProperties)
-                          : undefined
-                      }
                     />
                   </a>
                 </li>
