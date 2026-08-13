@@ -344,9 +344,11 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
+  padding: 0;
   color: var(--fg);
   background: transparent;
   border: 0;
+  appearance: none;
   cursor: pointer;
   transition: opacity 0.15s var(--ease-out);
 }

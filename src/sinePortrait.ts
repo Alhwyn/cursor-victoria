@@ -77,7 +77,9 @@ export function renderSinePortrait(
   probeCtx.drawImage(img, dx, dy, drawW, drawH);
   const pixels = probeCtx.getImageData(0, 0, width, height).data;
 
-  const amp = new Float32Array(width * height);
+  const raw = new Float32Array(width * height);
+  let lo = 1;
+  let hi = 0;
   for (let i = 0; i < width * height; i += 1) {
     const idx = i * 4;
     const gray = luminance(
@@ -85,8 +87,16 @@ export function renderSinePortrait(
       pixels[idx + 1] ?? 0,
       pixels[idx + 2] ?? 0,
     );
-    const contrast = Math.min(1, Math.max(0, (gray - 0.5) * 2.1 + 0.42));
-    amp[i] = contrast;
+    raw[i] = gray;
+    if (gray < lo) lo = gray;
+    if (gray > hi) hi = gray;
+  }
+
+  const range = Math.max(0.18, hi - lo);
+  const amp = new Float32Array(width * height);
+  for (let i = 0; i < width * height; i += 1) {
+    const stretched = ((raw[i] ?? 0) - lo) / range;
+    amp[i] = Math.min(1, Math.max(0, (stretched - 0.5) * 1.65 + 0.5));
   }
 
   const bg = hexToRgb(tone.background);
@@ -97,11 +107,11 @@ export function renderSinePortrait(
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
 
-  const spacing = Math.max(2, 2.15 * dpr);
-  const period = 4.8 * dpr;
+  const spacing = Math.max(2.2, 2.6 * dpr);
+  const period = Math.max(3.6, 6.4 * dpr);
   const wave = (Math.PI * 2) / period;
-  const maxAmp = spacing * 1.75;
-  ctx.lineWidth = Math.max(0.65, spacing * 0.34);
+  const maxAmp = spacing * 1.35;
+  ctx.lineWidth = Math.max(0.55, spacing * 0.22);
 
   for (let baseY = -spacing; baseY < height + spacing; baseY += spacing) {
     ctx.beginPath();
