@@ -308,8 +308,8 @@
 }
 
 .logo-garden-card[data-sponsor="exa"] img {
-  --logo-optical-scale: 0.85;
-  --logo-optical-scale-mobile: 0.82;
+  --logo-optical-scale: 0.72;
+  --logo-optical-scale-mobile: 0.7;
 }
 
 .logo-garden-card[data-sponsor="wispr-flow"] img {
