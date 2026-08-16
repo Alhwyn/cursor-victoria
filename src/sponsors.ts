@@ -49,7 +49,7 @@ export const sponsors = [
     slug: "shipaton",
     name: "Shipaton",
     src: shipaton,
-    href: "https://www.revenuecat.com/shipaton",
+    href: "https://www.shipaton.com",
   },
   {
     slug: "elevenlabs",
