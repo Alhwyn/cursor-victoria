@@ -35,9 +35,9 @@ export const judges = [
     handle: "@Owner",
     href: "https://x.com/AdamWhitcroft",
     photo: adamWhitcroft,
-    preset: "Purple",
-    background: "#efeaf5",
-    foreground: "#a78bfa",
+    preset: "Blue",
+    background: "#e8ecf5",
+    foreground: "#6b8cff",
   },
   {
     slug: "marcus-farrell",

@@ -34,13 +34,13 @@ test("portraits follow the Compile speakers color order", () => {
   expect(judges.map(judge => judge.preset)).toEqual([
     "Orange",
     "Green",
-    "Purple",
+    "Blue",
     "Green",
   ]);
   expect(judges.map(judge => judge.foreground)).toEqual([
     "#ff6b35",
     "#4ade80",
-    "#a78bfa",
+    "#6b8cff",
     "#4ade80",
   ]);
 });

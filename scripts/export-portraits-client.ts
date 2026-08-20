@@ -1,4 +1,4 @@
-import marcusFarrell from "../src/assets/judges/marcus-farrell.jpg";
+import adamWhitcroft from "../src/assets/judges/adam-whitcroft.jpg";
 import {
   DEFAULT_EFFECT_SETTINGS,
   renderSinePortrait,
@@ -7,17 +7,16 @@ import {
 
 const jobs = [
   {
-    file: "marcus-farrell-sinwave.png",
-    src: marcusFarrell,
-    photoFit: "center 28%",
-    zoom: 1.2,
+    file: "adam-whitcroft-sinwave.png",
+    src: adamWhitcroft,
+    photoFit: "center 18%",
+    zoom: 1.35,
     settings: {
       ...DEFAULT_EFFECT_SETTINGS,
-      invert: true,
-      brightness: -4,
+      brightness: 2,
       contrast: 1.85,
-      foregroundColor: "#4ade80",
-      backgroundColor: "#e6f2ea",
+      foregroundColor: "#6b8cff",
+      backgroundColor: "#e8ecf5",
     } satisfies EffectSettings,
   },
 ];
@@ -43,4 +42,4 @@ for (const job of jobs) {
   });
 }
 await fetch("/done", { method: "POST" });
-document.body.textContent = "Exported Marcus portrait.";
+document.body.textContent = "Exported Adam portrait.";
