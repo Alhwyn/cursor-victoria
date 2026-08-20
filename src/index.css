@@ -363,8 +363,9 @@
   grid-column: 1;
   grid-row: 1 / 4;
   align-items: flex-start;
-  padding: 0 0 0 0.04em;
-  font-size: 68cqi;
+  padding: 0 0 0 0.02em;
+  font-size: 72cqi;
+  line-height: 1.02;
 }
 
 .judges-glyph-u,
@@ -395,10 +396,10 @@
   grid-row: 3;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
-  padding: 0.08em 0.08em 0.04em;
-  font-size: 11.4cqi;
-  line-height: 0.78;
+  justify-content: space-evenly;
+  padding: 0.12em 0.1em 0.08em;
+  font-size: 9.6cqi;
+  line-height: 0.74;
 }
 
 .judges-copy {

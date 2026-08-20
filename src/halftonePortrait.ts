@@ -102,7 +102,7 @@ export function renderHalftonePortrait(
   const tone = new Float32Array(width * height);
   for (let i = 0; i < width * height; i += 1) {
     const stretched = ((raw[i] ?? 0) - lo) / range;
-    tone[i] = Math.min(1, Math.max(0, (stretched - 0.5) * 1.45 + 0.5));
+    tone[i] = Math.min(1, Math.max(0, (stretched - 0.5) * 1.22 + 0.52));
   }
 
   ctx.fillStyle = "#edece8";
