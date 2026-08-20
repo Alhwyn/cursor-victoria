@@ -102,8 +102,8 @@ export function JudgesSection() {
                 src={judge.photo}
                 alt=""
                 className="absolute inset-0 h-full w-full object-cover"
-                width={900}
-                height={1200}
+                width={800}
+                height={1000}
               />
             </div>
             <p className="type-sm">
