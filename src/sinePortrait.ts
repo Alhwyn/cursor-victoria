@@ -178,6 +178,28 @@ type PreparedSineWave = {
 
 const WORKING_HEIGHT = 1200;
 const WORKING_WIDTH = Math.round((WORKING_HEIGHT * 3) / 4);
+const OFFICIAL_MIN_SIZE = 1000;
+const OFFICIAL_MAX_SIZE = 1200;
+
+/** Official tool sizing: keep source aspect, scale longest side into 1000–1200. */
+export function officialWorkingSize(srcW: number, srcH: number) {
+  let width = srcW;
+  let height = srcH;
+  const longest = Math.max(width, height);
+  if (longest < OFFICIAL_MIN_SIZE) {
+    const scale = OFFICIAL_MIN_SIZE / longest;
+    width *= scale;
+    height *= scale;
+  } else if (longest > OFFICIAL_MAX_SIZE) {
+    const scale = OFFICIAL_MAX_SIZE / longest;
+    width *= scale;
+    height *= scale;
+  }
+  return {
+    width: Math.max(1, Math.round(width)),
+    height: Math.max(1, Math.round(height)),
+  };
+}
 
 function coverDraw(
   ctx: CanvasRenderingContext2D,
@@ -209,16 +231,24 @@ function prepareSineWave(
   settings: EffectSettings,
   photoFit: string,
   zoom = 1,
+  size?: { width: number; height: number },
+  letterbox = false,
 ): PreparedSineWave {
-  const width = WORKING_WIDTH;
-  const height = WORKING_HEIGHT;
+  const width = size?.width ?? WORKING_WIDTH;
+  const height = size?.height ?? WORKING_HEIGHT;
   const probe = document.createElement("canvas");
   probe.width = width;
   probe.height = height;
   const probeCtx = probe.getContext("2d", { willReadFrequently: true });
   if (!probeCtx) throw new Error("Canvas 2D context unavailable");
 
-  coverDraw(probeCtx, img, width, height, photoFit, zoom);
+  if (letterbox) {
+    probeCtx.imageSmoothingEnabled = true;
+    probeCtx.imageSmoothingQuality = "high";
+    probeCtx.drawImage(img, 0, 0, width, height);
+  } else {
+    coverDraw(probeCtx, img, width, height, photoFit, zoom);
+  }
   const data = probeCtx.getImageData(0, 0, width, height).data;
 
   const grayscale = new Float32Array(width * height);
@@ -332,6 +362,26 @@ export function renderSinePortrait(
   zoom = 1,
 ): void {
   const prepared = prepareSineWave(img, settings, photoFit, zoom);
+  canvas.width = prepared.width;
+  canvas.height = prepared.height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  renderSineWaveFrame(ctx, prepared, 1);
+}
+
+/**
+ * Official sinwave.vercel.app Image export: keep the source aspect ratio,
+ * scale into the 1000–1200 working range, and paint the default Blue effect.
+ */
+export function renderOfficialSineImage(
+  canvas: HTMLCanvasElement,
+  img: HTMLImageElement,
+  settings: EffectSettings = DEFAULT_EFFECT_SETTINGS,
+): void {
+  const srcW = img.naturalWidth || img.width;
+  const srcH = img.naturalHeight || img.height;
+  const size = officialWorkingSize(srcW, srcH);
+  const prepared = prepareSineWave(img, settings, "center", 1, size, true);
   canvas.width = prepared.width;
   canvas.height = prepared.height;
   const ctx = canvas.getContext("2d");

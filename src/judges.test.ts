@@ -50,6 +50,15 @@ test("official sine-wave export keeps a square source square", () => {
   expect(officialWorkingSize(460, 460)).toEqual({ width: 1000, height: 1000 });
 });
 
+test("Adam portrait PNG is a square official export, not purple", async () => {
+  const bytes = new Uint8Array(await Bun.file("src/assets/judges/adam-whitcroft-sinwave.png").arrayBuffer());
+  expect(bytes[0]).toBe(0x89);
+  const width = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(16);
+  const height = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(20);
+  expect(width).toBe(1000);
+  expect(height).toBe(1000);
+});
+
 test("portraits follow the Compile speakers color order", () => {
   expect(judges.map(judge => judge.preset)).toEqual([
     "Orange",
