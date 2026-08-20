@@ -80,10 +80,14 @@ function JudgePhoto({
   );
 }
 
-export function JudgesSection() {
-  const [adam, flo, kenneth, jennifer] = judges;
-  if (!adam || !flo || !kenneth || !jennifer) return null;
+const boardSlots = [
+  { copy: "judges-place-a-copy", photo: "judges-place-a-photo" },
+  { copy: "judges-place-b-copy", photo: "judges-place-b-photo" },
+  { copy: "judges-place-c-copy", photo: "judges-place-c-photo" },
+  { copy: "judges-place-d-copy", photo: "judges-place-d-photo" },
+] as const;
 
+export function JudgesSection() {
   return (
     <section id="judges" className="page-shell scroll-mt-8 mt-32 md:mt-64" aria-labelledby="judges-heading">
       <h2 id="judges-heading" className="sr-only">
@@ -92,14 +96,16 @@ export function JudgesSection() {
       <p className="judges-mobile-label">{judgesHeading}</p>
 
       <div className="judges-board">
-        <JudgeCopy judge={adam} className="judges-place-adam-copy" />
-        <JudgePhoto judge={adam} className="judges-place-adam-photo" />
-        <JudgeCopy judge={flo} className="judges-place-flo-copy" />
-        <JudgePhoto judge={flo} className="judges-place-flo-photo" />
-        <JudgeCopy judge={kenneth} className="judges-place-kenneth-copy" />
-        <JudgePhoto judge={kenneth} className="judges-place-kenneth-photo" />
-        <JudgeCopy judge={jennifer} className="judges-place-jennifer-copy" />
-        <JudgePhoto judge={jennifer} className="judges-place-jennifer-photo" />
+        {judges.map((judge, index) => {
+          const slot = boardSlots[index];
+          if (!slot) return null;
+          return (
+            <span key={judge.slug} className="contents">
+              <JudgeCopy judge={judge} className={slot.copy} />
+              <JudgePhoto judge={judge} className={slot.photo} />
+            </span>
+          );
+        })}
         <div className="judges-lines" aria-hidden />
       </div>
 

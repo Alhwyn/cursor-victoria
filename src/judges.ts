@@ -1,46 +1,46 @@
-import adamSyed from "./assets/judges/adam-syed.jpg";
-import floGuo from "./assets/judges/flo-guo.jpg";
-import jenniferJing from "./assets/judges/jennifer-jing.jpg";
-import kennethKuh from "./assets/judges/kenneth-kuh.jpg";
+import adamWhitcroft from "./assets/judges/adam-whitcroft.jpg";
+import ericThomas from "./assets/judges/eric-thomas.jpg";
+import marcusFarrell from "./assets/judges/marcus-farrell.jpg";
+import simonStern from "./assets/judges/simon-stern.jpg";
 
 export const judgesHeading = "Judges";
 
 export const judges = [
   {
-    slug: "adam-syed",
-    name: "Adam Syed",
-    role: "Designer",
-    handle: "@Netflix",
-    href: "https://syedadam.com/",
-    photo: adamSyed,
+    slug: "simon-stern",
+    name: "Simon Stern",
+    role: "Founder",
+    handle: "@Apricot",
+    href: "https://x.com/SimiStern",
+    photo: simonStern,
+    photoFit: "center 22%",
+  },
+  {
+    slug: "eric-thomas",
+    name: "Eric Thomas",
+    role: "Software Architect",
+    handle: "Victoria, BC",
+    href: "https://www.linkedin.com/in/eric-thomas-32985a4/",
+    photo: ericThomas,
     photoFit: "center 20%",
   },
   {
-    slug: "flo-guo",
-    name: "Flo Guo",
-    role: "Founding Designer",
-    handle: "@Paradigm",
-    href: "https://www.floguo.com/",
-    photo: floGuo,
-    photoFit: "center 30%",
-  },
-  {
-    slug: "kenneth-kuh",
-    name: "Kenneth Kuh",
+    slug: "adam-whitcroft",
+    name: "Adam Whitcroft",
     role: "Designer",
-    handle: "@Cursor",
-    href: "https://kennethkuh.info/",
-    photo: kennethKuh,
+    handle: "@Owner",
+    href: "https://x.com/AdamWhitcroft",
+    photo: adamWhitcroft,
     photoFit: "center 28%",
   },
   {
-    slug: "jennifer-jing",
-    name: "Jennifer Jing",
-    role: "Designer",
-    handle: "@YouTube",
-    href: "https://jenniferjing.com/",
-    photo: jenniferJing,
-    photoFit: "center 18%",
+    slug: "marcus-farrell",
+    name: "Marcus Farrell",
+    role: "Founding Designer",
+    handle: "@Dub",
+    href: "https://x.com/farrellmarcus",
+    photo: marcusFarrell,
+    photoFit: "center 30%",
   },
 ] as const;
 

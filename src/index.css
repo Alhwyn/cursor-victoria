@@ -409,42 +409,42 @@
   z-index: 1;
 }
 
-.judges-place-adam-copy {
+.judges-place-a-copy {
   grid-column: 3;
   grid-row: 1;
 }
 
-.judges-place-adam-photo {
+.judges-place-a-photo {
   grid-column: 4;
   grid-row: 1;
 }
 
-.judges-place-flo-copy {
+.judges-place-b-copy {
   grid-column: 2;
   grid-row: 2;
 }
 
-.judges-place-flo-photo {
+.judges-place-b-photo {
   grid-column: 2;
   grid-row: 3;
 }
 
-.judges-place-kenneth-photo {
+.judges-place-c-photo {
   grid-column: 1;
   grid-row: 4;
 }
 
-.judges-place-kenneth-copy {
+.judges-place-c-copy {
   grid-column: 2;
   grid-row: 4;
 }
 
-.judges-place-jennifer-copy {
+.judges-place-d-copy {
   grid-column: 3;
   grid-row: 4;
 }
 
-.judges-place-jennifer-photo {
+.judges-place-d-photo {
   grid-column: 4;
   grid-row: 4;
 }
