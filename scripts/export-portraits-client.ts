@@ -1,4 +1,3 @@
-import adamWhitcroft from "../src/assets/judges/adam-whitcroft.jpg";
 import marcusFarrell from "../src/assets/judges/marcus-farrell.jpg";
 import {
   DEFAULT_EFFECT_SETTINGS,
@@ -8,27 +7,14 @@ import {
 
 const jobs = [
   {
-    file: "adam-whitcroft-sinwave.png",
-    src: adamWhitcroft,
-    photoFit: "center 18%",
-    zoom: 1.35,
-    settings: {
-      ...DEFAULT_EFFECT_SETTINGS,
-      brightness: 2,
-      contrast: 1.85,
-      foregroundColor: "#a78bfa",
-      backgroundColor: "#efeaf5",
-    } satisfies EffectSettings,
-  },
-  {
     file: "marcus-farrell-sinwave.png",
     src: marcusFarrell,
-    photoFit: "42% 22%",
-    zoom: 1.5,
+    photoFit: "center 28%",
+    zoom: 1.12,
     settings: {
       ...DEFAULT_EFFECT_SETTINGS,
-      brightness: 18,
-      contrast: 1.5,
+      brightness: 8,
+      contrast: 1.9,
       foregroundColor: "#4ade80",
       backgroundColor: "#e6f2ea",
     } satisfies EffectSettings,
@@ -42,7 +28,7 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   return img;
 }
 
-async function exportOne(job: (typeof jobs)[number]): Promise<void> {
+for (const job of jobs) {
   const img = await loadImage(job.src);
   const canvas = document.createElement("canvas");
   renderSinePortrait(canvas, img, job.settings, job.photoFit, job.zoom);
@@ -55,9 +41,5 @@ async function exportOne(job: (typeof jobs)[number]): Promise<void> {
     body: blob,
   });
 }
-
-for (const job of jobs) {
-  await exportOne(job);
-}
 await fetch("/done", { method: "POST" });
-document.body.textContent = "Exported 2 portraits.";
+document.body.textContent = "Exported Marcus portrait.";
