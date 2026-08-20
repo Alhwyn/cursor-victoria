@@ -1,6 +1,5 @@
 import { expect, test } from "bun:test";
 import { judges, judgesHeading } from "./judges";
-import { COLOR_PRESETS, colorPreset } from "./sinePortrait";
 
 test("lists the four Codechella judges", () => {
   expect(judgesHeading).toBe("Judges");
@@ -19,34 +18,29 @@ test("lists the four Codechella judges", () => {
   ]);
 });
 
-test("each judge has copy, a profile photo, a public link, and a portrait tone", () => {
+test("each judge has copy, a processed portrait PNG, and a public link", () => {
   for (const judge of judges) {
     expect(judge.role.length).toBeGreaterThan(0);
     expect(judge.handle.length).toBeGreaterThan(0);
     expect(judge.href.startsWith("https://")).toBe(true);
     expect(judge.photo.length).toBeGreaterThan(0);
+    expect(judge.photo).toContain(".png");
     expect(judge.background).toMatch(/^#[0-9A-Fa-f]{6}$/);
     expect(judge.foreground).toMatch(/^#[0-9A-Fa-f]{6}$/);
   }
 });
 
-test("portraits use official sine-wave color presets", () => {
-  expect(COLOR_PRESETS.map(preset => preset.name)).toEqual([
-    "Blue",
-    "Orange",
-    "Tan",
-    "Purple",
-    "Green",
-  ]);
+test("portraits follow the Compile speakers color order", () => {
   expect(judges.map(judge => judge.preset)).toEqual([
-    "Purple",
     "Orange",
-    "Blue",
     "Green",
+    "Purple",
+    "Teal",
   ]);
-  for (const judge of judges) {
-    const preset = colorPreset(judge.preset);
-    expect(judge.foreground).toBe(preset.fg);
-    expect(judge.background).toBe(preset.bg);
-  }
+  expect(judges.map(judge => judge.foreground)).toEqual([
+    "#ff6b35",
+    "#4ade80",
+    "#a78bfa",
+    "#12b5a7",
+  ]);
 });

@@ -1,8 +1,7 @@
-import adamWhitcroft from "./assets/judges/adam-whitcroft.jpg";
-import ericThomas from "./assets/judges/eric-thomas.jpg";
-import marcusFarrell from "./assets/judges/marcus-farrell.jpg";
-import simonStern from "./assets/judges/simon-stern.jpg";
-import { colorPreset } from "./sinePortrait";
+import adamWhitcroft from "./assets/judges/adam-whitcroft-sinwave.png";
+import ericThomas from "./assets/judges/eric-thomas-sinwave.png";
+import marcusFarrell from "./assets/judges/marcus-farrell-sinwave.png";
+import simonStern from "./assets/judges/simon-stern-sinwave.png";
 
 export const judgesHeading = "Judges";
 
@@ -14,10 +13,9 @@ export const judges = [
     handle: "@Apricot",
     href: "https://x.com/SimiStern",
     photo: simonStern,
-    photoFit: "center 22%",
-    preset: "Purple",
-    background: colorPreset("Purple").bg,
-    foreground: colorPreset("Purple").fg,
+    preset: "Orange",
+    background: "#ebe6e1",
+    foreground: "#ff6b35",
   },
   {
     slug: "eric-thomas",
@@ -26,10 +24,9 @@ export const judges = [
     handle: "Victoria, BC",
     href: "https://www.linkedin.com/in/eric-thomas-32985a4/",
     photo: ericThomas,
-    photoFit: "center 20%",
-    preset: "Orange",
-    background: colorPreset("Orange").bg,
-    foreground: colorPreset("Orange").fg,
+    preset: "Green",
+    background: "#e6f2ea",
+    foreground: "#4ade80",
   },
   {
     slug: "adam-whitcroft",
@@ -38,10 +35,9 @@ export const judges = [
     handle: "@Owner",
     href: "https://x.com/AdamWhitcroft",
     photo: adamWhitcroft,
-    photoFit: "center 28%",
-    preset: "Blue",
-    background: colorPreset("Blue").bg,
-    foreground: colorPreset("Blue").fg,
+    preset: "Purple",
+    background: "#efeaf5",
+    foreground: "#a78bfa",
   },
   {
     slug: "marcus-farrell",
@@ -50,10 +46,9 @@ export const judges = [
     handle: "@Dub",
     href: "https://x.com/farrellmarcus",
     photo: marcusFarrell,
-    photoFit: "center 30%",
-    preset: "Green",
-    background: colorPreset("Green").bg,
-    foreground: colorPreset("Green").fg,
+    preset: "Teal",
+    background: "#e6f4f3",
+    foreground: "#12b5a7",
   },
 ] as const;
 

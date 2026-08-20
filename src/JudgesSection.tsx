@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
-import { judges, judgesHeading, type Judge } from "./judges";
-import { DEFAULT_EFFECT_SETTINGS, renderSinePortrait } from "./sinePortrait";
+import { useRef } from "react";
+import { judges, judgesHeading } from "./judges";
 
 function ChevronLeftIcon() {
   return (
@@ -42,51 +41,14 @@ function ChevronRightIcon() {
   );
 }
 
-function JudgePortrait({ judge }: { judge: Judge }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const img = new Image();
-    let cancelled = false;
-
-    img.onload = () => {
-      if (cancelled || !img.naturalWidth) return;
-      renderSinePortrait(
-        canvas,
-        img,
-        {
-          ...DEFAULT_EFFECT_SETTINGS,
-          foregroundColor: judge.foreground,
-          backgroundColor: judge.background,
-        },
-        judge.photoFit,
-      );
-    };
-    img.src = judge.photo;
-
-    return () => {
-      cancelled = true;
-    };
-  }, [judge.photo, judge.background, judge.foreground, judge.photoFit]);
-
-  return (
-    <div className="judge-portrait" style={{ background: judge.background }}>
-      <canvas ref={canvasRef} aria-hidden />
-    </div>
-  );
-}
-
 export function JudgesSection() {
-  const trackRef = useRef<HTMLUListElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollByCard = (direction: -1 | 1) => {
     const track = trackRef.current;
     if (!track) return;
-    const card = track.querySelector("li");
-    const gap = Number.parseFloat(getComputedStyle(track).columnGap || "16");
+    const card = track.querySelector("[data-judge-card]");
+    const gap = 16;
     const amount = (card?.getBoundingClientRect().width ?? 240) + gap;
     track.scrollBy({ left: amount * direction, behavior: "smooth" });
   };
@@ -97,11 +59,8 @@ export function JudgesSection() {
       className="page-shell scroll-mt-8 mt-32 md:mt-64"
       aria-labelledby="judges-heading"
     >
-      <div className="mb-2 flex items-center justify-between gap-4">
-        <h2
-          id="judges-heading"
-          className="text-[1.15rem] font-medium tracking-tight text-[var(--fg)] md:text-[1.25rem]"
-        >
+      <div className="flex items-center justify-between gap-4">
+        <h2 id="judges-heading" className="type-md-sm leading-8 text-[var(--fg)]">
           {judgesHeading}
         </h2>
         <div className="flex items-center gap-1">
@@ -124,24 +83,37 @@ export function JudgesSection() {
         </div>
       </div>
 
-      <ul ref={trackRef} className="judges-track">
-        {judges.map(judge => (
-          <li key={judge.slug} className="judge-card">
-            <a
-              href={judge.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block transition-opacity hover:opacity-80"
-            >
-              <JudgePortrait judge={judge} />
-              <p className="type-sm mt-3 text-[var(--fg)]">
-                <span className="font-medium">{judge.name}</span>{" "}
-                <span className="text-[var(--fg-secondary)]">{judge.role}</span>
-              </p>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div
+        ref={trackRef}
+        className="no-scrollbar mt-2 snap-x snap-mandatory overflow-x-auto"
+      >
+        <div className="flex w-max gap-4">
+          {judges.map(judge => (
+            <div key={judge.slug} data-judge-card className="snap-start">
+              <a
+                href={judge.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-[min(60vw,400px)] shrink-0 flex-col gap-2 sm:w-[min(40vw,320px)]"
+              >
+                <div className="relative aspect-[3/4] w-full overflow-hidden" style={{ background: judge.background }}>
+                  <img
+                    src={judge.photo}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    width={900}
+                    height={1200}
+                  />
+                </div>
+                <div className="type-sm flex items-baseline gap-1">
+                  <p className="font-medium text-[var(--fg)]">{judge.name}</p>
+                  <p className="tracking-tight text-[var(--fg-secondary)]">{judge.role}</p>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
