@@ -107,8 +107,13 @@ export function JudgesSection() {
               />
             </div>
             <p className="type-sm">
-              <span className="font-medium text-[var(--fg)]">{judge.name}</span>{" "}
-              <span className="text-[var(--fg-secondary)]">{judge.role}</span>
+              <span className="font-medium text-[var(--fg)]">{judge.name}</span>
+              {judge.company ? (
+                <>
+                  {" "}
+                  <span className="text-[var(--fg-secondary)]">{judge.company}</span>
+                </>
+              ) : null}
             </p>
           </a>
         ))}

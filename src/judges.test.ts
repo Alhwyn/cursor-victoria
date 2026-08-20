@@ -6,22 +6,21 @@ test("lists the four Codechella judges", () => {
   expect(judgesHeading).toBe("Judges");
   expect(judges).toHaveLength(4);
   expect(judges.map(judge => judge.name)).toEqual([
-    "Simon Stern",
     "Eric Thomas",
     "Adam Whitcroft",
+    "Simon Stern",
     "Marcus Farrell",
   ]);
   expect(judges.map(judge => judge.href)).toEqual([
-    "https://x.com/SimiStern",
     "https://www.linkedin.com/in/eric-thomas-32985a4/",
     "https://x.com/AdamWhitcroft",
+    "https://x.com/SimiStern",
     "https://x.com/farrellmarcus",
   ]);
 });
 
 test("each judge has copy, a processed portrait PNG, and a public link", () => {
   for (const judge of judges) {
-    expect(judge.role.length).toBeGreaterThan(0);
     expect(judge.handle.length).toBeGreaterThan(0);
     expect(judge.href.startsWith("https://")).toBe(true);
     expect(judge.photo.length).toBeGreaterThan(0);
@@ -31,10 +30,19 @@ test("each judge has copy, a processed portrait PNG, and a public link", () => {
   }
 });
 
+test("captions use companies instead of job roles", () => {
+  expect(judges.map(judge => judge.company)).toEqual([
+    "",
+    "Owner",
+    "Superteam Solana",
+    "Dub",
+  ]);
+});
+
 test("Simon Stern is from Superteam Solana", () => {
   const simon = judges.find(judge => judge.slug === "simon-stern");
   expect(simon?.name).toBe("Simon Stern");
-  expect(simon?.role).toBe("Superteam Solana");
+  expect(simon?.company).toBe("Superteam Solana");
   expect(simon?.handle).not.toBe("@Apricot");
 });
 
@@ -61,15 +69,15 @@ test("Adam portrait PNG is the official sinwave export", async () => {
 
 test("portraits follow the official sinwave exports", () => {
   expect(judges.map(judge => judge.preset)).toEqual([
-    "Green",
     "Orange",
     "Blue",
+    "Green",
     "Purple",
   ]);
   expect(judges.map(judge => judge.foreground)).toEqual([
-    "#4ade80",
     "#ff6b35",
     "#6b8cff",
+    "#4ade80",
     "#a78bfa",
   ]);
 });

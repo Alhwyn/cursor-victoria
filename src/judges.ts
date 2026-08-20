@@ -7,20 +7,9 @@ export const judgesHeading = "Judges";
 
 export const judges = [
   {
-    slug: "simon-stern",
-    name: "Simon Stern",
-    role: "Superteam Solana",
-    handle: "@Superteam",
-    href: "https://x.com/SimiStern",
-    photo: simonStern,
-    preset: "Green",
-    background: "#e6f2ea",
-    foreground: "#4ade80",
-  },
-  {
     slug: "eric-thomas",
     name: "Eric Thomas",
-    role: "Software Architect",
+    company: "",
     handle: "Victoria, BC",
     href: "https://www.linkedin.com/in/eric-thomas-32985a4/",
     photo: ericThomas,
@@ -31,7 +20,7 @@ export const judges = [
   {
     slug: "adam-whitcroft",
     name: "Adam Whitcroft",
-    role: "Designer",
+    company: "Owner",
     handle: "@Owner",
     href: "https://x.com/AdamWhitcroft",
     photo: adamWhitcroft,
@@ -40,9 +29,20 @@ export const judges = [
     foreground: "#6b8cff",
   },
   {
+    slug: "simon-stern",
+    name: "Simon Stern",
+    company: "Superteam Solana",
+    handle: "@Superteam",
+    href: "https://x.com/SimiStern",
+    photo: simonStern,
+    preset: "Green",
+    background: "#e6f2ea",
+    foreground: "#4ade80",
+  },
+  {
     slug: "marcus-farrell",
     name: "Marcus Farrell",
-    role: "Founding Designer",
+    company: "Dub",
     handle: "@Dub",
     href: "https://x.com/farrellmarcus",
     photo: marcusFarrell,
