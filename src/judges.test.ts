@@ -1,0 +1,22 @@
+import { expect, test } from "bun:test";
+import { judges, judgesHeading } from "./judges";
+
+test("lists the four Codechella judges", () => {
+  expect(judgesHeading).toBe("Judges");
+  expect(judges).toHaveLength(4);
+  expect(judges.map(judge => judge.name)).toEqual([
+    "Adam Syed",
+    "Flo Guo",
+    "Kenneth Kuh",
+    "Jennifer Jing",
+  ]);
+});
+
+test("each judge has copy, a profile photo, and a public link", () => {
+  for (const judge of judges) {
+    expect(judge.role.length).toBeGreaterThan(0);
+    expect(judge.handle.startsWith("@")).toBe(true);
+    expect(judge.href.startsWith("https://")).toBe(true);
+    expect(judge.photo.length).toBeGreaterThan(0);
+  }
+});

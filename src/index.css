@@ -334,6 +334,253 @@
   }
 }
 
+.judges-board {
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+}
+
+.judges-glyph {
+  z-index: 1;
+  display: flex;
+  overflow: hidden;
+  color: var(--fg);
+  font-family: "Inter Tight", "Geist", "Inter", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.07em;
+  line-height: 0.72;
+  user-select: none;
+  pointer-events: none;
+}
+
+.judges-glyph-j {
+  grid-column: 1;
+  grid-row: 1 / 4;
+  align-items: flex-start;
+  padding: 0 0 0 0.04em;
+  font-size: 68cqi;
+}
+
+.judges-glyph-u,
+.judges-glyph-d,
+.judges-glyph-g {
+  align-items: flex-end;
+  padding: 0 0.06em 0.08em 0.08em;
+  font-size: 21.5cqi;
+}
+
+.judges-glyph-u {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.judges-glyph-d {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.judges-glyph-g {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.judges-glyph-es {
+  grid-column: 4;
+  grid-row: 3;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0.08em 0.08em 0.04em;
+  font-size: 11.4cqi;
+  line-height: 0.78;
+}
+
+.judges-copy {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.15em;
+  min-width: 0;
+  padding: clamp(0.55rem, 2.2cqi, 1.15rem);
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.15s var(--ease-out);
+}
+
+.judges-copy:hover {
+  opacity: 0.7;
+}
+
+.judges-copy-name,
+.judges-copy-role,
+.judges-copy-handle {
+  display: block;
+  font-size: clamp(0.68rem, 1.85cqi, 0.875rem);
+  line-height: 1.35;
+}
+
+.judges-copy-name {
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.judges-copy-role,
+.judges-copy-handle {
+  color: var(--fg-secondary);
+}
+
+.judges-photo {
+  position: relative;
+  z-index: 2;
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.judges-photo-source,
+.judges-photo-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.judges-photo-source {
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.35) brightness(1.04);
+}
+
+.judges-photo-canvas {
+  z-index: 1;
+}
+
+.judges-place-adam-copy {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.judges-place-adam-photo {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.judges-place-flo-copy {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.judges-place-flo-photo {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.judges-place-kenneth-photo {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+.judges-place-kenneth-copy {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+.judges-place-jennifer-copy {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+.judges-place-jennifer-photo {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+.judges-cell-empty {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.judges-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--fg), var(--fg)) 25% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--fg), var(--fg)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--fg), var(--fg)) 75% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--fg), var(--fg)) 0 25% / 100% 1px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) 0 50% / 100% 1px no-repeat,
+    linear-gradient(var(--fg), var(--fg)) 0 75% / 100% 1px no-repeat;
+}
+
+.judges-mobile,
+.judges-mobile-label {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .judges-board {
+    display: none;
+  }
+
+  .judges-mobile-label {
+    display: block;
+    margin: 0 0 1rem;
+    color: var(--fg-tertiary);
+    font-size: 0.8125rem;
+  }
+
+  .judges-mobile {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--fg);
+  }
+
+  .judges-mobile > li {
+    display: grid;
+    grid-template-rows: auto auto;
+    border-right: 1px solid var(--fg);
+    border-bottom: 1px solid var(--fg);
+  }
+
+  .judges-mobile > li:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .judges-mobile > li:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .judges-mobile .judges-photo {
+    aspect-ratio: 1;
+  }
+
+  .judges-mobile .judges-copy {
+    min-height: 5.25rem;
+    padding: 0.75rem 0.8rem 0.9rem;
+  }
+
+  .judges-mobile .judges-copy-name,
+  .judges-mobile .judges-copy-role,
+  .judges-mobile .judges-copy-handle {
+    font-size: 0.8125rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

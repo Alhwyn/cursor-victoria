@@ -1,5 +1,6 @@
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import { JudgesSection } from "./JudgesSection";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
@@ -126,6 +127,9 @@ function SiteHeader() {
           <a href="#tracks" className="transition-colors hover:text-[var(--fg)]">
             Tracks
           </a>
+          <a href="#judges" className="transition-colors hover:text-[var(--fg)]">
+            Judges
+          </a>
           <a href="#faq" className="transition-colors hover:text-[var(--fg)]">
             FAQ
           </a>
@@ -245,6 +249,8 @@ export function App() {
             ))}
           </div>
         </PageSection>
+
+        <JudgesSection />
 
         <PageSection className="mt-32 md:mt-64">
           <div className="grid gap-16 border-t border-[var(--border)] pt-10 md:grid-cols-2 md:gap-x-12 md:gap-y-0">
