@@ -184,10 +184,11 @@ function coverDraw(
   width: number,
   height: number,
   photoFit: string,
+  zoom = 1,
 ): void {
   const srcW = img.naturalWidth || img.width;
   const srcH = img.naturalHeight || img.height;
-  const scale = Math.max(width / srcW, height / srcH);
+  const scale = Math.max(width / srcW, height / srcH) * Math.max(1, zoom);
   const drawW = srcW * scale;
   const drawH = srcH * scale;
   const origin = parseObjectPosition(photoFit);
@@ -206,6 +207,7 @@ function prepareSineWave(
   img: HTMLImageElement,
   settings: EffectSettings,
   photoFit: string,
+  zoom = 1,
 ): PreparedSineWave {
   const width = WORKING_WIDTH;
   const height = WORKING_HEIGHT;
@@ -215,7 +217,7 @@ function prepareSineWave(
   const probeCtx = probe.getContext("2d", { willReadFrequently: true });
   if (!probeCtx) throw new Error("Canvas 2D context unavailable");
 
-  coverDraw(probeCtx, img, width, height, photoFit);
+  coverDraw(probeCtx, img, width, height, photoFit, zoom);
   const data = probeCtx.getImageData(0, 0, width, height).data;
 
   const grayscale = new Float32Array(width * height);
@@ -325,8 +327,9 @@ export function renderSinePortrait(
   img: HTMLImageElement,
   settings: EffectSettings,
   photoFit = "center",
+  zoom = 1,
 ): void {
-  const prepared = prepareSineWave(img, settings, photoFit);
+  const prepared = prepareSineWave(img, settings, photoFit, zoom);
   canvas.width = prepared.width;
   canvas.height = prepared.height;
   const ctx = canvas.getContext("2d");

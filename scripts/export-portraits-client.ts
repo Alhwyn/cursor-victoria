@@ -1,7 +1,5 @@
 import adamWhitcroft from "../src/assets/judges/adam-whitcroft.jpg";
-import ericThomas from "../src/assets/judges/eric-thomas.jpg";
 import marcusFarrell from "../src/assets/judges/marcus-farrell.jpg";
-import simonStern from "../src/assets/judges/simon-stern.jpg";
 import {
   DEFAULT_EFFECT_SETTINGS,
   renderSinePortrait,
@@ -10,31 +8,14 @@ import {
 
 const jobs = [
   {
-    file: "simon-stern-sinwave.png",
-    src: simonStern,
-    photoFit: "center 22%",
-    settings: {
-      ...DEFAULT_EFFECT_SETTINGS,
-      foregroundColor: "#ff6b35",
-      backgroundColor: "#ebe6e1",
-    } satisfies EffectSettings,
-  },
-  {
-    file: "eric-thomas-sinwave.png",
-    src: ericThomas,
-    photoFit: "center 20%",
-    settings: {
-      ...DEFAULT_EFFECT_SETTINGS,
-      foregroundColor: "#4ade80",
-      backgroundColor: "#e6f2ea",
-    } satisfies EffectSettings,
-  },
-  {
     file: "adam-whitcroft-sinwave.png",
     src: adamWhitcroft,
-    photoFit: "center 28%",
+    photoFit: "center 18%",
+    zoom: 1.35,
     settings: {
       ...DEFAULT_EFFECT_SETTINGS,
+      brightness: 2,
+      contrast: 1.85,
       foregroundColor: "#a78bfa",
       backgroundColor: "#efeaf5",
     } satisfies EffectSettings,
@@ -42,11 +23,14 @@ const jobs = [
   {
     file: "marcus-farrell-sinwave.png",
     src: marcusFarrell,
-    photoFit: "center 30%",
+    photoFit: "42% 22%",
+    zoom: 1.5,
     settings: {
       ...DEFAULT_EFFECT_SETTINGS,
-      foregroundColor: "#12b5a7",
-      backgroundColor: "#e6f4f3",
+      brightness: 18,
+      contrast: 1.5,
+      foregroundColor: "#4ade80",
+      backgroundColor: "#e6f2ea",
     } satisfies EffectSettings,
   },
 ];
@@ -61,7 +45,7 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
 async function exportOne(job: (typeof jobs)[number]): Promise<void> {
   const img = await loadImage(job.src);
   const canvas = document.createElement("canvas");
-  renderSinePortrait(canvas, img, job.settings, job.photoFit);
+  renderSinePortrait(canvas, img, job.settings, job.photoFit, job.zoom);
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(value => (value ? resolve(value) : reject(new Error("toBlob failed"))), "image/png");
   });
@@ -76,4 +60,4 @@ for (const job of jobs) {
   await exportOne(job);
 }
 await fetch("/done", { method: "POST" });
-document.body.textContent = "Exported 4 portraits.";
+document.body.textContent = "Exported 2 portraits.";
