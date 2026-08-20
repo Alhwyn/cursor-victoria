@@ -1,19 +1,19 @@
 import { useRef } from "react";
 import { judges, judgesHeading } from "./judges";
 
-function ChevronLeftIcon() {
+function ArrowLeftIcon() {
   return (
     <svg
-      className="h-4 w-4"
+      className="h-3.5 w-3.5"
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
       <path
-        d="M10 3L5 8l5 5"
+        d="M10 3.5 5.5 8 10 12.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -21,19 +21,19 @@ function ChevronLeftIcon() {
   );
 }
 
-function ChevronRightIcon() {
+function ArrowRightIcon() {
   return (
     <svg
-      className="h-4 w-4"
+      className="h-3.5 w-3.5"
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
       <path
-        d="M6 3l5 5-5 5"
+        d="M6 3.5 10.5 8 6 12.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.25"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -48,7 +48,8 @@ export function JudgesSection() {
     const track = trackRef.current;
     if (!track) return;
     const card = track.querySelector("[data-judge-card]");
-    const gap = 16;
+    const styles = getComputedStyle(track);
+    const gap = Number.parseFloat(styles.columnGap || styles.gap || "16");
     const amount = (card?.getBoundingClientRect().width ?? 240) + gap;
     track.scrollBy({ left: amount * direction, behavior: "smooth" });
   };
@@ -63,14 +64,14 @@ export function JudgesSection() {
         <h2 id="judges-heading" className="type-md-sm leading-8 text-[var(--fg)]">
           {judgesHeading}
         </h2>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center">
           <button
             type="button"
             className="judges-nav-btn"
             aria-label="Previous judges"
             onClick={() => scrollByCard(-1)}
           >
-            <ChevronLeftIcon />
+            <ArrowLeftIcon />
           </button>
           <button
             type="button"
@@ -78,41 +79,39 @@ export function JudgesSection() {
             aria-label="Next judges"
             onClick={() => scrollByCard(1)}
           >
-            <ChevronRightIcon />
+            <ArrowRightIcon />
           </button>
         </div>
       </div>
 
-      <div
-        ref={trackRef}
-        className="no-scrollbar mt-2 snap-x snap-mandatory overflow-x-auto"
-      >
-        <div className="flex w-max gap-4">
-          {judges.map(judge => (
-            <div key={judge.slug} data-judge-card className="snap-start">
-              <a
-                href={judge.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex w-[min(60vw,400px)] shrink-0 flex-col gap-2 sm:w-[min(40vw,320px)]"
-              >
-                <div className="relative aspect-[3/4] w-full overflow-hidden" style={{ background: judge.background }}>
-                  <img
-                    src={judge.photo}
-                    alt=""
-                    className="absolute inset-0 h-full w-full object-cover"
-                    width={900}
-                    height={1200}
-                  />
-                </div>
-                <div className="type-sm flex items-baseline gap-1">
-                  <p className="font-medium text-[var(--fg)]">{judge.name}</p>
-                  <p className="tracking-tight text-[var(--fg-secondary)]">{judge.role}</p>
-                </div>
-              </a>
+      <div ref={trackRef} className="judges-track no-scrollbar mt-2">
+        {judges.map(judge => (
+          <a
+            key={judge.slug}
+            data-judge-card
+            href={judge.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex min-w-0 snap-start flex-col gap-2"
+          >
+            <div
+              className="relative aspect-[3/4] w-full overflow-hidden"
+              style={{ background: judge.background }}
+            >
+              <img
+                src={judge.photo}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover"
+                width={900}
+                height={1200}
+              />
             </div>
-          ))}
-        </div>
+            <p className="type-sm">
+              <span className="font-medium text-[var(--fg)]">{judge.name}</span>{" "}
+              <span className="text-[var(--fg-secondary)]">{judge.role}</span>
+            </p>
+          </a>
+        ))}
       </div>
     </section>
   );
