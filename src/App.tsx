@@ -1,5 +1,6 @@
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { about, faq, perks, schedule, site, tracks, who } from "./content";
+import { GuestsPage } from "./GuestsPage";
 import { sponsors, sponsorsHeading } from "./sponsors";
 import cursorLockup from "./assets/cursor-lockup.png";
 import parliamentDome from "./assets/parliament-dome-sketch.png";
@@ -129,13 +130,16 @@ function SiteHeader() {
           <a href="#faq" className="transition-colors hover:text-[var(--fg)]">
             FAQ
           </a>
+          <a href="/guests" className="transition-colors hover:text-[var(--fg)]">
+            Guests
+          </a>
         </nav>
       </div>
     </header>
   );
 }
 
-export function App() {
+function LandingPage() {
   return (
     <div id="top" className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       <SiteHeader />
@@ -295,4 +299,13 @@ export function App() {
       </main>
     </div>
   );
+}
+
+/** Simple pathname routing — Bun serves `index.html` for all paths. */
+export function App() {
+  const path = typeof window !== "undefined" ? window.location.pathname : "/";
+  if (path === "/guests" || path === "/directory") {
+    return <GuestsPage />;
+  }
+  return <LandingPage />;
 }

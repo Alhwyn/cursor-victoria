@@ -1,0 +1,38 @@
+[
+  {
+    "email": "ada@example.com",
+    "name": "Ada Example",
+    "firstName": "Ada",
+    "lastName": "Example",
+    "ticketName": "Standard",
+    "city": "Victoria",
+    "company": "Analytical Engines Ltd",
+    "building": "A live coding demo with agents",
+    "linkedin": "https://www.linkedin.com/in/example-ada",
+    "github": "https://github.com/example-ada",
+    "photoUrl": "https://api.dicebear.com/9.x/initials/svg?seed=Ada%20Example"
+  },
+  {
+    "email": "grace@example.org",
+    "name": "Grace Hopper",
+    "firstName": "Grace",
+    "lastName": "Hopper",
+    "ticketName": "Watch the Demos",
+    "city": "Vancouver",
+    "company": "Naval Computing",
+    "building": "Debugging tools for LLM apps",
+    "twitter": "https://x.com/example_grace",
+    "github": "https://github.com/example-grace"
+  },
+  {
+    "email": "linus@example.net",
+    "name": "Linus Sample",
+    "firstName": "Linus",
+    "lastName": "Sample",
+    "ticketName": "Standard",
+    "city": "Seattle",
+    "company": "Kernel Labs",
+    "building": "Open-source editor plugins",
+    "linkedin": "https://www.linkedin.com/in/example-linus"
+  }
+]

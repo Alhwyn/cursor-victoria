@@ -22,6 +22,12 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .env.production.local
 .env.local
 
+# Guest PII — never commit real Luma exports or seeded guest data
+data/guests.json
+*.csv
+guests*.csv
+luma*.csv
+
 # caches
 .eslintcache
 .cache
