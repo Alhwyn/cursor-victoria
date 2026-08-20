@@ -18,11 +18,13 @@ test("lists the four Codechella judges", () => {
   ]);
 });
 
-test("each judge has copy, a profile photo, and a public link", () => {
+test("each judge has copy, a profile photo, a public link, and a portrait tone", () => {
   for (const judge of judges) {
     expect(judge.role.length).toBeGreaterThan(0);
     expect(judge.handle.length).toBeGreaterThan(0);
     expect(judge.href.startsWith("https://")).toBe(true);
     expect(judge.photo.length).toBeGreaterThan(0);
+    expect(judge.background).toMatch(/^#[0-9A-Fa-f]{6}$/);
+    expect(judge.foreground).toMatch(/^#[0-9A-Fa-f]{6}$/);
   }
 });

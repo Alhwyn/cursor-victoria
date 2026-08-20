@@ -14,6 +14,8 @@ export const judges = [
     href: "https://x.com/SimiStern",
     photo: simonStern,
     photoFit: "center 22%",
+    background: "#F3C6D8",
+    foreground: "#C2186A",
   },
   {
     slug: "eric-thomas",
@@ -23,6 +25,8 @@ export const judges = [
     href: "https://www.linkedin.com/in/eric-thomas-32985a4/",
     photo: ericThomas,
     photoFit: "center 20%",
+    background: "#F4C4A8",
+    foreground: "#E24E1B",
   },
   {
     slug: "adam-whitcroft",
@@ -32,6 +36,8 @@ export const judges = [
     href: "https://x.com/AdamWhitcroft",
     photo: adamWhitcroft,
     photoFit: "center 28%",
+    background: "#B8DCF0",
+    foreground: "#1F7AA8",
   },
   {
     slug: "marcus-farrell",
@@ -41,6 +47,8 @@ export const judges = [
     href: "https://x.com/farrellmarcus",
     photo: marcusFarrell,
     photoFit: "center 30%",
+    background: "#D4C4F0",
+    foreground: "#6B46A8",
   },
 ] as const;
 

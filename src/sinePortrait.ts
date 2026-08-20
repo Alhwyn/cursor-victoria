@@ -1,7 +1,37 @@
-/** Cover-crop a portrait, then paint a newsprint-style halftone. */
+type Tone = {
+  background: string;
+  foreground: string;
+};
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const value = hex.replace("#", "");
+  return {
+    r: Number.parseInt(value.slice(0, 2), 16),
+    g: Number.parseInt(value.slice(2, 4), 16),
+    b: Number.parseInt(value.slice(4, 6), 16),
+  };
+}
 
 function luminance(r: number, g: number, b: number): number {
   return (r * 0.299 + g * 0.587 + b * 0.114) / 255;
+}
+
+function parseObjectPosition(fit = "center"): { x: number; y: number } {
+  const keyword = (token: string): number | undefined => {
+    if (token === "center") return 0.5;
+    if (token === "left" || token === "top") return 0;
+    if (token === "right" || token === "bottom") return 1;
+    if (token.endsWith("%")) return Number.parseFloat(token) / 100;
+    return undefined;
+  };
+
+  const parts = fit.trim().split(/\s+/);
+  const first = parts[0] ? keyword(parts[0]) : undefined;
+  const second = parts[1] ? keyword(parts[1]) : undefined;
+  return {
+    x: first ?? 0.5,
+    y: second ?? 0.5,
+  };
 }
 
 function sample(
@@ -31,26 +61,12 @@ function sample(
   );
 }
 
-function axisPosition(token: string | undefined): number {
-  if (!token || token === "center") return 0.5;
-  if (token === "left" || token === "top") return 0;
-  if (token === "right" || token === "bottom") return 1;
-  if (token.endsWith("%")) return Number.parseFloat(token) / 100;
-  return 0.5;
-}
-
-function parseObjectPosition(position: string): { x: number; y: number } {
-  const [first, second] = position.trim().split(/\s+/);
-  return {
-    x: axisPosition(first),
-    y: axisPosition(second ?? first),
-  };
-}
-
-export function renderHalftonePortrait(
+/** Cover-crop `img` into a portrait canvas, then paint Compile-style wavy lines. */
+export function renderSinePortrait(
   canvas: HTMLCanvasElement,
   img: HTMLImageElement,
-  objectPosition = "center center",
+  tone: Tone,
+  photoFit = "center",
 ): void {
   const cssWidth = Math.max(1, canvas.clientWidth);
   const cssHeight = Math.max(1, canvas.clientHeight);
@@ -69,12 +85,10 @@ export function renderHalftonePortrait(
 
   const srcW = img.naturalWidth || img.width;
   const srcH = img.naturalHeight || img.height;
-  if (srcW < 1 || srcH < 1) return;
-
   const scale = Math.max(width / srcW, height / srcH);
   const drawW = srcW * scale;
   const drawH = srcH * scale;
-  const origin = parseObjectPosition(objectPosition);
+  const origin = parseObjectPosition(photoFit);
   const dx = (width - drawW) * origin.x;
   const dy = (height - drawH) * origin.y;
 
@@ -98,31 +112,43 @@ export function renderHalftonePortrait(
     if (gray > hi) hi = gray;
   }
 
-  const range = Math.max(0.22, hi - lo);
-  const tone = new Float32Array(width * height);
+  const range = Math.max(0.18, hi - lo);
+  const amp = new Float32Array(width * height);
   for (let i = 0; i < width * height; i += 1) {
     const stretched = ((raw[i] ?? 0) - lo) / range;
-    tone[i] = Math.min(1, Math.max(0, (stretched - 0.5) * 1.22 + 0.52));
+    amp[i] = Math.min(1, Math.max(0, (stretched - 0.5) * 1.65 + 0.5));
   }
 
-  ctx.fillStyle = "#edece8";
+  const bg = hexToRgb(tone.background);
+  const fg = hexToRgb(tone.foreground);
+  ctx.fillStyle = `rgb(${bg.r},${bg.g},${bg.b})`;
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "#14120b";
+  ctx.strokeStyle = `rgb(${fg.r},${fg.g},${fg.b})`;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
 
-  const spacing = Math.max(2.4, 3.15 * dpr);
-  const maxR = spacing * 0.52;
+  const spacing = Math.max(2.2, 2.6 * dpr);
+  const period = Math.max(3.6, 6.4 * dpr);
+  const wave = (Math.PI * 2) / period;
+  const maxAmp = spacing * 1.35;
+  ctx.lineWidth = Math.max(0.55, spacing * 0.22);
 
-  for (let y = spacing * 0.5; y < height; y += spacing) {
-    const offset = (Math.round(y / spacing) % 2) * (spacing * 0.5);
-    for (let x = spacing * 0.5 + offset; x < width; x += spacing) {
-      const brightness = sample(tone, width, height, x, y);
+  for (let baseY = -spacing; baseY < height + spacing; baseY += spacing) {
+    ctx.beginPath();
+    let started = false;
+    for (let x = 0; x <= width; x += 1) {
+      const brightness = sample(amp, width, height, x, baseY);
       const darkness = 1 - brightness;
       const shaped = darkness * darkness * (3 - 2 * darkness);
-      const radius = maxR * Math.pow(shaped, 0.92);
-      if (radius < 0.22) continue;
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fill();
+      const amplitude = 0.35 * dpr + maxAmp * Math.pow(shaped, 1.35);
+      const py = baseY + Math.sin(x * wave) * amplitude;
+      if (!started) {
+        ctx.moveTo(x, py);
+        started = true;
+      } else {
+        ctx.lineTo(x, py);
+      }
     }
+    ctx.stroke();
   }
 }
