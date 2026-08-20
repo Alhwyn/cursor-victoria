@@ -9,8 +9,8 @@ export const judges = [
   {
     slug: "simon-stern",
     name: "Simon Stern",
-    role: "Founder",
-    handle: "@Apricot",
+    role: "Superteam Solana",
+    handle: "@Superteam",
     href: "https://x.com/SimiStern",
     photo: simonStern,
     preset: "Orange",
