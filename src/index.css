@@ -97,6 +97,15 @@
     row-gap: var(--spacing-g1);
   }
 
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .site-grain {
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, rgb(255 255 255 / 0.55), transparent 55%),
@@ -333,6 +342,41 @@
     max-height: 2.5rem;
   }
 }
+
+.judges-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--fg-tertiary);
+  background: transparent;
+  border: 0;
+  appearance: none;
+  cursor: pointer;
+  transition: opacity 0.15s var(--ease-out);
+}
+
+.judges-nav-btn:hover {
+  opacity: 0.55;
+}
+
+.judges-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+@media (max-width: 767px) {
+  .judges-track {
+    grid-auto-columns: minmax(68%, 1fr);
+  }
+}
+
 
 @media (prefers-reduced-motion: reduce) {
   html {

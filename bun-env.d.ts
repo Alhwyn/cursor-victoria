@@ -13,6 +13,11 @@ declare module "*.png" {
   export = path;
 }
 
+declare module "*.jpg" {
+  const path: `${string}.jpg`;
+  export = path;
+}
+
 declare module "*.module.css" {
   /**
    * A record of class names to their corresponding CSS module classes
