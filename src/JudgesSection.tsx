@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { judges, judgesHeading, type Judge } from "./judges";
-import { renderSinePortrait } from "./sinePortrait";
+import { DEFAULT_EFFECT_SETTINGS, renderSinePortrait } from "./sinePortrait";
 
 function ChevronLeftIcon() {
   return (
@@ -43,49 +43,37 @@ function ChevronRightIcon() {
 }
 
 function JudgePortrait({ judge }: { judge: Judge }) {
-  const frameRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const frame = frameRef.current;
     const canvas = canvasRef.current;
-    if (!frame || !canvas) return;
+    if (!canvas) return;
 
     const img = new Image();
     let cancelled = false;
-    let frameId = 0;
 
-    const paint = () => {
+    img.onload = () => {
       if (cancelled || !img.naturalWidth) return;
       renderSinePortrait(
         canvas,
         img,
-        { background: judge.background, foreground: judge.foreground },
+        {
+          ...DEFAULT_EFFECT_SETTINGS,
+          foregroundColor: judge.foreground,
+          backgroundColor: judge.background,
+        },
         judge.photoFit,
       );
     };
-
-    img.onload = () => {
-      if (cancelled) return;
-      paint();
-    };
     img.src = judge.photo;
-
-    const observer = new ResizeObserver(() => {
-      cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(paint);
-    });
-    observer.observe(frame);
 
     return () => {
       cancelled = true;
-      cancelAnimationFrame(frameId);
-      observer.disconnect();
     };
   }, [judge.photo, judge.background, judge.foreground, judge.photoFit]);
 
   return (
-    <div ref={frameRef} className="judge-portrait" style={{ background: judge.background }}>
+    <div className="judge-portrait" style={{ background: judge.background }}>
       <canvas ref={canvasRef} aria-hidden />
     </div>
   );
