@@ -9,7 +9,7 @@ export const judges = [
   {
     slug: "eric-thomas",
     name: "Eric Thomas",
-    company: "",
+    company: "Barnacle Systems Inc.",
     handle: "Victoria, BC",
     href: "https://www.linkedin.com/in/eric-thomas-32985a4/",
     photo: ericThomas,

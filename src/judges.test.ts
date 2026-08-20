@@ -32,7 +32,7 @@ test("each judge has copy, a processed portrait PNG, and a public link", () => {
 
 test("captions use companies instead of job roles", () => {
   expect(judges.map(judge => judge.company)).toEqual([
-    "",
+    "Barnacle Systems Inc.",
     "Owner",
     "Superteam Solana",
     "Dub",
