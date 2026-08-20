@@ -38,7 +38,7 @@ const server = Bun.serve({
 console.log(`Export server at ${server.url}`);
 await finished;
 server.stop();
-if (saved.size !== 1) {
-  throw new Error(`Expected Adam portrait, saved ${saved.size}`);
+if (saved.size !== 4) {
+  throw new Error(`Expected 4 portraits, saved ${saved.size}`);
 }
 console.log(`Wrote ${[...saved].sort().join(", ")}`);

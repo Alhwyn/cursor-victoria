@@ -59,16 +59,16 @@ test("Adam portrait PNG is a square official export, not purple", async () => {
   expect(height).toBe(1000);
 });
 
-test("portraits follow the Compile speakers color order", () => {
+test("portraits follow the official sinwave exports", () => {
   expect(judges.map(judge => judge.preset)).toEqual([
-    "Orange",
     "Green",
+    "Orange",
     "Blue",
     "Green",
   ]);
   expect(judges.map(judge => judge.foreground)).toEqual([
-    "#ff6b35",
     "#4ade80",
+    "#ff6b35",
     "#6b8cff",
     "#4ade80",
   ]);
