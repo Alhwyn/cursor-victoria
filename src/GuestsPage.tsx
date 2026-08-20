@@ -243,16 +243,20 @@ export function GuestsPage() {
             </ul>
 
             {/* Desktop table */}
-            <div className="hidden overflow-x-auto md:block">
-              <table className="w-full min-w-[56rem] border-collapse text-left">
+            <div className="hidden md:block">
+              <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="border-b border-[var(--border)] type-sm text-[var(--fg-tertiary)]">
-                    <th className="py-3 pr-4 font-normal">Guest</th>
-                    <th className="py-3 pr-4 font-normal">Email</th>
-                    <th className="py-3 pr-4 font-normal">Ticket</th>
-                    <th className="py-3 pr-4 font-normal">City</th>
-                    <th className="py-3 pr-4 font-normal">Company</th>
-                    <th className="py-3 pr-4 font-normal">Building</th>
+                    <th className="py-3 pr-3 font-normal">Guest</th>
+                    <th className="py-3 pr-3 font-normal">Email</th>
+                    <th className="py-3 pr-3 font-normal">Ticket</th>
+                    <th className="hidden py-3 pr-3 font-normal lg:table-cell">
+                      City
+                    </th>
+                    <th className="hidden py-3 pr-3 font-normal lg:table-cell">
+                      Company
+                    </th>
+                    <th className="py-3 pr-3 font-normal">Building</th>
                     <th className="py-3 font-normal">Social</th>
                   </tr>
                 </thead>
@@ -262,7 +266,7 @@ export function GuestsPage() {
                       key={guest._id}
                       className="border-b border-[var(--border)] type-sm align-top"
                     >
-                      <td className="py-4 pr-4">
+                      <td className="py-4 pr-3">
                         <div className="flex items-center gap-3">
                           <GuestAvatar
                             name={guest.name}
@@ -275,19 +279,19 @@ export function GuestsPage() {
                           </span>
                         </div>
                       </td>
-                      <td className="py-4 pr-4 text-[var(--fg-secondary)]">
+                      <td className="max-w-[12rem] truncate py-4 pr-3 text-[var(--fg-secondary)]">
                         {guest.email}
                       </td>
-                      <td className="py-4 pr-4 text-[var(--fg)]">
+                      <td className="py-4 pr-3 text-[var(--fg)]">
                         {guest.ticketName || <EmptyCell />}
                       </td>
-                      <td className="py-4 pr-4 text-[var(--fg-secondary)]">
+                      <td className="hidden py-4 pr-3 text-[var(--fg-secondary)] lg:table-cell">
                         {guest.city || <EmptyCell />}
                       </td>
-                      <td className="py-4 pr-4 text-[var(--fg-secondary)]">
+                      <td className="hidden py-4 pr-3 text-[var(--fg-secondary)] lg:table-cell">
                         {guest.company || <EmptyCell />}
                       </td>
-                      <td className="max-w-[14rem] py-4 pr-4 text-[var(--fg)]">
+                      <td className="max-w-[14rem] py-4 pr-3 text-[var(--fg)]">
                         {guest.building || <EmptyCell />}
                       </td>
                       <td className="py-4">
