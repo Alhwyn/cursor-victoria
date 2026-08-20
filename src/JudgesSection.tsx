@@ -92,23 +92,6 @@ export function JudgesSection() {
       <p className="judges-mobile-label">{judgesHeading}</p>
 
       <div className="judges-board">
-        <span className="judges-glyph judges-glyph-j" aria-hidden>
-          j
-        </span>
-        <span className="judges-glyph judges-glyph-u" aria-hidden>
-          u
-        </span>
-        <span className="judges-glyph judges-glyph-d" aria-hidden>
-          d
-        </span>
-        <span className="judges-glyph judges-glyph-g" aria-hidden>
-          g
-        </span>
-        <span className="judges-glyph judges-glyph-es" aria-hidden>
-          <span>e</span>
-          <span>s</span>
-        </span>
-
         <JudgeCopy judge={adam} className="judges-place-adam-copy" />
         <JudgePhoto judge={adam} className="judges-place-adam-photo" />
         <JudgeCopy judge={flo} className="judges-place-flo-copy" />
@@ -117,8 +100,6 @@ export function JudgesSection() {
         <JudgePhoto judge={kenneth} className="judges-place-kenneth-photo" />
         <JudgeCopy judge={jennifer} className="judges-place-jennifer-copy" />
         <JudgePhoto judge={jennifer} className="judges-place-jennifer-photo" />
-
-        <span className="judges-cell judges-cell-empty" aria-hidden />
         <div className="judges-lines" aria-hidden />
       </div>
 

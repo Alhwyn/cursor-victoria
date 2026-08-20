@@ -346,62 +346,6 @@
   background: var(--bg);
 }
 
-.judges-glyph {
-  z-index: 1;
-  display: flex;
-  overflow: hidden;
-  color: var(--fg);
-  font-family: "Inter Tight", "Geist", "Inter", sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.07em;
-  line-height: 0.72;
-  user-select: none;
-  pointer-events: none;
-}
-
-.judges-glyph-j {
-  grid-column: 1;
-  grid-row: 1 / 4;
-  align-items: flex-start;
-  padding: 0 0 0 0.02em;
-  font-size: 72cqi;
-  line-height: 1.02;
-}
-
-.judges-glyph-u,
-.judges-glyph-d,
-.judges-glyph-g {
-  align-items: flex-end;
-  padding: 0 0.06em 0.08em 0.08em;
-  font-size: 21.5cqi;
-}
-
-.judges-glyph-u {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.judges-glyph-d {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.judges-glyph-g {
-  grid-column: 4;
-  grid-row: 2;
-}
-
-.judges-glyph-es {
-  grid-column: 4;
-  grid-row: 3;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  padding: 0.12em 0.1em 0.08em;
-  font-size: 9.6cqi;
-  line-height: 0.74;
-}
-
 .judges-copy {
   z-index: 2;
   display: flex;
@@ -505,11 +449,6 @@
   grid-row: 4;
 }
 
-.judges-cell-empty {
-  grid-column: 3;
-  grid-row: 3;
-}
-
 .judges-lines {
   position: absolute;
   inset: 0;
@@ -524,21 +463,19 @@
     linear-gradient(var(--fg), var(--fg)) 0 75% / 100% 1px no-repeat;
 }
 
-.judges-mobile,
 .judges-mobile-label {
+  margin: 0 0 1rem;
+  color: var(--fg-tertiary);
+  font-size: 0.8125rem;
+}
+
+.judges-mobile {
   display: none;
 }
 
 @media (max-width: 639px) {
   .judges-board {
     display: none;
-  }
-
-  .judges-mobile-label {
-    display: block;
-    margin: 0 0 1rem;
-    color: var(--fg-tertiary);
-    font-size: 0.8125rem;
   }
 
   .judges-mobile {
