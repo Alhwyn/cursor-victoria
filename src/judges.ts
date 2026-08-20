@@ -46,9 +46,9 @@ export const judges = [
     handle: "@Dub",
     href: "https://x.com/farrellmarcus",
     photo: marcusFarrell,
-    preset: "Green",
-    background: "#e6f2ea",
-    foreground: "#4ade80",
+    preset: "Purple",
+    background: "#efeaf5",
+    foreground: "#a78bfa",
   },
 ] as const;
 

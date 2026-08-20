@@ -64,12 +64,12 @@ test("portraits follow the official sinwave exports", () => {
     "Green",
     "Orange",
     "Blue",
-    "Green",
+    "Purple",
   ]);
   expect(judges.map(judge => judge.foreground)).toEqual([
     "#4ade80",
     "#ff6b35",
     "#6b8cff",
-    "#4ade80",
+    "#a78bfa",
   ]);
 });
