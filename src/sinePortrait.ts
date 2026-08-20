@@ -13,6 +13,7 @@ export type EffectSettings = {
   contourDepth: number;
   contrast: number;
   brightness: number;
+  invert?: boolean;
 };
 
 export const DEFAULT_EFFECT_SETTINGS: EffectSettings = {
@@ -228,6 +229,7 @@ function prepareSineWave(
         (data[idx + 1] ?? 0) * 0.587 +
         (data[idx + 2] ?? 0) * 0.114) /
       255;
+    if (settings.invert) gray = 1 - gray;
     gray = (gray - 0.5) * settings.contrast + 0.5 + settings.brightness / 100;
     grayscale[i] = Math.max(0, Math.min(1, gray));
   }
