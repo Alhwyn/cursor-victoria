@@ -10,7 +10,9 @@
     "building": "A live coding demo with agents",
     "linkedin": "https://www.linkedin.com/in/example-ada",
     "github": "https://github.com/example-ada",
-    "photoUrl": "https://api.dicebear.com/9.x/initials/svg?seed=Ada%20Example"
+    "photoUrl": "https://api.dicebear.com/9.x/initials/svg?seed=Ada%20Example",
+    "passportUrl": "https://luma.com/cursorvictoria",
+    "emailStatus": "none"
   },
   {
     "email": "grace@example.org",
@@ -22,7 +24,10 @@
     "company": "Naval Computing",
     "building": "Debugging tools for LLM apps",
     "twitter": "https://x.com/example_grace",
-    "github": "https://github.com/example-grace"
+    "github": "https://github.com/example-grace",
+    "passportUrl": "https://luma.com/cursorvictoria",
+    "emailStatus": "sent",
+    "sentAt": 1787000000000
   },
   {
     "email": "linus@example.net",
@@ -33,6 +38,25 @@
     "city": "Seattle",
     "company": "Kernel Labs",
     "building": "Open-source editor plugins",
-    "linkedin": "https://www.linkedin.com/in/example-linus"
+    "linkedin": "https://www.linkedin.com/in/example-linus",
+    "emailStatus": "opened",
+    "sentAt": 1786900000000,
+    "openedAt": 1786950000000
+  },
+  {
+    "email": "margaret@example.com",
+    "name": "Margaret Sample",
+    "firstName": "Margaret",
+    "lastName": "Sample",
+    "ticketName": "Standard",
+    "city": "Portland",
+    "company": "Software Arts",
+    "building": "A passport-style builder profile",
+    "github": "https://github.com/example-margaret",
+    "passportUrl": "https://luma.com/cursorvictoria",
+    "emailStatus": "read",
+    "sentAt": 1786800000000,
+    "openedAt": 1786820000000,
+    "readAt": 1786830000000
   }
 ]

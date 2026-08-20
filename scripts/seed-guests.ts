@@ -28,6 +28,10 @@ type GuestSeed = {
   passportId?: string;
   photoUrl?: string;
   lumaGuestId?: string;
+  emailStatus?: "none" | "sent" | "opened" | "read";
+  sentAt?: number;
+  openedAt?: number;
+  readAt?: number;
 };
 
 const dataPath = process.argv[2] ?? "data/guests.json";

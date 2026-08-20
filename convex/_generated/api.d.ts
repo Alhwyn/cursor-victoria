@@ -8,7 +8,10 @@
  * @module
  */
 
+import type * as emails from "../emails.js";
 import type * as guests from "../guests.js";
+import type * as http from "../http.js";
+import type * as validators from "../validators.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +20,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  emails: typeof emails;
   guests: typeof guests;
+  http: typeof http;
+  validators: typeof validators;
 }>;
 
 /**

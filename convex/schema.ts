@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { emailStatusValidator } from "./validators";
 
 export default defineSchema({
   guests: defineTable({
@@ -19,5 +20,15 @@ export default defineSchema({
     photoUrl: v.optional(v.string()),
     photoStorageId: v.optional(v.id("_storage")),
     lumaGuestId: v.optional(v.string()),
-  }).index("by_email", ["email"]),
+    /** Delivery funnel: none → sent → opened → read (monotonic). */
+    emailStatus: v.optional(emailStatusValidator),
+    sentAt: v.optional(v.number()),
+    openedAt: v.optional(v.number()),
+    readAt: v.optional(v.number()),
+    /** Opaque token for open/click tracking links. Not exposed in public queries. */
+    emailToken: v.optional(v.string()),
+  })
+    .index("by_email", ["email"])
+    .index("by_email_token", ["emailToken"])
+    .index("by_email_status", ["emailStatus"]),
 });

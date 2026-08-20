@@ -1,8 +1,18 @@
-import { useQuery } from "convex/react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useAction, useQuery } from "convex/react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { api } from "../convex/_generated/api";
+import type { Id } from "../convex/_generated/dataModel";
 import cursorLockup from "./assets/cursor-lockup.png";
 import "./index.css";
+
+const ADMIN_SECRET_KEY = "codechella_admin_secret";
+
+type EmailStatus = "none" | "sent" | "opened" | "read";
 
 function CursorLogo({ className = "" }: { className?: string }) {
   return (
@@ -99,6 +109,39 @@ function SocialLinks({
   );
 }
 
+function EmailStatusPill({ status }: { status: EmailStatus }) {
+  switch (status) {
+    case "none":
+      return (
+        <span className="inline-flex type-sm text-[var(--fg-tertiary)]">
+          Not sent
+        </span>
+      );
+    case "sent":
+      return (
+        <span className="inline-flex bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] px-2 py-0.5 type-sm text-[var(--accent)]">
+          Sent
+        </span>
+      );
+    case "opened":
+      return (
+        <span className="inline-flex bg-[rgb(20_80_140/0.1)] px-2 py-0.5 type-sm text-[#1f5f8b]">
+          Opened
+        </span>
+      );
+    case "read":
+      return (
+        <span className="inline-flex bg-[var(--fg)] px-2 py-0.5 type-sm text-[var(--button-fg)]">
+          Read
+        </span>
+      );
+    default: {
+      const _exhaustive: never = status;
+      return _exhaustive;
+    }
+  }
+}
+
 function GuestsHeader() {
   return (
     <header className="header-shell">
@@ -132,19 +175,129 @@ function EmptyCell({ children }: { children?: ReactNode }) {
   );
 }
 
+function SendButton({
+  label,
+  busy,
+  disabled,
+  onClick,
+}: {
+  label: string;
+  busy: boolean;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled || busy}
+      className="bg-[var(--accent)] px-2.5 py-1 type-sm text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      {busy ? "Sending…" : label}
+    </button>
+  );
+}
+
 export function GuestsPage() {
   const guests = useQuery(api.guests.listGuests);
+  const sendGuestEmail = useAction(api.emails.sendGuestEmail);
+  const sendAllUnsent = useAction(api.emails.sendAllUnsent);
+
   const [query, setQuery] = useState("");
+  const [adminSecret, setAdminSecret] = useState("");
+  const [adminReady, setAdminReady] = useState(false);
+  const [sendingId, setSendingId] = useState<Id<"guests"> | null>(null);
+  const [sendingAll, setSendingAll] = useState(false);
+  const [adminMessage, setAdminMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(ADMIN_SECRET_KEY) ?? "";
+      setAdminSecret(stored);
+    } catch {
+      // ignore
+    }
+    setAdminReady(true);
+  }, []);
+
+  const isAdmin = adminReady && adminSecret.trim().length > 0;
 
   const filtered = useMemo(() => {
     if (!guests) return [];
     const q = query.trim().toLowerCase();
     if (!q) return guests;
     return guests.filter(guest => {
-      const haystack = `${guest.name} ${guest.email} ${guest.company} ${guest.city}`.toLowerCase();
+      const haystack =
+        `${guest.name} ${guest.email} ${guest.company} ${guest.city}`.toLowerCase();
       return haystack.includes(q);
     });
   }, [guests, query]);
+
+  const unsentCount = useMemo(() => {
+    if (!guests) return 0;
+    return guests.filter(g => g.emailStatus === "none").length;
+  }, [guests]);
+
+  function persistAdminSecret(value: string) {
+    setAdminSecret(value);
+    try {
+      if (value.trim()) {
+        localStorage.setItem(ADMIN_SECRET_KEY, value);
+      } else {
+        localStorage.removeItem(ADMIN_SECRET_KEY);
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  async function handleSend(guestId: Id<"guests">) {
+    if (!adminSecret.trim()) return;
+    setSendingId(guestId);
+    setAdminMessage(null);
+    try {
+      const result = await sendGuestEmail({
+        guestId,
+        adminSecret: adminSecret.trim(),
+      });
+      setAdminMessage(
+        result.dryRun
+          ? "Dry-run: marked sent (no RESEND_API_KEY)."
+          : "Email sent.",
+      );
+    } catch (error) {
+      setAdminMessage(
+        error instanceof Error ? error.message : "Send failed.",
+      );
+    } finally {
+      setSendingId(null);
+    }
+  }
+
+  async function handleSendAll() {
+    if (!adminSecret.trim()) return;
+    setSendingAll(true);
+    setAdminMessage(null);
+    try {
+      const result = await sendAllUnsent({
+        adminSecret: adminSecret.trim(),
+      });
+      const suffix = result.dryRun ? " (dry-run)" : "";
+      const err =
+        result.errors.length > 0
+          ? ` Errors: ${result.errors.slice(0, 3).join("; ")}`
+          : "";
+      setAdminMessage(
+        `Sent ${result.sent}/${result.attempted} unsent guests${suffix}.${err}`,
+      );
+    } catch (error) {
+      setAdminMessage(
+        error instanceof Error ? error.message : "Send all failed.",
+      );
+    } finally {
+      setSendingAll(false);
+    }
+  }
 
   return (
     <div className="site-grain min-h-screen bg-[var(--bg)] text-[var(--fg)]">
@@ -173,6 +326,39 @@ export function GuestsPage() {
           </label>
         </div>
 
+        <div className="mb-8 grid gap-3 border border-[var(--border)] bg-[var(--card)] p-4 md:grid-cols-[1fr_auto] md:items-end">
+          <label className="block">
+            <span className="mb-1 block type-sm text-[var(--fg-tertiary)]">
+              Admin secret (required to send mail)
+            </span>
+            <input
+              type="password"
+              value={adminSecret}
+              onChange={e => persistAdminSecret(e.target.value)}
+              placeholder="Paste ADMIN_SECRET"
+              autoComplete="off"
+              className="w-full max-w-md border border-[var(--border)] bg-[var(--bg)] px-3 py-2 type-sm text-[var(--fg)] outline-none placeholder:text-[var(--fg-tertiary)] focus:border-[var(--fg-tertiary)]"
+            />
+          </label>
+          {isAdmin ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <SendButton
+                label={`Send all unsent (${unsentCount})`}
+                busy={sendingAll}
+                disabled={unsentCount === 0}
+                onClick={() => void handleSendAll()}
+              />
+              {adminMessage ? (
+                <p className="type-sm text-[var(--fg-secondary)]">{adminMessage}</p>
+              ) : null}
+            </div>
+          ) : (
+            <p className="type-sm text-[var(--fg-tertiary)]">
+              Enter the organizer secret to unlock Send.
+            </p>
+          )}
+        </div>
+
         {guests === undefined ? (
           <p className="type-sm text-[var(--fg-secondary)]">Loading guests…</p>
         ) : guests.length === 0 ? (
@@ -192,7 +378,6 @@ export function GuestsPage() {
               {filtered.length} of {guests.length} guests
             </p>
 
-            {/* Mobile cards */}
             <ul className="grid gap-6 md:hidden">
               {filtered.map(guest => (
                 <li
@@ -207,9 +392,12 @@ export function GuestsPage() {
                       photoUrl={guest.resolvedPhotoUrl}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="type-sm font-medium text-[var(--fg)]">
-                        {guest.name}
-                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="type-sm font-medium text-[var(--fg)]">
+                          {guest.name}
+                        </p>
+                        <EmailStatusPill status={guest.emailStatus} />
+                      </div>
                       <p className="type-sm truncate text-[var(--fg-secondary)]">
                         {guest.email}
                       </p>
@@ -229,12 +417,21 @@ export function GuestsPage() {
                           {guest.building}
                         </p>
                       ) : null}
-                      <div className="mt-3">
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
                         <SocialLinks
                           linkedin={guest.linkedin}
                           twitter={guest.twitter}
                           github={guest.github}
                         />
+                        {isAdmin ? (
+                          <SendButton
+                            label={
+                              guest.emailStatus === "none" ? "Send" : "Resend"
+                            }
+                            busy={sendingId === guest._id}
+                            onClick={() => void handleSend(guest._id)}
+                          />
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -242,7 +439,6 @@ export function GuestsPage() {
               ))}
             </ul>
 
-            {/* Desktop table */}
             <div className="hidden md:block">
               <table className="w-full border-collapse text-left">
                 <thead>
@@ -250,21 +446,18 @@ export function GuestsPage() {
                     <th className="py-3 pr-3 font-normal">Guest</th>
                     <th className="py-3 pr-3 font-normal">Email</th>
                     <th className="py-3 pr-3 font-normal">Ticket</th>
-                    <th className="hidden py-3 pr-3 font-normal lg:table-cell">
-                      City
+                    <th className="hidden py-3 pr-3 font-normal xl:table-cell">
+                      Building
                     </th>
-                    <th className="hidden py-3 pr-3 font-normal lg:table-cell">
-                      Company
-                    </th>
-                    <th className="py-3 pr-3 font-normal">Building</th>
-                    <th className="py-3 font-normal">Social</th>
+                    <th className="py-3 pr-3 font-normal">Status</th>
+                    <th className="py-3 font-normal">Mail</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map(guest => (
                     <tr
                       key={guest._id}
-                      className="border-b border-[var(--border)] type-sm align-top"
+                      className="border-b border-[var(--border)] type-sm align-middle"
                     >
                       <td className="py-4 pr-3">
                         <div className="flex items-center gap-3">
@@ -274,9 +467,16 @@ export function GuestsPage() {
                             lastName={guest.lastName}
                             photoUrl={guest.resolvedPhotoUrl}
                           />
-                          <span className="font-medium text-[var(--fg)]">
-                            {guest.name}
-                          </span>
+                          <div className="min-w-0">
+                            <p className="font-medium text-[var(--fg)]">
+                              {guest.name}
+                            </p>
+                            <p className="truncate text-[var(--fg-tertiary)]">
+                              {[guest.city, guest.company]
+                                .filter(Boolean)
+                                .join(" · ") || "—"}
+                            </p>
+                          </div>
                         </div>
                       </td>
                       <td className="max-w-[12rem] truncate py-4 pr-3 text-[var(--fg-secondary)]">
@@ -285,21 +485,24 @@ export function GuestsPage() {
                       <td className="py-4 pr-3 text-[var(--fg)]">
                         {guest.ticketName || <EmptyCell />}
                       </td>
-                      <td className="hidden py-4 pr-3 text-[var(--fg-secondary)] lg:table-cell">
-                        {guest.city || <EmptyCell />}
-                      </td>
-                      <td className="hidden py-4 pr-3 text-[var(--fg-secondary)] lg:table-cell">
-                        {guest.company || <EmptyCell />}
-                      </td>
-                      <td className="max-w-[14rem] py-4 pr-3 text-[var(--fg)]">
+                      <td className="hidden max-w-[12rem] py-4 pr-3 text-[var(--fg)] xl:table-cell">
                         {guest.building || <EmptyCell />}
                       </td>
+                      <td className="py-4 pr-3">
+                        <EmailStatusPill status={guest.emailStatus} />
+                      </td>
                       <td className="py-4">
-                        <SocialLinks
-                          linkedin={guest.linkedin}
-                          twitter={guest.twitter}
-                          github={guest.github}
-                        />
+                        {isAdmin ? (
+                          <SendButton
+                            label={
+                              guest.emailStatus === "none" ? "Send" : "Resend"
+                            }
+                            busy={sendingId === guest._id}
+                            onClick={() => void handleSend(guest._id)}
+                          />
+                        ) : (
+                          <span className="text-[var(--fg-tertiary)]">—</span>
+                        )}
                       </td>
                     </tr>
                   ))}
