@@ -1,8 +1,10 @@
 import { ConvexReactClient } from "convex/react";
 
 /**
- * Bun inlines `process.env.CONVEX_URL` at build time (see build.ts).
- * In `bun --hot` / `bun start`, Bun also loads `.env.local` from `npx convex dev`.
+ * Bun inlines `process.env.CONVEX_URL` for the browser:
+ * - `bun --hot`: via bunfig.toml `[serve.static] env = "CONVEX_*"`
+ * - `bun run build`: via build.ts `define`
+ * Seed scripts and `npx convex dev` use the same `.env.local` key.
  */
 const convexUrl = process.env.CONVEX_URL;
 
