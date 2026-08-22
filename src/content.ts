@@ -27,20 +27,17 @@ export const about = {
 } as const;
 
 export const schedule = [
-  { time: "9:30 am", label: "Check-in, snacks, and team formation" },
-  { time: "10:00 am", label: "Hacking begins" },
-  { time: "10:30 - 10:50 am", label: "GMI Cloud Workshop" },
-  { time: "10:50 - 11:10 am", label: "Cursor Workshop" },
-  { time: "11:10 - 11:30 am", label: "Convex Workshop" },
-  { time: "11:30 - 11:50 am", label: "Solana Workshop" },
-  { time: "12:00 pm", label: "Lunch" },
-  { time: "1:00 pm", label: "Afternoon build phase" },
-  { time: "4:30 pm", label: "Hard submission deadline" },
-  { time: "4:30 pm", label: "Final demos with strict 3-minute limit" },
-  {
-    time: "5:30 pm",
-    label: "Judge voting and award ceremony for 6pm",
-  },
+  { time: "10:00 am", label: "Doors open + check-in" },
+  { time: "10:15 am", label: "Kickoff" },
+  { time: "10:20 am", label: "Keynotes" },
+  { time: "10:35 am", label: "Hacking begins" },
+  { time: "10:45 - 11:05 am", label: "How to use Convex (20 min)" },
+  { time: "11:05 - 11:25 am", label: "How to use Solana (20 min)" },
+  { time: "12:30 pm", label: "Lunch served" },
+  { time: "5:00 pm", label: "Hard stop (coding ends)" },
+  { time: "5:00 - 5:45 pm", label: "Judging + demos (mandatory for prizes)" },
+  { time: "5:45 - 6:00 pm", label: "Winners announced + closing" },
+  { time: "6:00 pm", label: "Event ends" },
 ] as const;
 
 export const tracks = [
